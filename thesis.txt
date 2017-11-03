@@ -1,0 +1,628 @@
+1. Einleitung
+1.1. Problembeschreibung
+Zur Erfassung von digitalen Geländemodellen kleinerer Gebiete zur Vorbereitung oder
+Abrechnung von Bauarbeiten werden oft terrestrische Messungen mittels Tachymeter
+durchgeführt – oder aber auf Daten aus einer Erfassung mittels Airborne Laserscanning zurückgegriffen. Beide Verfahren sind sehr kostenintensiv und benötigen viel Zeit.
+Oft sind die Genauigkeiten auch nicht dem Anwendungsfeld entsprechend. Airborne
+Laserscanning, das Laserscanning aus der Luft, wird meist von Helikoptern aus durchgeführt. Hierdurch werden aber hohe Anschaffungs- und Flugkosten verursacht. Ein
+Lösungsansatz hierfür ist es, anstatt eines Helikopters als Trägersystem, einen Multikopter zu nutzen. Jedoch ist die Tragfähigkeit für die meisten Laserscanning-Systeme
+nicht ausreichend. Daher soll ein solches Airborne-Laserscanning-System entwickelt
+werden, dass auch von einem Multikopter getragen werden kann. Ein weiterer Vorteil
+einer solchen kompakten Systemes des Airborne Laserscanning ist es, dass hier auch
+Bodennahere Aufnahmen durchgeführt werden können und somit auch Fassaden mit
+guter Abdeckung aufgenommen werden können.
+
+1
+
+2. Technische Realisierung
+2.1. Sensorsysteme
+Zur Realisierung des Projektes steht ein Multikopter, ein Laserscanner Velodyne VLP16 Puck und eine inertiale Messeinheit der HafenCity Universität zur Verfügung. Außerdem wurde ein Raspberry Pi zur weiteren Auswertung verwendet.
+
+2.1.1. Laserscanner Velodyne VLP-16
+Laserscanner sind in den vergangenen Jahren kompakter geworden. Einer dieser KompaktLaserscanner ist der Velodyne Puck VLP-16 (siehe Bild 2.1). Er bietet sich durch seine
+geringe Größe von nur etwa 10cmDurchmesser für den Einsatz an dem Multikopter genau
+an. Es handelt sich beim VLP-16 um einen um eine Achse rotierenden Scanner mit 16 Größe
+Messstrahlen (Velodyne Lidar, 2017b). Der Scanner sendet diese Messstrahlen mit einer geringen Zeitdifferenz von 2, 3µs hintereinander aus, gefolgt von einer Nachladezeit
+von 18, 4µs, so dass jeder Messstrahl alle 55, 3µs ausgesendet werden kann (Velodyne
+Lidar, 2016, S. 16). Während der Messungen dreht sich der Laserscanner mit 5 bis 20
+Umdrehungen pro Sekunde (Velodyne Lidar, 2017b). Pro ausgesendeten Strahl können
+jeweils der die erste und die stärkste Reflexion zurück gegeben werden, so dass über eine
+halbe Million Punkte pro Sekunde zurückgegeben werden können (siehe Formel 2.1).
+Die Daten werden anschließend über den Netzwerkanschluss übertragen (siehe auch
+Absatz 3.2). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul
+des Types Garmin GPS 18x LVC. Auch andere GNSS-Module sind nutzbar, so dass im
+Weiteren der Versuch unternommen wurde, hier das GNSS-Modul der Inertialen Messeinheit (siehe Absatz 2.1.2) oder eines uBlox-GNSS-Modules zu nutzen (siehe Absatz
+2.6). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten
+mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so
+in der Nachbearbeitung mit den Daten aus der Inertialen Messeinheit zu verknüpfen.
+
+n=
+
+1s
+Messstrahlen Messwerte
+Messwerte
+· 16
+·2
+= 578.714
+55, 295µs
+Messung
+Messtrahl
+Sekunde
+
+(2.1)
+
+Die Messung der Distanz erfolgt über die Zeitmessung der Dauer zwischen der Aussendung eines Laserimpulses und des Eintreffen des reflektierten Strahles am Scanner.
+
+2
+
+Abbildung 2.1.: Laserscanner Velodyne VLP-16 (eigene Aufnahme)
+Die Höhenwinkel der Messstrahlen sind durch die Konstruktion des Scanners fest vorgegeben. Der Horizontalwinkel ergibt sich aus der Position des Messmodules zum Zeit
+der Aussendung, während sich dieses dreht.
+Bei dem Laserscanner handelt es sich mit hoher Wahrscheinlichkeit um einen sogenannten Faserlaser. Hier wird der Laserstrahl eines einzigen Messlaser über einen
+Spiegel in verschiedene Faserbündel eingespiegelt. Die Fasern leiten den Strahl dann
+zu dem gewünschten Messwinkel. Die Fasern sind beim Bau des Scanners fest verklebt
+und daher in ihrer Ausrichtung stabil. durch diese Bündel in die vorgegebene Richtung
+abgelenkt. (Beraldin et al., 2010, S. 18)
+
+Laserscann
+ausführlich
+
+2.1.2. Inertiale Messeinheit und GNSS-Empfänger iMAR
+iNAT-M200-FLAT
+Bei der Inertialen Messeinheit handelt es sich um einen Sensor, der die Neigung sowie
+Drehbewegungen der Sensoreinheit misst. Sie soll im Einsatz des Multikopters unverwindbar mit dem Laserscanner verbunden werden und so es ermöglichen, die Ausrichtung des Laserscanners zu bestimmen. Außerdem verfügt die verwendete Einheit
+über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Postprocessing können diese eine Positionsgenauigkeit von etwa 2 Zentimeter erreichen
+(iMAR Navigation GmbH, 2015).Durch die Verwendung von zwei Empfängern, die an
+jeweils einem Ausleger befestigt sind (siehe Bild ), kann die Orientierung des Scanners
+bestimmt werden. Außerdem kann die Positionssicherheit durch Mittlung der beiden
+Positionen erhöht werden.
+Im Postprocessing kann aus den Daten der Inertialen Messeinheit zusammen mit
+
+alternativ:
+Matthias
+Wilkens
+Bild
+machen
+
+3
+
+denen der GNSS-Module und GNSS-Korrekturdaten die Flugbahn des Multikopters
+berechnet werden. Die Daten der Inertialen Messeinheit werden hierbei regelmäßig
+durch die Daten der GNSS-Module gestützt.
+
+2.2. Weitere Gerätschaften
+2.2.1. Raspberry Pi 3 Typ B
+Es wurde sich entschieden, die Datenverarbeitung mit einem Raspberry Pi 3 durchzuführen. Es handelt sich hierbei um einen von der Raspberry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an den Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Raspberry Pi kam im Februar 2012
+auf den Markt. Er verfügte über 256 MB Arbeitsspeicher und einen 700 MHz EinKernprozessor. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor
+mit 1,2 Ghz und 1 GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über
+11 Millionen mal verkauft. (Möcker, 2017)
+Alle Modelle der Raspberry Pi Serie basieren auf Ein-Chip-System von des Halbleiterherstellers Broadcom. In diesem Chip sind die wichtigsten Bauteile des Systemes
+integriert wie ein ARM-Prozessor, eine Grafikeinheit sowie verschiedene andere Komponenten. Die so gering gehaltene Anzahl an einzelnen Bauelementen beim Raspberry
+Pi ermöglichen den geringen Preis - ein Ziel der Raspberry Pi Foundation.
+Der Vorteil des Raspberry Pi zur Datenverarbeitung sind vor allem seine verschiedensten Schnittstellen zur Daten Ein- und Ausgabe (RS Components Limited, 2015):
+• 4 USB 2.0 Host-Anschlüsse
+• Netzwerkschnittstelle (RJ45)
+• Bluetooth- und WLAN
+• 27 GPIO-Ports, nutzbar als (Schnabel, 2017)
+– Digitale Pins
+– Serielle Schnittstelle
+– I2C-Schnittstelle
+– SPI-Schnittstelle
+• Stromversorgung 3,3V und 5V
+• MicroUSB-Anschluss zur eigenen Stromversorgung (5V)
+• MicroSD-Steckplatz
+
+4
+
+• verschiedene Video- und Audioausgänge
+Außerdem vorteilhaft ist für die Nutzung am Multikopter ist seine geringe Größe
+und sein relativ geringer Stromverbrauch von maximal 12,5 Watt (RS Components
+Limited, 2015).
+
+2.2.2. Multikopter Copterproject CineStar 6HL
+Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren.
+Es gibt entsprechend der Rotoranzahl verschiedene Modelle wie zum Beispiel den weit
+verbreiteten Quadrokopter oder den Hexakopter, welcher in dieser Arbeit betrachtet
+wird. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind sie aber auch vermehrt in kleineren Ausführungen im Privatbesitz für Videoaufnahmen zu finden (Heise Online, 2017). Angetrieben werden die handelsüblichen
+Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu
+fünf Kilogramm versprechen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die
+Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit
+auch die Tragkraft des Multikopters. Im Normalfall ist die Anzahl der Rotoren durch
+zwei teilbar, damit sich das auf das Traggestell wirkende Drehmoment aufhebt. Dies
+ist der große Vorteil gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen
+Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung
+eines Propellerpaares zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz
+zu einem Modellflugzeug ist es außerdem, dass er senkrecht starten kann und auch zum
+Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist
+der höhere Energieverbrauch, so dass Flugzeuge bei gleicher Akkukapazität deutlich
+länger in der Luft bleiben können. (Bachfeld, 2013)
+In dieser Arbeit soll der Multikopter den Laserscanner, die IMU, das Gimbal, die
+Stromversorgung, Datenverarbeitung und -speicherung im Betrieb tragen können. Bei
+der Systementwicklung des Multikopters muss daher darauf geachtet werden, dass das
+Gewicht möglichst gering bleibt und dennoch müssen die angehängten Messeinrichtungen auch für härtere Landungen ausgelegt sein. Bei dem verwendeten Hexakopter
+handelt es sich um einen mit einer Tragkraft von etwa 5 Kilogramm und eine Flugdauer
+von bis zu 20 Minuten (Schulz, 2016).
+
+2.2.3. Gimbal Freefly MöVI M10
+Um die Messgeräte an dem Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung durch Flugsteuerung an den Laserscanner übertragen, wird ein sogenanntes
+Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messein-
+
+5
+
+Gerät
+
+Laserscanner
+
+IMU
+
+(Velodyne Lidar, 2017b)
+Spannung
+
+9 - 18 V
+
+max. Strom
+typ. Leistung
+
+Raspberry-Pi
+(RS Components Limited, 2015)
+
+12.0 V
+
+5.0 V
+
+0.9 A
+
+2.5 A
+
+8W
+
+12.5 W
+
+Tabelle 2.1.: Spannungs- und Strombedarf der einzelnen Module
+heit (siehe auch Absatz 2.1.2), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom
+Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
+Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet.
+
+mehr...
+
+2.3. Auswahl des Datenverarbeitungssystemes
+Ein Teil der Datenverarbeitung und die Speicherung soll direkt auf dem Sensorsystem durchgeführt werden. Da bei dem Betrieb des Multikopters jede weitere Masse
+die Laufzeit verkürzt, muss hierbei auf das Gewicht geachtet werden. Somit kommen für die Verarbeitung nur Ein-Chip-Computersysteme wie der Raspberry-Pi oder
+Mikrokontroller-Boards wie die der Arduino-Serie in Frage.
+Vorteile eines Arduinos wären vorallem der geringere Stromverbrauch und die EchtZeitfähigkeit. Jedoch ist die Steuerung der Datenaufnahme über die Netzwerkschnittstelle und die Speicherung deutlich komplizierter und die Hardware nicht so leistungsfähig. Bei der Alternative, dem Raspberry-Pi übernimmt das Betriebssystem
+die grundlegenden Steuerungen, so dass nur noch die Daten selbst verarbeitet werden müssen. Außerdem bietet er mit der festverbauten Netzwerkschnittstelle und dem
+MicroSD-Karten- und der USB-Schnittstelle auch die komplette benötigte Hardware,
+die so nicht einzeln zusammengestellt und -gebaut werden muss.
+
+2.4. Stromversorgung
+Die Stromversorgung des Raspberry-Pi an der Drohne soll mittels Lithium-Ionen-Zellen
+erfolgen. Der Raspberry-Pi erfordert hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann hierbei zu Systeminstabilitäten
+führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf
+den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die
+Anforderungen an die Energiequelle erläutert.
+
++IMU+Qc
+
+6
+
+Tabelle 2.1 listet die verschiedenen Module und den die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung
+und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt
+der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig
+um sicher landen zu können.
+Für eine geplante Flugdauer von 30 Minuten wird bei einem angenommenen Wirkungsgrad von 90% eine Akkukapazität von mindestens 12 Wh (siehe Formel 2.2)
+benötigt. Außerdem muss ein Teil in 12 Volt und ein Teil mit 5V stabilisierter Spannung
+abgeben werden können. Gegebenenfalls sind hierfür auch zwei komplett unabhängige
+Spannungsquellen zu nutzen.
+(8W + 12.5W ) · 0, 5h
+P ·t
+=
+= 11, 4W h
+E=
+η
+0, 9
+
++IMU
+(2.2)
+
+2.5. Anbindung des Raspberry Pi an den Laserscanner
+Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Sternpunkt der Schnittstellen. Der Laserscanner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle angeschlossen. Die IMU zeichnet die Daten selbstständig auf, kann
+aber auch mittels der als serieller Schnittstelle nutzbaren GPIO-Pins an den Raspberry
+angeschlossen werden. Außerdem kann an diesem Port auch ein GNSS-Modul angeschlossen werden. Dieses GNSS-Modul kann im folgenden dem Raspberry Pi zu einer
+genauen Uhrzeit verhelfen, die für die Verarbeitung der Daten benötigt wird. Alternativ kann auch ein an den Laserscanner angeschlossenes GNSS-Modul sein Zeitstempel
+per Netzwerk an den Raspberry Pi liefern. Diese Methode soll hier verwendet werden.
+
+2.6. Verbindung des GNSS-Modules zum Laserscanner
+Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laserscanner benötigten Übertragungsprotokoll handelt es sich um das standardisierte
+NMEA-Protokoll, welches mit einer Datenrate von 9600bit/s und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom
+Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe
+Bild 2.2) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von Velodyne Lidar (2017a, S. 3) entsprach. Es zeigte sich, dass das Signal
+gedreht werden musste, da die Definition der Signalspannung verschieden war: Der
+Laserscanner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3
+
+7
+
++IMU
+
+Volt (Velodyne Lidar, 2017a, S. 3) codiert ist (HIGH), beim GNSS-Modul entspricht
+die höhere Spannung Logisch 0.
+
+Abbildung 2.2.: Messung des Signals am uBlox NEO-6M (grün: Ausgangssignal; rot:
+Signal nach Nutzung eines Pegelwandler; 1000 Punkte entsprechen 5
+Volt)
+Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um ein Logikkonverter, der die HIGH- und LOW-Signale (Signal
+gegen Masse) tauscht. Der Laserscanner versorgt das GNSS-Modull nur mit 5 Volt
+Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Hierfür wurde
+ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren
+Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist Abbildung 2.3 zu
+entnehmen.
+
+Abbildung 2.3.: Schaltplan zum Anschluss des GNSS-Modules an den Laserscanner,
+gezeichnet in Fritzing
+
+8
+
+2.7. Steuerung im Betrieb
+Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Daher
+ist es notwendig, eine alternative Benutzerschnittstelle zu implementieren. Ein großer
+Steuerbedarf ist nicht gegeben, so dass wenige Tasten zum Stoppen der Datenaufzeichung und zum Herunterfahren des Raspberry Pi ausreichend sind. Um auch eine
+Steuermöglichkeit zu implementieren, die im Flug genutzt werden kann, soll ein WLANAccess-Point und ein simpler Webserver auf dem Raspberry Pi implementiert werden,
+der den Zugriff zum Beispiel über ein Smartphone oder Laptop ermöglicht.
+
+Abbildung 2.4.: Schaltplan für Steuerung des Raspberry, gezeichnet in Fritzing
+Abbildung 2.4 zeigt den Schaltplan des entwickelten Steuermodules. Dieses bietet mit
+drei Leuchtdioden und 2 Tastern die Möglichkeit, im Skript später einfache Anzeigen
+und Eingaben zu realisieren. Hierfür wurde eine Erweiterung auf Basis des GPIOPortes des Raspberry Pi aufgebaut. Die zwei Taster sind über die beiden GPIO-Pins
+erreichbar. Ohne Betätigung werden die Eingänge über die Pull-Down-Widerstände ()
+auf ein Low-Level gezogen. Durch Drücken des Tasters wird ein High-Signal erzeugt,
+welches durch das Pythonskript zur Laufzeit ausgelesen werden kann. Der Widerstand
+dient zur Strombegrenzung. Die drei Leuchtdioden wurden mit jeweils einem 150Ohm
+Vorwiderstand direkt zwischen ein GPIO-Pin und Ground eingebaut. Durch Ansteuerung der GPIO-Pins lassen sich diese An- und Abschalten. Außer zum Schutz und
+Betrieb der LEDs verhindern die Vorwiderstände auch eine zu hohe Stromaufnahme
+aus den GPIO-Pins. Die genaue Belastbarkeit der Pins ist nicht dokumentiert, jedoch
+
+9
+
+PinNumme
+R?
+R?
+
+wird meist von einem Wert um 10mA bei 3,3 Volt gesprochen (zum Beispiel Schnabel
+(2017)).
+
+UR = UGP IO − ULED = 3, 3V − 2, 0V = 1, 3V
+UR
+1, 3V
+R=
+=
+= 130Ω
+ILED
+0, 01A
+
+| Benötigter Spannungsabfall
+| min. Vorwiderstand
+
+(2.3)
+
+2.8. Platinenentwurf und -realisierung
+Nach dem Entwurf und Test der beiden Schaltungen aus Abbildung 2.3 und 2.4 auf
+einem lötfreien Steckbrett, soll diese Schaltungen zum späteren Einsatz an Bord des
+Multikopters als Platine mit verlöteten Bauteilen erstellt werden. Vorteile der gelöteten
+Schaltung sind in diesem Projekt ihre höhere Widerstandsfähigkeit gegen Vibrationen
+und Korrosion. Durch die Vibrationen im Flug könnten sich so Bauteile lösen und im
+schlimmsten Fall zum Kurzschluss und somit zur Zerstörung führen. Auch können die
+Kontakte zwischen den Federklemmen und den Bauteilen durch den Betrieb außerhalb
+von Gebäuden durch Luftfeuchtigkeit korrodieren und somit der Kontaktwiderstand
+höher werden, was zu Störungen führen kann.
+Für den Prototyp soll die Schaltung von Hand aufgebaut und verlötet werden. Erst
+in der zukünftigen Entwicklung, wenn die Schaltung ausreichend erprobt wurde, könnte
+es sinnvoll sein, eine Platine ätzen zu lassen. Als Platine kommen daher vorerst nur
+vorgefertigte Layouts in Frage:
+• Lochrasterplatinen (Platine mit einzelnen Lötpunkten)
+• Streifenrasterplatine (Lötpunkte sind in Streifen verbunden)
+• Punktstreifenrasterplatine (Streifenrasterplatine, bei denen die Streifen regelmäßig,
+zum Beispiel alle 4 Lötpunkte, unterbrochen sind)
+• spezielle Aufsteckplatinen für den Raspberry Pi
+
+10
+
+3. Theoretische Datenverarbeitung
+3.1. Verwendung von Python
+Zur Realisierung der Programmierung wurde die Sktiptsprache Python ausgewählt.
+Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil
+zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken
+genutzt sondern Texteinrückungen verplichtend hierfür eingesetzt (Theis, 2011, S. 13f).
+Die Struktur des Programmes ist so schnell erfassbar. Außerdem ist es nicht notwendig,
+den Quellcode zu kompilieren. Er wird vom Interpreter direkt ausgeführt. So sind
+kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren möglich. Änderungen
+und Anpassungen können schnell durchgeführt werden.
+Python wurde in seiner ersten Version 1991 von Guido van Rossum freigegeben.
+Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die
+der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht
+erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach zu lösenden
+Problem objektorientiert oder strukturiert programmiert werden kann (Theis, 2011, S.
+14).
+Die aktuelle Version von Python (Oktober 2017) ist die Version 3.6. Das Skript
+wurde unter Verwendung dieser Version entwickelt. Es wurde aber auch auf eine Kompatibilität mit Python 2.7, der neusten Version von Python 2, die noch sehr häufig
+im Einsatz ist, geachtet. Um Teile des Quellcodes als Python-Module auch in andere
+Skripte einfach einbinden zu können, aber auch den Quelltext übersichtlich zu halten,
+wurde der objektorientierte Programmierstil gewählt.
+
+3.2. Datenlieferung vom Laserscanner
+Der Laserscanner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in
+einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern
+müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels
+des in dieser Arbeit entwickelten Scriptes durchgeführt werden.
+Ein Datenpaket (siehe Tabelle 3.1) besteht jeweils aus einem Header von 42 Bytes,
+gefolgt von 12 Datenblöcken mit jeweils 32 Messungen, abgeschlossen von 4 Bytes, die
+
+11
+
+den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern.
+Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers
+und darauf folgend die Messwerte von zwei Messungen der 16 Laserstrahlen. Die genaue
+Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen aus
+zwei auf einander folgenden Messungen interpoliert werden.
+Header
+
+Netzwerk-Header 42 Bytes
+
+Messung 1
+Block 1
+Messung 2
+
+0-1
+
+Flag
+
+2 Bytes
+
+2-3
+
+Horizontalwinkel
+
+2 Bytes
+
+4-5
+
+Entfernung
+
+2 Bytes
+
+6
+
+Reflektivität
+
+1 Byte
+
+7-8
+
+Entfernung
+
+2 Bytes
+
+9
+
+Reflektivtät
+
+1 Byte
+
+Messungen 3 - 32
+Block 2 - 12
+Time
+
+1200-1204 Zeitstempel
+
+4 Bytes
+
+Factory
+
+1205-1206 Return-Modus
+
+2 Bytes
+
+Tabelle 3.1.: Aufbau der Daten des Netzwerkpaketes, nach Velodyne Lidar (2016)
+Der Laserscanner sendet bei der Einstellung Dual Return, also der Rückgabe vom
+stärksten und letzten Signal pro Messung bis zu 1508 Pakete dieser Form pro Sekunde
+(Velodyne Lidar, 2016, S. 49). Die Ausgangsdaten werden, bei einer Paketgröße von
+1248 Bytes mit einer Datenrate von 1,8 MB/s empfangen (siehe Formel 3.2). Hierbei
+werden fast 600.000 Messwerte pro Sekunde übertragen (siehe Formel 3.1).
+
+1508P akete 12Datenbloecke 32M essungen
+579.072Datensaetze
+·
+·
+=
+Sekunde
+P aket
+Datenblock
+Sekunde
+1508P akete 1248Bytes
+·
+= 1, 79M B/s
+Sekunde
+P aket
+
+(3.1)
+
+(3.2)
+
+3.3. Geplantes Datenmodell
+Die Daten des Laserscanners sollen in einer einfach lesbaren Textdatei abgelegt werden.
+In der Nachbereitung sollen die Daten aus dieser Textdatei mit den Daten der Inertialen
+Messeinheit und des GNSS-Empfängers verknüpft werden, um so die Daten georeferenzieren zu können. Als Verknüpfung bietet sich hier der Zeitstempel an. Die Inertialen
+
+12
+
+Messeinheit und der Laserscanner können hierbei die Zeitdaten aus dem GNSS-Signal
+verwenden. Hierdurch sind hochgenaue Zeitstempel möglich. Die Zeitinformation bildet
+also einen wichtigen Schlüssel in den Daten. Als einfaches Textformat wurden durch
+Tabulator getrennte Daten, jeweils eine Zeile je Messung, gewählt. Folgende Daten sind
+in dieser Reihenfolge enthalten:
+• Zeitstempel in Mikrosekunden
+• Richtung der Messung in der Rotationsebene in Grad
+• Höhenwinkel zur Rotationsebene in Grad
+• Gemessene Entfernung in m
+• Reflektivität auf einer Skala von 0 bis 255
+Problematisch ist bei diesem Datenmodell jedoch die benötigte Datenrate. Eine Datenzeile erfordert 29 Bytes und somit wird bei über einer halben Million Messungen pro
+Sekunde (siehe Formel 3.1) eine Datenschreibrate von mindestens 16 MB/s benötigt
+(siehe Formel 3.3). Da das Schreiben nicht dauerhaft erfolgt, sollte die Datenrate bevorzugt deutlich höher sein.
+29Bytes
+579.072Datensaetze
+∗
+= 16, 02M B/s
+(3.3)
+Sekunde
+Datenzeile
+Erste Test ergaben, dass diese Verarbeitungsgeschwindigkeit nicht mit dem Raspberry Pi erreicht werden konnte. Außerdem benötigen die Daten sehr viel Speicher. Daher
+wurde sich später für eine Hybridlösung entschieden (siehe Kapitel 4).
+
+3.4. Weiterverarbeitung der Daten zu Koordinaten
+Die als Text gespeicherten Rohdaten sollen dann im Rahmen einer weiterführenden
+Arbeit zu Koordinaten umgewandelt werden. Zu dieser Umwandlung werden die Positionen des Laserscanners mittels dem GNSS-Empfänger in der IMU und die Neigungsdaten aus der IMU verwendet. Die Neigungen werden dazu direkt mit den Winkeldaten
+verrechnet.
+Bei der Berechnung ist jedoch zu beachten, dass der Ursprungspunkt der Laserstrahlen nicht in der Drehachse des Laserscanners liegt, sondern etwa 40mm in Strahlrichtung verschoben ist (siehe Bild 3.1). Bei der Streckenberechnung ist diese Strecke mit
+enthalten, jedoch ist diese Entfernung für die Nutzung des Höhenwinkels des Laserscanners entscheidend, wenn auch diese Abweichung für den Einsatzzweck zur Erzeugung
+eines digitalen Geländemodelles nur von geringerer Bedeutung ist.
+
+13
+
+Satz
+sortieren
+
+Abbildung 3.1.: Strahlengang im Laserscanner VLP-16, Werte in Millimetern, nach
+Velodyne Lidar (2014)
+
+3.5. Anforderungen an das Skript
+Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skript
+aufweisen muss:
+• Rohdaten vom Scanner abrufen
+• Zeit vom GNSS-Modul abrufen
+• Steuerungmöglichkeit mittels Hard- und Software
+• Umwandlung in eigenes Datenmodell
+Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schritte
+und Gegebenheiten. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Raspberry Pi keinen eigenen Zeitgeber. Um die
+Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig - diese liefert das GNSS-Modul, welches am Laserscanner angeschlossen
+ist, sofern ein GNSS-Fix besteht. Es muss also vor dem Erzeugen der Dateien auf ein
+gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der
+Abbildung 3.2 zu entnehmen.
+
+
+
+Abbildung 3.2.: Vereinfachter Ablaufplan des Skriptes
+
+
+4. Entwicklung des Skriptes
+4.1. Klassenentwurf
+Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hilfe des
+Ablaufplanes aus Abbildung 3.2 die benötigten Klassen entworfen.
+
+Abbildung 4.1.: UML-Diagramm
+
+
+4.2. Beispiel-Quelltext-Zitat
+Die Daten werden eingelesen (siehe Zeile 18, Listing 4.1)
+Listing 4.1: Quelltext-Test
+
+
+5. Konfiguration des Raspberry Pi
+Als Grundlage wurde auf die MicroSD-Karte, die dem Raspberry Pi als Festplatte
+dient, das Betriebssystem Raspbian aufgespielt. Hierbei handelt es sich um ein Derivat
+von Debian GNU/Linux, das speziell auf die Hardware des Raspberry Pi angepasst
+wurde. Die aktuelle Version (Stand 27.10.2017) nennt sich Raspian Stretch. Für die
+Verwendung als Verarbeitungsgerät ohne angeschlossenen Display reicht die Variante
+ohne grafische Benutzeroberfläche aus (Raspbian Stretch Lite). Die Konfiguration des
+Raspberry Pi erfolgt vollständig über Konfigurationsdateien. In dieser Arbeit erfolgte die Konfiguration per Fernzugriff über SSH, einem Standard für das Fernsteuern
+der Konsole über das Netzwerk. Eine Konfiguration hätte aber auch mittels einem
+angeschlossenen Display und einer USB-Tastatur erfolgen können.
+Die Änderungen der Konfigurationsdateien erfolgte mit vorinstallierten Editor nano
+unter Nutzung der Administratorrechte. Ein solcher Aufruf erfolgt zum Beispiel mit
+dem Befehl sudo nano /pfad/zur/konfiguration.txt. Nachfolgend müssen die betroffenen Programme oder sogar das komplette Betriebssystem neugestartet werden.
+Der Neustart eines Services erfolgt zum Beispiel mit dem Aufruf sudo service programmname
+restart, der Neustart des Betriebssystemes mit sudo shutdown -r now. Es empfiehlt
+sich, von allen zu ändernden Konfigurationsdateien Sicherungskopien anzulegen. Dies
+erfolgt zum Beispiel mit sudo cp original.txt original.old.txt (Kopieren) oder
+sudo mv original.txt original.old.txt (Verschieben, zum Beispiel zum Anlegen
+einer komplett neuen Datei). Auf diese Linux-Grundlagen wird im folgenden nicht mehr
+eingegangen.
+
+5.1. Installation von Raspbian
+Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes
+von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit
+dem Tool Etcher. Auf der nach dem Entpacken erzeugten boot-Partition wird eine
+leere Datei mit dem Namen ssh angelegt. Hierdurch wird sofort nach dem Start der
+SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per
+DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem
+Einloggen zum Beispiel unter Linux mit dem Befehl ssh pi@raspberrypi und dem
+Passwort raspberry, kann mittels passwd das Passwort verändert werden.
+
+18
+
+Schnittstelle
+Laserscanner
+Raspberry Pi
+
+IP-Adresse bzw. Bereich
+
+Ethernet 192.168.1.111 statisch
+Ethernet 192.168.2.110 statisch
+WiFi
+
+Client
+
+10.10.10.10 statisch
+
+WiFi
+
+10.10.10.100 - 10.10.10.254
+
+Tabelle 5.1.: IP-Adressen-Verteilung
+
+5.2. Befehle mit Root-Rechten
+Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (root). Da es jedoch nicht empfohlen ist, Skripte als root
+auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die
+Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurde dem normalen Nutzer (pi) die Rechte gegeben, einzelne
+Befehle als Admin ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei /etc/sudoers gegeben werden. Da
+eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl visudo überarbeitet, der nach
+dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem Listing 5.1 zu entnehmen.(ubuntuusers.de, 2017)
+Listing 5.1: Änderung der /etc/sudoers
+
+5.3. IP-Adressen-Konfiguration
+Per Ethernet soll der Raspberry auf die IP-Adresse 192.168.1.111 konfiguriert werden, da diese IP-Adresse im Laserscanner als Host eingestellt war und an diesen die
+Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN
+wurde fest auf die gut zu merkende Adresse 10.10.10.10 geändert, hierüber erfolgt
+später der Zugriff auf die Weboberfläche (siehe auch Tabelle 5.1).
+Die Konfiguration der IP-Adressen für den Raspberry erfolgt in der Konfigurationsdatei /etc/network/interfaces (siehe Listing 5.2. Raspberry Pi Foundation (2017)
+Original
+hinzufügen
+
+
+Listing 5.2: Konfiguration der /etc/network/interfaces
+
+
+Zur Konfiguration der dynamischen IP-Adressen der Clients im WLAN wird ein
+DHCP-Server eingerichtet. Ein solcher Server weißt neuen Geräten – beziehungsweise
+welchen, die länger nicht im Netzwerk waren – automatisch eine neue, unverwendete
+IP-Adresse zu. Hierdurch benötigen die Clients keine spezielle Konfiguration und ihre
+IP-Einstellungen können auf dem üblichen Standardeinstellungen verbleiben (automatische IP-Adresse beziehen). Als DHCP-Server wird hier das Paket dnsmasq verwendet.
+Außer dem DHCP-Server bietet dieses Paket auch einen DNS-Server, der es erlaubt,
+den Geräten auch einen Hostname zuzuweisen. So wäre der Zugriff zum Beispiel über
+den Hostname raspberry.ip anstatt durch Eingabe der IP-Adresse möglich.
+Die Konfiguration des DHCP-Servers ist vergleichsweise einfach und benötigt nur das
+verwendete Netzwerk-Interface, hier wlan0, den zu nutzenden IP-Bereich, die Netzmaske und die Zeit, nach der eine IP-Adresse an ein anderes Gerät vergeben werden darf,
+die sogenannte Lease-Time (siehe Listing 5.3). Raspberry Pi Foundation (2017)
+Listing 5.3: Konfiguration der /etc/dnsmasq.conf
+
+5.4. Konfiguration als WLAN-Access-Point
+Um einen Zugriff auf die Python-Weboberfläche des Skriptes und die Konfiguration
+des Laserscanners zu ermöglichen, soll der Raspberry Pi selbst als WLAN-AccessPoint fungieren. Hierzu das Paket hostapd verwendet. Zur Konfiguration werden die
+Einstellungen in die Datei /etc/hostapd/hostapd.conf geschrieben. Raspberry Pi
+Foundation (2017)
+Listing 5.4: Konfiguration der /etc/hostapd/hostapd.conf
+
+
+5.5. Autostart des Skriptes
+Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde
+das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start
+des Skriptes unmittelbar nach dem Hochfahren des Betriebssystemes.
+
+
