@@ -46,12 +46,6 @@
 \bibliographystyle{hcu}
 
 \begin{document}
-% Mehrere gleichzeitig zitieren
-\providecommand{\citeTwo}[4]{\citep[{\citealp[#1]{#2};}][#3]{#4}} 
-\providecommand{\citeThree}[6]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4};}][#5]{#6}} 
-\providecommand{\citeFour}[8]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4}; \citealp[#5]{#6};}][#7]{#8}}.
-
-
 \pagenumbering{Roman}
 \begin{titlepage}
 \begin{center}
@@ -111,6 +105,13 @@ Auch Teil der Arbeit ist die Schaffung einer Steuerung der Aufnahme des Lasersca
 The present work is part of a project aimed the development of a system that allows the modular interchangeable operation of various sensor systems on a multicopter. In particular, the data interface for compact laser scanner Velodyne Lidar Puck VLP-16 to a single-board computer Raspberry Pi will be developed and implemented. The scanner itself provides the data in a proprietary, binary format, which should be converted and stored into an easy-to-read ASCII file. In addition, the data should be provided with a unique timestamp in order to be able to link it later with other sensor systems. This data transformation should be carried out as simultaneously as possible while recording.
 
 Also part of the work is the creation of a control of the recording of the laser scanner. For this purpose, an operating module was developed, which can be connected directly to the Raspberry Pi, as well as a web control surface integrated in the software, which should enable the control during the flight.
+
+
+% Mehrere gleichzeitig zitieren
+\providecommand{\citeTwo}[4]{\citep[{\citealp[#1]{#2};}][#3]{#4}} 
+\providecommand{\citeThree}[6]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4};}][#5]{#6}} 
+\providecommand{\citeFour}[8]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4}; \citealp[#5]{#6};}][#7]{#8}}.
+
 \newpage
 
 \tableofcontents
@@ -144,9 +145,9 @@ Für Messung der Entfernung werden zwei verschiedene Prinzipien angewandt.
 Bei der Laufzeitmessung wird ein Laserimpuls ausgesandt. Mit dem Aussenden startet ein hochgenauer Timer seine Messung. Beim Eintreffen des an einer Oberfläche reflektierten Strahles beim Laserscanner wird der Timer gestoppt. Aus dieser gemessenen Laufzeit lässt sich die zurückgelegte Strecke des Lichtstrahles und somit die doppelte Entfernung der Oberfläche bestimmen. Hierzu wird der Brechungsindex \(n\) des vom Laser durchlaufenen Mediums benötigt. Aus der bekannten Lichtgeschwindigkeit \(c_0\) und der benötigten Zeit \(t\) lässt sich dann die Entfernung \(s\) mit der \autoref{equ:entfernung} berechnen.
 
 \begin{equation}
-\begin{align}
+\begin{aligned}
 s &=  \frac{c_0}{n} \cdot \frac{t}{2}  && \left|\  \text{Streckenberechnung} \right. \\
-\end{align}
+\end{aligned}
 \label{equ:entfernung}
 \end{equation}
 
@@ -336,10 +337,10 @@ Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Da
 Die drei Leuchtdioden wurden mit jeweils einem 150Ohm Vorwiderstand direkt zwischen ein GPIO-Pin und Ground eingebaut. Durch Ansteuerung der GPIO-Pins lassen sich diese An- und Abschalten. Außer zum Schutz und Betrieb der LEDs verhindern die Vorwiderstände auch eine zu hohe Stromaufnahme aus den GPIO-Pins. Die genaue Belastbarkeit der Pins ist nicht dokumentiert, jedoch wird meist von einem Wert um 10mA bei 3,3 Volt gesprochen (zum Beispiel \citet{ekRaspPin}).
 
 \begin{equation}
-\begin{align}
+\begin{aligned}
 U_R &= U_{GPIO} - U_{LED} = 3,3V - 2,0V = 1,3V    && \left|\  \text{Benötigter Spannungsabfall} \right. \\
 R &= \frac{U_R}{I_{LED}} = \frac{1,3V}{0,01A} = 130\Omega   && \left|\  \text{min. Vorwiderstand} \right. \\
-\end{align}
+\end{aligned}
 \label{eq:vorwiderstand}
 \end{equation}
 
@@ -669,7 +670,7 @@ ieee80211d=1
 country_code=DE
 wmm_enabled=1
 
-# WLAN-Verschlüsselung
+#WLAN-Verschluesselung
 auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
