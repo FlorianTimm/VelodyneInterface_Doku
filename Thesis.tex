@@ -46,6 +46,12 @@
 \bibliographystyle{hcu}
 
 \begin{document}
+% Mehrere gleichzeitig zitieren
+\providecommand{\citeTwo}[4]{\citep[{\citealp[#1]{#2};}][#3]{#4}} 
+\providecommand{\citeThree}[6]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4};}][#5]{#6}} 
+\providecommand{\citeFour}[8]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4}; \citealp[#5]{#6};}][#7]{#8}}.
+
+
 \pagenumbering{Roman}
 \begin{titlepage}
 \begin{center}
@@ -133,7 +139,9 @@ Airborne Laserscanning bezeichnet das Verfahren, bei dem ein Laserscanner, welch
 Ein Laserscanner besteht grundlegend aus einer Laser-Entfernungsmesseinheit und einer Ablenkeinheit. Für beide Teile gibt es verschiedenste Bauformen, auf die im folgenden eingegangen wird.
 
 \subsection{Entfernungsmessung}
-Zur Messung der Entfernung werden zwei grundlegende Prinzipien angewandt. Bei der Laufzeitmessung wird ein Laserimpuls ausgesandt. Mit dem Aussenden startet ein hochgenauer Timer seine Messung. Beim Eintreffen des an einer Oberfläche reflektierten Strahles beim Laserscanner wird der Timer gestoppt. Aus dieser gemessenen Laufzeit lässt sich die zurückgelegte Strecke des Lichtstrahles und somit die doppelte Entfernung der Oberfläche bestimmen. Hierzu wird der Brechungsindex \(n\) des vom Laser durchlaufenen Mediums benötigt. Aus der bekannten Lichtgeschwindigkeit \(c_0\) und der benötigten Zeit \(t\) lässt sich dann die Entfernung \(s\) mit der \autoref{equ:entfernung} berechnen.
+Für Messung der Entfernung werden zwei verschiedene Prinzipien angewandt.
+
+Bei der Laufzeitmessung wird ein Laserimpuls ausgesandt. Mit dem Aussenden startet ein hochgenauer Timer seine Messung. Beim Eintreffen des an einer Oberfläche reflektierten Strahles beim Laserscanner wird der Timer gestoppt. Aus dieser gemessenen Laufzeit lässt sich die zurückgelegte Strecke des Lichtstrahles und somit die doppelte Entfernung der Oberfläche bestimmen. Hierzu wird der Brechungsindex \(n\) des vom Laser durchlaufenen Mediums benötigt. Aus der bekannten Lichtgeschwindigkeit \(c_0\) und der benötigten Zeit \(t\) lässt sich dann die Entfernung \(s\) mit der \autoref{equ:entfernung} berechnen.
 
 \begin{equation}
 \begin{align}
@@ -142,29 +150,50 @@ s &=  \frac{c_0}{n} \cdot \frac{t}{2}  && \left|\  \text{Streckenberechnung} \ri
 \label{equ:entfernung}
 \end{equation}
 
+\paragraph{Phasenvergleichsverfahren}
+Eine andere, weitaus häufiger verwendete Methode, ist das Phasenvergleichsverfahren. Hierbei wird nicht direkt die Zeit gemessen sondern ein kontinuierlichen Lichtstrahl mit einer Sinusschwingung amplitudenmoduliert (Intensivitäts- bzw. Helligkeitsschwankungen). Hierdurch können weniger frequente Wellen (Modulationswelle) verwendet werden, wodurch sich bei guten Ausbreitungseigenschaften der hochfrequenten Trägerwellen die leichtere Verarbeitbarkeit von längeren Wellen ausnutzen lässt. Durch Messung des Phasenunterschiedes des Messstrahles, kann auf die Reststrecke der nicht-vollständigen Phasen des Messstrahles geschlossen werden. Als Trägerwelle wird zur normalen Messung auf einen Reflektor Infrarotlicht mit einer Wellenlänge von etwa 900nm verwendet. Dieses kann mit einer Galliumarsenid-Leuchtdiode einfach erzeugt und direkt durch Spannungsschwankungen moduliert werden. Außerdem hat diese Wellenlänge gute Ausbreitungseigenschaften. Die hierfür benötigte Modulationswelle wird durch ein Quarzoszillator erzeugt. Ein hier verbautes Quarzplättchen wird durch Anlegen einer Spannung in eine Schwingung versetzt, welche im Gegensatz zu anderen Oszillatorenschaltungen seine Frequenz sehr genau einhalten kann. Die Schwingung wird dann verstärkt und an den Infrarot-Laser geleitet, so dass dieser das modulierte Infrarotlicht aussendet. Die maximal eindeutig messbare Entfernung ist direkt von der längsten verwendeten Wellenlänge, dem Grobmaßstab, abhängig: Da nur die Phasenunterschiede und nicht die Anzahl der Schwingungen gemessen werden kann, ist die maximale eindeutige  Streckenmessung genau halb so groß wie die maximale Wellenlänge, da mit dem Reflektor die Strecke doppelt (Hin- und Rückweg) gemessen wird. Wenn längere Strecken als die halbe Wellenlänge gemessen werden, ist dem Gerät nicht bekannt, wie viele ganze Wellen das Licht schon zurückgelegt hat. Das Signal ist bei zu langen Strecken mehrdeutig. Zur Messung der Phase werden die ausgesendete und die eingehende Messwelle mit einer Überlagerungsfrequenz vermischt, die aus diesen beiden hochfrequenten Wellen eine niederfrequente Welle macht. Die Überlagerungsfrequenz hat die Frequenz der Summe der Modulationsfrequenz und der gewünschten Niederfrequenz. Hierdurch wird die Verarbeitbarkeit der Wellen vereinfacht. Da die Genauigkeit der Zeit-Messung begrenzt ist, wird durch Nutzung verschiedener Wellenlängen eine Genauigkeitssteigerung durchgeführt werden. Nach der groben Messung mit einer langen Wellenlänge, wird die Genauigkeit durch die Verwendung immer kürzerer Modulationswellen gesteigert. Eine grobe Messung ist jedoch vorher notwendig, da ansonsten die Anzahl der ganzen Schwingungen des Messstrahles unbekannt ist. \citep[S. 311ff]{Witte2006}
 
+\paragraph{Zeitmessung}
+Bei beiden Verfahren ist ein Problem die genaue Zeitmessung. Eine Möglichkeit dieser Messung ist die Nutzung eines Frequenzgenerators, welcher Zählimpulse erzeugt. Diese werden dann zwischen zwei Flanken der zu messenden Ausgangs- und Eingangswellen mehrfach gezählt und gemittelt und ergeben so zum Beispiel die Phasenverschiebung. Dieses Verfahren wird als digitale Messung bezeichnet. Eine andere Methode ist die analoge Messung. Hierbei öffnet die eine Flanke den Stromfluss zu einem Kondensator, die Flanke der anderen Welle schließt sie wieder. Aus der Ladung des Kondensators kann dann auf den Phasenwinkel und die Phasenverschiebung geschlossen werden.  \citep[S. 314f]{Witte2006}
 
-\citep[]{ALS}
+\subsection{Ablenkeinheit}
+Bei den meisten Laserscannern ist nur eine Laserentfernungsmesseinheit verbaut. Um hiermit verschiedene Punkte messen zu können, muss der Laserstrahl durch geeignete Verfahren abgelenkt werden. Auch hierfür gibt es im Airborne Laserscanning verschiedenste Ansätze:
+\citeTwo{S. 23ff}{ALS}{S. 16ff}{beraldin}
 
+\paragraph{Schwenkspiegel}
+Der Laserstrahl wird auf einen schwingenden, flachen Spiegel gerichtet. Durch die Schwingung wird der Laserstrahl in einer Ebene nach Links und Rechts abgelenkt. Durch die Bewegung des Fluggerätes wird der Laser so in Richtung der Schwingachse ensteht so auf der Oberfläche eine Zick-Zack-Linie als Messmuster.
 
-Die Messung der Distanz erfolgt über die Zeitmessung der Dauer zwischen der Aussendung eines Laserimpulses und des Eintreffen des reflektierten Strahles am Scanner. Die Höhenwinkel der Messstrahlen sind durch die Konstruktion des Scanners fest vorgegeben. Der Horizontalwinkel ergibt sich aus der Position des Messmodules zum Zeit der Aussendung, während sich dieses dreht.
+\paragraph{Rotierender Polygon-Spiegel}
+Beim drehenden Polygon-Spiegel dreht sich ein Prisma mit einem gleichseitigen Polygon in der Achse der Flugbewegung. Seine rechteckigen Seiten sind verspiegelt und der Laser auf diese gerichtet. Von oben gesehen wird der Strahl somit immer nur in eine Richtung abgelenkt und springt dann wieder zurück auf die andere Seite. Es entsteht ein Streifenmuster.
 
-Bei dem Laserscanner handelt es sich mit hoher Wahrscheinlichkeit um einen sogenannten Faserlaser. Hier wird der Laserstrahl eines einzigen Messlaser über einen Spiegel in verschiedene Faserbündel eingespiegelt. Die Fasern leiten den Strahl dann zu dem gewünschten Messwinkel. Die Fasern sind beim Bau des Scanners fest verklebt und daher in ihrer Ausrichtung stabil. durch diese Bündel in die vorgegebene Richtung abgelenkt. \citep[S. 18]{beraldin}
+\paragraph{Palmer Scanner}
+Beim Palmerscanner rotiert ein Flachspiegel um eine Achse, die fast senkrecht zur Spiegeloberfläche steht. Da der Spiegel nicht genau senkrecht auf dieser Achse montiert ist, beschreibt der auf den Spiegel gerichtete Laser einen Kreis. Durch einen im 45 Grad Winkel zur Achse stehenden Spiegel und einem sich in der Drehachse befindenen Scanner können die Strahlen auch rechtwinklig abgelenkt werden und somit eine Ebene scannen. Dies wird häufig bei terrestrischen Laserscannern im Zusammenhang mit einer zweiten Drehachse angewandt.
+
+\paragraph{Glasfaser-Scanner}
+Der Glasfaserscanner nutzt zur Ablenkung zusätzlich Glasfasern, welche fest verklebt sind. Hierdurch sind die Winkel zur Seite festgegeben. Zum Beispiel ein Polygonspiegel wie er zuvor beschrieben wurde, reflektiert den Messstrahl in die jeweiligen Faserbündel. Die Ablenkungswinkel sind fest vom Hersteller vorgeben.
+
+\paragraph{Zusätzliche Achsen}
+Zusätzlich zu den Spiegelmechanismen verfügen viele, vorallem die terrestrische Laserscanner über eine weitere Drehachse. Das Scanmodul dreht sich hier um sich selbst und ermöglicht so das Scannen des kompletten Panoramas.
+
+\todo{Bild malen}
 
 \section{Positionsbestimmung mittels globalen Navigationssatellitensystemen}
 \label{s:GNSS}
-Zur Bestimmung der Position des Fluggerätes wird ein Empfänger für globale Satellitennavigationssysteme (GNSS) verwendet. Ein solcher Empfänger kann durch die Laufzeitbestimmung des Signales von verschiedenen Satelliten zum Beispiel des US-amerikanischen Navstar GPS seine aktuelle Position bestimmen. Hierzu ist eine freie Sicht zum Himmel notwendig. Je nach Weiterverarbeitung des Signales sind Genauigkeiten zwischen 10 Metern ohne zusätzliche Daten und wenigen Millimetern bei statischen Dauermessungen und dem Einsatz von Daten von anderen Basisstationen im Postprocessing.
-
+Zur Bestimmung der Position des Fluggerätes wird ein Empfänger für globale Satellitennavigationssysteme (global navigation satellite system, GNSS) verwendet. Ein solcher Empfänger kann durch die Laufzeitbestimmung des Signales von verschiedenen Satelliten zum Beispiel des US-amerikanischen Navstar GPS seine aktuelle Position bestimmen. Hierzu ist eine freie Sicht zum Himmel notwendig. Je nach Auswertung und Weiterverarbeitung des Signales sind Genauigkeiten zwischen 10 Metern ohne zusätzliche Daten und wenigen Millimetern bei statischen Dauermessungen und dem Einsatz von Daten von Referenzstationen im Postprocessing möglich. Es befinden sich pro System etwa 30 Satelliten in einer bekannten Umlaufbahn. Durch an Bord befindlich Atomuhren können die Satelliten hochgenaue Zeitstempel und sich wiederholende Codemuster aussenden. Im Fall von Navstar GPS erfolgt die Aussendung aktuell auf drei verschiedenen Frequenzen L1, L2 und L5. Für die öffentliche Nutzung ist nur L1 freigegeben. L2 und L5 sind der militärischen Nutzung vorbehalten. Durch reine Auswertung des ausgesendeten L1-Codes können Genauigkeiten bis 5 Meter erreicht werden. Für geodätische Anwendungsfälle wird zusätzlich die Phasenmessung benutzt. Hierbei wird nicht nur das dem Funksignal aufmodelierte Codemuster ausgewertet, sondern auch die Phase des Signals. Hierdurch ist es auch möglich, dass verschlüsselte L2-Signal mitzunutzen. Durch die Nutzung von Referenzstationsnetzen wie SAPOS Genauigkeiten von 1-2cm in Echtzeit und von unter Zentimetergenauigkeit im Postprocessing erreicht werden \citep[S. 375]{Witte2006}.
 
 \section{Inertiale Messeinheit}
 \label{s:IMU}
+Bei der Inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie wird benötigt, um beim Airborne Laserscanning die genaue Ausrichtung des Laserscanners zu bestimmen. Daher muss diese auch unverwindbar mit dem Laserscanner verbunden sein. In Kombination mit den Positionsdaten des GNSS-Modules ermöglicht sie die Rekonstruktion der Flugbewegungen (Trajektorie). Ein weiterer Vorteil der intertialen Messeinheit ist ihre Messfrequenz: Im Gegensatz zum GNSS, dass im Normalfall nur eine Messung pro Sekunde durchführt, kann die IMU bis zu 200 Messungen pro Sekunde ausführen. Sie stützt daher nicht nur die GNSS-Messung sondern hilf auch, die Trajektorie zu interpolieren und somit auch für den Bereich zwischen den GNSS-Messungen genaue Positionen zu bestimmen. \citep[S. 23]{beraldin}
 
-Bei der Inertialen Messeinheit handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie soll im Einsatz des Multikopters unverwindbar mit dem Laserscanner verbunden werden und so es ermöglichen, die Ausrichtung des Laserscanners zu bestimmen. Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Postprocessing können diese eine Positionsgenauigkeit von etwa 2 Zentimeter erreichen \citep{imar}.\todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann die Orientierung des Scanners bestimmt werden. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+Hauptsächlich unterschieden werden die inertialen Messeinheiten in mechanische Systeme und MEMS-Systeme \todo{Quelle, ausformulieren}
 
-Im Postprocessing kann aus den Daten der Inertialen Messeinheit zusammen mit denen der GNSS-Module und GNSS-Korrekturdaten die Flugbahn des Multikopters berechnet werden. Die Daten der Inertialen Messeinheit werden hierbei regelmäßig durch die Daten der GNSS-Module gestützt.
+\section{Kombination des Messsysteme}
+Um die drei eigenständigen Messsysteme kombiniert nutzen zu können, muss die relative Position der Systeme genau bekannt sein und darf sich während des Fluges nicht verändern. Beim klassischen Airborne Laserscanning vom Helikopter werden hierfür zum Beispiel eigenständige Module entwickelt, die alle benötigten Systeme verdrehsicher enthalten und an den Kuffen des Helikopters montiert werden können \todo{Quellen, ausformulieren}
 
 \chapter{Technische Realisierung}
 \label{c:realisierung}
+
+Wie bereits erwähnt soll das Airborne Laserscanning System von einem Multikopter getragen werden. Im Gegensatz anderen Versuchen dieser Art, soll es sich hierbei um einen Mini-Multikopter handeln mit einer Tragkraft von bis zu 5 Kilogramm. Ähnlich Sensorsysteme wurden bereits auf größen Plattformen realisiert, sind jedoch aufgrund ihrer Größe nur sehr begrenzt einsetzbar. \citep[S. 19]{uav}
 
 \section {Verwendete Gerätschaften}
 
@@ -187,6 +216,9 @@ Einer dieser Kompakt-Laserscanner ist der Velodyne Puck VLP-16 (siehe \autoref{i
 
 \section{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
 \label{s:iMar}
+ Sie soll im Einsatz des Multikopters unverwindbar mit dem Laserscanner verbunden werden und so es ermöglichen, die Ausrichtung des Laserscanners zu bestimmen. Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Postprocessing können diese eine Positionsgenauigkeit von etwa 2 Zentimeter erreichen \citep{imar}.\todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann die Orientierung des Scanners bestimmt werden. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+
+Im Postprocessing kann aus den Daten der Inertialen Messeinheit zusammen mit denen der GNSS-Module und GNSS-Korrekturdaten die Flugbahn des Multikopters berechnet werden. Die Daten der Inertialen Messeinheit werden hierbei regelmäßig durch die Daten der GNSS-Module gestützt.
 
 \subsection{Raspberry Pi 3 Typ B}
 \label{ss:Raspberry}
