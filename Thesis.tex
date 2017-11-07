@@ -174,7 +174,9 @@ Beim Palmerscanner rotiert ein Flachspiegel um eine Achse, die fast senkrecht zu
 Der Glasfaserscanner nutzt zur Ablenkung zusätzlich Glasfasern, welche fest verklebt sind. Hierdurch sind die Winkel zur Seite festgegeben. Zum Beispiel ein Polygonspiegel wie er zuvor beschrieben wurde, reflektiert den Messstrahl in die jeweiligen Faserbündel. Die Ablenkungswinkel sind fest vom Hersteller vorgeben.
 
 \paragraph{Zusätzliche Achsen}
-Zusätzlich zu den Spiegelmechanismen verfügen viele, vorallem die terrestrische Laserscanner über eine weitere Drehachse. Das Scanmodul dreht sich hier um sich selbst und ermöglicht so das Scannen des kompletten Panoramas.
+Zusätzlich zu den Spiegelmechanismen verfügen die terrestrische Laserscanner über eine weitere Achse. Während beim normalen Airborne Laserscanning die weitere Bewegung des Lasers durch die Fortbewegung des Fluggerätes durchgeführt wird, muss hier dies ein Motor übernehmen. Panorama-Laserscanner haben hierfür einen Drehmechanismus um ihre Hochachse. Bei Kamerascannern, sie messen nur eine quadratische Fläche wie eine Kamera, kann die zusätzliche Bewegung auch einfach durch einen zweiten Ablenkungsspiegel erfolgen. \citep[S. 37]{beraldin}
+
+Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Meßeinheit, die den Stand des Spiegels misst. Hierdurch lässt sich dann die Abstrahlrichtung des Lasers berechnen, beziehungsweise beim Faserlaser bestimmen, welches Faserbündel genutzt wurde. Der Winkel wird dann wiederum zur Berechnung von Koordinaten benötigt.
 
 \todo{Bild malen}
 
@@ -184,12 +186,23 @@ Zur Bestimmung der Position des Fluggerätes wird ein Empfänger für globale Sa
 
 \section{Inertiale Messeinheit}
 \label{s:IMU}
-Bei der Inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie wird benötigt, um beim Airborne Laserscanning die genaue Ausrichtung des Laserscanners zu bestimmen. Daher muss diese auch unverwindbar mit dem Laserscanner verbunden sein. In Kombination mit den Positionsdaten des GNSS-Modules ermöglicht sie die Rekonstruktion der Flugbewegungen (Trajektorie). Ein weiterer Vorteil der intertialen Messeinheit ist ihre Messfrequenz: Im Gegensatz zum GNSS, dass im Normalfall nur eine Messung pro Sekunde durchführt, kann die IMU bis zu 200 Messungen pro Sekunde ausführen. Sie stützt daher nicht nur die GNSS-Messung sondern hilf auch, die Trajektorie zu interpolieren und somit auch für den Bereich zwischen den GNSS-Messungen genaue Positionen zu bestimmen. \citep[S. 23]{beraldin}
+Bei der Inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie wird benötigt, um beim Airborne Laserscanning die genaue Ausrichtung des Laserscanners zu bestimmen. Daher muss diese auch unverwindbar mit dem Laserscanner verbunden sein. In Kombination mit den Positionsdaten des GNSS-Modules ermöglicht sie die Rekonstruktion der Flugbewegungen (Trajektorie). Ein weiterer Vorteil der intertialen Messeinheit ist ihre Messfrequenz: Im Gegensatz zum GNSS, dass im Normalfall nur eine Messung pro Sekunde durchführt, kann die IMU bis zu 200 Messungen pro Sekunde ausführen. Sie stützt daher nicht nur die GNSS-Messung sondern hilf auch, die Trajektorie zu interpolieren und somit auch für den Bereich zwischen den GNSS-Messungen genaue Positionen zu bestimmen. \citep[S. 23ff]{beraldin}
 
-Hauptsächlich unterschieden werden die inertialen Messeinheiten in mechanische Systeme und MEMS-Systeme \todo{Quelle, ausformulieren}
+Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, mechanische Systeme und mikroelektromechanische Systeme, sogenannte MEMS (microelectromechanical systems).
+
+\paragraph{Klassische Systeme}
+
+
+\paragraph{Mikroelektromechanische Systeme}
+\citep[S. 10ff]{Willemsen}
+
+
+\todo{Quelle, ausformulieren}
 
 \section{Kombination des Messsysteme}
 Um die drei eigenständigen Messsysteme kombiniert nutzen zu können, muss die relative Position der Systeme genau bekannt sein und darf sich während des Fluges nicht verändern. Beim klassischen Airborne Laserscanning vom Helikopter werden hierfür zum Beispiel eigenständige Module entwickelt, die alle benötigten Systeme verdrehsicher enthalten und an den Kuffen des Helikopters montiert werden können \citep[S. 23f]{beraldin}
+
+Außerdem müssen alle Systeme synchronisiert werden, damit die Daten später miteinander verarbeitet werden können. Hierfür wird üblicherweise das ein Sekundensignal des Satellitennavigationssystemes (pulse per second, PPS) genutzt. Das GNSS-System sendet dazu zu jeder vollen Sekunde der GNSS-Zeit ein Impuls aus.
 
 \chapter{Technische Realisierung}
 \label{c:realisierung}
@@ -685,6 +698,8 @@ Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde
 su pi -c "python3 VdAutoStart.py"
 exit 0
 \end{lstlisting}
+
+\todo{zu Ende schreiben}
 
 \chapter{Ausblick}
 \label{c:ausblick}
