@@ -179,7 +179,7 @@ Der Glasfaserscanner nutzt zur Ablenkung zusätzlich Glasfasern, welche fest ver
 \paragraph{Zusätzliche Achsen}
 Zusätzlich zu den Spiegelmechanismen verfügen die terrestrische Laserscanner über eine weitere Achse. Während beim normalen Airborne Laserscanning die weitere Bewegung des Lasers durch die Fortbewegung des Fluggerätes durchgeführt wird, muss hier dies ein Motor übernehmen. Panorama-Laserscanner haben hierfür einen Drehmechanismus um ihre Hochachse. Bei Kamerascannern, sie messen nur eine quadratische Fläche wie eine Kamera, kann die zusätzliche Bewegung auch einfach durch einen zweiten Ablenkungsspiegel erfolgen. \citep[S. 37]{beraldin}
 
-Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Meßeinheit, die den Stand des Spiegels misst. Hierdurch lässt sich dann die Abstrahlrichtung des Lasers berechnen, beziehungsweise beim Faserlaser bestimmen, welches Faserbündel genutzt wurde. Der Winkel wird dann wiederum zur Berechnung von Koordinaten benötigt.
+Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Meßeinheit, die den Stand des Spiegels misst. Hierdurch lässt sich dann die Abstrahlrichtung des Lasers berechnen, beziehungsweise beim Faserlaser bestimmen, welches Faserbündel genutzt wurde. Die Richtung wird dann wiederum zur Berechnung von Koordinaten benötigt.
 
 \todo{Bild malen}
 
@@ -200,7 +200,17 @@ Bei der Inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich 
 
 Die Messung erfolgt mit mehreren Einzelsensoren: Für die Messung der Beschleunigung in drei Dimensionen sind drei jeweils rechtwinklig zu einander stehende Beschleunigungsmesser verbaut. In der klassischen Bauform ist hierfür jeweils eine Probemasse zwischen zwei Federn gelagert. Durch eine auf die Probemasse wirkende Beschleunigung wird diese zwischen den Federn ausgelenkt. Die Messung der Drehrate erfolgt mittels drei einzelnen Kreiselinstrumenten (Gyroskop) in drei Achsen. Sie basieren auf Kreiseln, welche drehbar gelagert sind. Sie streben dazu, die Ausrichtung ihrer Drehachsen im Raum beizubehalten. Durch Messung der Kräfte kann die Drehrate berechnet werden. Einige inertiale Messeinheiten enthalten auch ein dreidimensionales Magnetometer, mit dem sich die magnetische Nordrichtung dreidimensional feststellen lässt.
 
-Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, mechanische Systeme, wie sie bereits hier beschrieben wurden, und mikroelektromechanische Systeme, sogenannte MEMS (microelectromechanical systems). Bei den zweitgenannten handelt es sich um stark miniaturisierte Bauteile, welche zum Beispiel in aktuellen Smartphones eingesetzt werden. Sie werden für Zwecke eingesetzt, in denen keine hohen Genauigkeitsanforerungen gestellt werden und der Preis gering gehalten werden soll. Auch zur Stabilisierung der Fluglage von Multikoptern oder Gimbals werden diese Sensoren eingesetzt. Für geodätische Anwendungsfälle werden jedoch meist noch mechanische Systeme genutzt, da deren Genauigkeit und ihre zeitliche Abweichung geringer sind.
+Die Genauigkeit von inertialen Messeinheiten wird in ihre Messgenauigkeit und in ihre zeitliche Abweichung unterteilt. Die zeitliche Stabilität ist vorallem bei der Inertialnavigation, die ausschließlich auf deren Messungen basiert, wichtig.
+
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/mems.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{MPU-9250 - Low-Cost-MEMS-IMU-Modul wie es in vielen Consumer-Geräten und Multikoptern verwendet wird (schwarzes Bauteil mittig auf der Platine, eigene Aufnahme)}
+ \label{img:mems}
+\end{figure}
+
+Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, mechanische Systeme, wie sie bereits hier beschrieben wurden, und mikroelektromechanische Systeme, sogenannte MEMS (microelectromechanical systems). Bei den zweitgenannten handelt es sich um stark miniaturisierte Bauteile (beispielsweise \autoref{img:mems}) , welche zum Beispiel in aktuellen Smartphones eingesetzt werden. Sie werden für Zwecke eingesetzt, in denen keine hohen Genauigkeitsanforerungen gestellt werden und der Preis gering gehalten werden soll. Auch zur Stabilisierung der Fluglage von Multikoptern oder Gimbals werden diese Sensoren eingesetzt. Für geodätische Anwendungsfälle werden jedoch meist noch mechanische Systeme genutzt, da deren Genauigkeit und ihre zeitliche Abweichung geringer sind.
 
 \todo{Quelle}
 
@@ -226,9 +236,9 @@ Im Folgenden wird zunächst auf die verwendeten Geräte und ihre technischen Eig
 
 \subsection{Velodyne VLP-16}
 \label{sss:vlp16}
-Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laserscanner eingesetzt. Einer dieser Kompakt-Laserscanner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Er hat einen Durchmesser von etwa 10 cm und eine Höhe von 7 cm bei einem Gewicht von etwa 830 g ohne Kabel und Schnittstellenbox. Es handelt sich beim VLP-16 sehr wahrscheinlich um einen Faserscanner (siehe \autoref{p:faserscanner}) mit 16 Messstrahlen, der sich zusätzlich um seine Hochachse dreht. Seine Messgenauigkeit beträgt laut Datenblatt \(3~cm\). Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem augensicheren Infrarotlaser mit einer Wellenlänge von 903nm. \citep{vlpSheet}
+Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laserscanner eingesetzt. Einer dieser Kompakt-Laserscanner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Er hat einen Durchmesser von etwa 10 cm und eine Höhe von 7 cm bei einem Gewicht von etwa 830 g ohne Kabel und Schnittstellenbox. Es handelt sich beim VLP-16 sehr wahrscheinlich um einen Faserscanner (siehe \autoref{p:faserscanner}) mit 16 Messstrahlen, der sich zusätzlich um seine Hochachse dreht. Seine Messgenauigkeit beträgt laut Datenblatt \(3~cm\). Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem Infrarotlaser mit einer Wellenlänge von 903nm. \citep{vlpSheet}
 
-Der Scanner sendet die Messstrahlen mit einer geringen Zeitdifferenz von \(2,3\mu s\) hintereinander aus, gefolgt von einer Nachladezeit von \(18,4\mu s\), so dass jeder Messstrahl alle \(55,3~\mu s\) ausgesendet werden kann \citep[S. 16]{vlpManual}. Es ergibt sich somit eine durchschnittliche Messfrequenz von \(289.357~Hz\) (siehe \autoref{equ:XproS}). Während der Messungen dreht sich der Laserscanner je nach Einstellung über das Webinterface des Scanners mit 5 bis 20 Umdrehungen pro Sekunde \citep{vlpSheet}. Pro ausgesendeten Strahl können jeweils die erste und die stärkste Reflexion zurück gegeben werden, so dass über eine halbe Million Punkte pro Sekunde gemessen werden können (siehe \autoref{equ:XproS}). Die Daten werden anschließend über den Netzwerkanschluss gestreamt (siehe auch \autoref{ss:Datenlieferung}). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul des Types Garmin GPS 18x LVC. Auch andere GNSS-Module sind nutzbar, so dass im Weiteren der Versuch unternommen wurde, hier das GNSS-Modul der Inertialen Messeinheit (siehe \autoref{s:iMar}) oder eines uBlox-GNSS-Modules zu nutzen (siehe \autoref{s:GNSSAnschluss}). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so in der Nachbearbeitung mit den Daten aus der Inertialen Messeinheit zu verknüpfen.
+Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hintereinander aus, gefolgt von einer Nachladezeit von \(18,4\mu s\), so dass jeder Messstrahl alle \(55,3~\mu s\) ausgesendet werden kann \citep[S. 16]{vlpManual}. Es ergibt sich somit eine durchschnittliche Messfrequenz von \(289.357~Hz\) (siehe \autoref{equ:XproS}). Während der Messungen dreht sich der Laserscanner je nach Einstellung über das Webinterface des Scanners mit 5 bis 20 Umdrehungen pro Sekunde \citep{vlpSheet}. Pro ausgesendeten Strahl können jeweils die erste und die stärkste Reflexion zurück gegeben werden, so dass über eine halbe Million Punkte pro Sekunde gemessen werden können (siehe \autoref{equ:XproS}). Die Daten werden anschließend über den Netzwerkanschluss gestreamt (siehe auch \autoref{ss:Datenlieferung}). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul des Types Garmin GPS 18x LVC. Auch andere GNSS-Module sind nutzbar, so dass im Weiteren der Versuch unternommen wurde, hier das GNSS-Modul der Inertialen Messeinheit (siehe \autoref{s:iMar}) oder eines uBlox-GNSS-Modules zu nutzen (siehe \autoref{s:GNSSAnschluss}). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so in der Nachbearbeitung mit den Daten aus der Inertialen Messeinheit zu verknüpfen.
 
 \begin{equation}
  \label{equ:XproS}
@@ -248,13 +258,16 @@ Der Scanner sendet die Messstrahlen mit einer geringen Zeitdifferenz von \(2,3\m
 
 \section{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
 \label{s:iMar}
- Sie soll im Einsatz des Multikopters unverwindbar mit dem Laserscanner verbunden werden und so es ermöglichen, die Ausrichtung des Laserscanners zu bestimmen. Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Postprocessing können diese eine Positionsgenauigkeit von etwa 2 Zentimeter erreichen \citep{imar}.\todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann die Orientierung des Scanners bestimmt werden. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+Als inertiale Messeinheit wird ein Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Richtungsmessungen pro Stunde liegt unter 0,5 Grad. \citep{imar}
+\todo{mehr Daten}
 
-Im Postprocessing kann aus den Daten der Inertialen Messeinheit zusammen mit denen der GNSS-Module und GNSS-Korrekturdaten die Flugbahn des Multikopters berechnet werden. Die Daten der Inertialen Messeinheit werden hierbei regelmäßig durch die Daten der GNSS-Module gestützt.
+Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+
+Im Postprocessing kann aus den Daten der inertialen Messeinheit zusammen mit denen der GNSS-Module und GNSS-Korrekturdaten eine genaue Flugbahn des Multikopters berechnet werden. Die Daten der inertialen Messeinheit werden hierbei regelmäßig durch die Daten der GNSS-Module gestützt.
 
 \subsection{Raspberry Pi 3 Typ B}
 \label{ss:Raspberry}
-Es wurde sich entschieden, die Datenverarbeitung mit einem Raspberry Pi 3 durchzuführen. Es handelt sich hierbei um einen von der Raspberry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an den Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Raspberry Pi kam im Februar 2012 auf den Markt. Er verfügte über 256 MB Arbeitsspeicher und einen 700 MHz Ein-Kernprozessor. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor mit 1,2 Ghz und 1 GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über 11 Millionen mal verkauft. \citep{heise5Rasp}
+Es wurde sich entschieden, die Datenverarbeitung mit einem Raspberry Pi 3 (siehe \autoref{img:rpi3}) durchzuführen. Es handelt sich hierbei um einen von der Raspberry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an den Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Raspberry Pi kam im Februar 2012 auf den Markt. Er verfügte über 256 MB Arbeitsspeicher und einen 700 MHz Ein-Kernprozessor. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor mit 1,2 Ghz und 1 GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über 11 Millionen mal verkauft. \citep{heise5Rasp}
 
 Alle Modelle der Raspberry Pi Serie basieren auf Ein-Chip-System von des Halbleiterherstellers Broadcom. In diesem Chip sind die wichtigsten Bauteile des Systemes integriert wie ein ARM-Prozessor, eine Grafikeinheit sowie verschiedene andere Komponenten. Die so gering gehaltene Anzahl an einzelnen Bauelementen beim Raspberry Pi ermöglichen den geringen Preis - ein Ziel der Raspberry Pi Foundation.
 
@@ -280,6 +293,14 @@ Außerdem vorteilhaft ist für die Nutzung am Multikopter ist seine geringe
 Größe und sein relativ geringer Stromverbrauch von maximal 12,5 
 Watt \citep{raspSheet}.
 
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/rpi3.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Raspberry Pi 3 (eigene Aufnahme)}
+ \label{img:rpi3}
+\end{figure}
+
 \subsection{Multikopter Copterproject CineStar 6HL}
 Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Es gibt entsprechend der Rotoranzahl verschiedene Modelle wie zum Beispiel den weit verbreiteten Quadrokopter oder den Hexakopter, welcher in dieser Arbeit betrachtet wird. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind sie aber auch vermehrt in kleineren Ausführungen im Privatbesitz für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu fünf Kilogramm versprechen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall ist die Anzahl der Rotoren durch zwei teilbar, damit sich das auf das Traggestell wirkende Drehmoment aufhebt. Dies ist der große Vorteil gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass er senkrecht starten kann und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Flugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
 
@@ -301,38 +322,47 @@ Vorteile eines Arduinos wären vorallem der geringere Stromverbrauch und die Ech
 \section{Stromversorgung}
 Die Stromversorgung des Raspberry-Pi an der Drohne soll mittels Lithium-Ionen-Zellen erfolgen. Der Raspberry-Pi erfordert hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann hierbei zu Systeminstabilitäten führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
 
-\todo{+IMU+Qc} 
+\autoref{tab:strom} listet die verschiedenen Module und den die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
+
 \begin{table}
-\begin{tabular}{ l | r | r | r | r }
-  Gerät 	& Laserscanner	& IMU		& Raspberry-Pi\\
-		& \citep{vlpSheet} &		& \citep{raspSheet}	\\
+\centering
+\begin{tabular}{ l | r | r | r }
+  Gerät 	& Laserscanner	& IMU		& Raspberry Pi\\
   \hline
-  Spannung 	& 9 - 18 V 	&	12.0 V	& 5.0 V \\
+  Spannung 	& 9 - 18 V 	& 10 - 36 V	& 5,0 V \\
   \hline
-  max. Strom 	& 0.9 A		&		& 2.5 A \\
+  max. Strom 	& 0,9 A		& 0,75 A	& 2,5 A \\
   \hline
-  typ. Leistung	& 8 W		& 		& 12.5 W 
+  typ. Leistung	& 8 W		& 7,5 W		& 12,5 W 
 \end{tabular}
-\caption{Spannungs- und Strombedarf der einzelnen Module}
+\caption{Spannungs- und Strombedarf der einzelnen Module \citep{vlpSheet,imar,raspSheet}}
 \label{tab:strom}
 \end{table}
 
-\autoref{tab:strom} listet die verschiedenen Module und den die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
-
-Für eine geplante Flugdauer von 30 Minuten wird bei einem angenommenen Wirkungsgrad von 90\% eine Akkukapazität von mindestens 12 Wh \todo{+IMU} (siehe \autoref{equ:akku}) benötigt. Außerdem muss ein Teil in 12 Volt und ein Teil mit 5V stabilisierter Spannung abgeben werden können. Gegebenenfalls sind hierfür auch zwei komplett unabhängige Spannungsquellen zu nutzen.
+Für eine geplante Flugdauer von 30 Minuten wird bei einem angenommenen Wirkungsgrad von 90\% eine Akkukapazität von mindestens 16 Wh (siehe \autoref{equ:akku}) benötigt. Außerdem muss ein Teil in 12 Volt und ein Teil mit 5V stabilisierter Spannung abgeben werden können. Gegebenenfalls sind hierfür auch zwei komplett unabhängige Spannungsquellen zu nutzen.
 
 \todo{+IMU} 
 \begin{equation}
 \label{equ:akku}
-E = \frac{ P \cdot t}{\eta} = \frac{(8W + 12.5W) \cdot 0,5h}{0,9} = 11,4 Wh
+E = \frac{ P \cdot t}{\eta} = \frac{(8~W + 12,5~W + 7,5W) \cdot 0,5~h}{90~\%} \approx 15,6~Wh
 \end{equation}
 
 \section{Anbindung des Raspberry Pi an den Laserscanner}
-Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Sternpunkt der Schnittstellen. Der Laserscanner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle angeschlossen. Die Inertiale Messeinheit zeichnet die Daten selbstständig auf, kann aber auch mittels der als serieller Schnittstelle nutzbaren GPIO-Pins an den Raspberry angeschlossen werden. Außerdem kann an diesem Port auch ein GNSS-Modul angeschlossen werden. Dieses GNSS-Modul kann im folgenden dem Raspberry Pi zu einer genauen Uhrzeit verhelfen, die für die Verarbeitung der Daten benötigt wird. Alternativ kann auch ein an den Laserscanner angeschlossenes GNSS-Modul sein Zeitstempel per Netzwerk an den Raspberry Pi liefern. Diese Methode soll hier verwendet werden.
+Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Sternpunkt der Schnittstellen. Der Laserscanner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle angeschlossen. Die Inertiale Messeinheit zeichnet die Daten selbstständig auf, kann aber auch mittels der als serieller Schnittstelle nutzbaren GPIO-Pins an den Raspberry Pi angeschlossen werden. Außerdem kann an diesem Port auch ein GNSS-Modul angeschlossen werden. Dieses GNSS-Modul kann im folgenden dem Raspberry Pi zu einer genauen Uhrzeit verhelfen, die für die Verarbeitung der Daten benötigt wird. Alternativ kann auch ein an den Laserscanner angeschlossenes GNSS-Modul sein Zeitstempel per Netzwerk an den Raspberry Pi liefern. Diese Methode soll hier verwendet werden.
 
 \section{Verbindung des GNSS-Modules zum Laserscanner}
 \label{s:GNSSAnschluss}
-Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laserscanner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von 9600bit/s und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laserscanner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3 Volt \citep[S. 3]{vlpInterface} codiert ist (HIGH), beim GNSS-Modul entspricht  die höhere Spannung Logisch 0.
+Für die Versorgung des Laserscanners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dieses Signal zu nutzen.
+
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/ublox.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{uBlox NEO-M8N, das Vorgängermodell NEO-6M mit PPS-Ausgang wurde verwendet (eigene Aufnahme)}
+ \label{img:ublox}
+\end{figure}
+
+Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laserscanner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laserscanner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3 Volt \citep[S. 3]{vlpInterface} codiert ist (HIGH), beim GNSS-Modul entspricht  die höhere Spannung Logisch 0.
 
 \begin{figure}[ht!]
  \centering
@@ -393,7 +423,7 @@ Für den Prototyp soll die Schaltung von Hand aufgebaut und verlötet werden. Er
 \label{c:datenverarbeitung}
 
 \section{Verwendung von Python}
-Zur Realisierung der Programmierung wurde die Sktiptsprache Python ausgewählt. Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken genutzt sondern Texteinrückungen verplichtend hierfür eingesetzt \citep[S. 13f]{python}. Die Struktur des Programmes ist so schnell erfassbar. Außerdem ist es nicht notwendig, den Quellcode zu kompilieren. Er wird vom Interpreter direkt ausgeführt. So sind kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren möglich. Änderungen und Anpassungen können schnell durchgeführt werden.
+Zur Realisierung der Programmierung wurde die Skriptsprache Python ausgewählt. Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken genutzt sondern Texteinrückungen verplichtend hierfür eingesetzt \citep[S. 13f]{python}. Die Struktur des Programmes ist so schnell erfassbar. Außerdem ist es nicht notwendig, den Quellcode zu kompilieren. Er wird vom Interpreter direkt ausgeführt. So sind kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren möglich. Änderungen und Anpassungen können schnell durchgeführt werden.
 
 Python wurde in seiner ersten Version 1991 von Guido van Rossum freigegeben. Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach zu lösenden Problem objektorientiert oder strukturiert programmiert werden kann \citep[S. 14]{python}.
 
@@ -401,7 +431,7 @@ Die aktuelle Version von Python (Oktober 2017) ist die Version 3.6. Das Skript w
 
 \section{Datenlieferung vom Laserscanner}
 \label{ss:Datenlieferung}
-Der Laserscanner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Scriptes durchgeführt werden.
+Der Laserscanner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Skriptes durchgeführt werden.
 
 Ein Datenpaket (siehe \autoref{tab:datenmodell}) besteht jeweils aus einem Header von 42 Bytes, gefolgt von 12 Datenblöcken mit jeweils 32 Messungen, abgeschlossen von 4 Bytes, die den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern. Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers und darauf folgend die Messwerte von zwei Messungen der 16 Laserstrahlen. Die genaue Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen aus zwei auf einander folgenden Messungen interpoliert werden.
 
@@ -414,7 +444,7 @@ Header                                         &
 \multicolumn{1}{|l|}{\multirow{7}{*}{Block 1}} &                                 
                 & 0-1       & Flag             & 2 Bytes  \\ \cline{2-5} 
 \multicolumn{1}{|l|}{}                         &                                 
-                & 2-3       & Horizontalwinkel & 2 Bytes  \\ \cline{2-5} 
+                & 2-3       & Horizontalrichtung & 2 Bytes  \\ \cline{2-5} 
 \multicolumn{1}{|l|}{}                         & 
 \multicolumn{1}{l|}{\multirow{2}{*}{Messung 1}} & 4-5       & Entfernung       & 
 2 Bytes  \\ \cline{3-5} 
@@ -439,17 +469,17 @@ Factory                                        & \multicolumn{1}{l|}{}
 \label{tab:datenmodell}
 \end{table}
 
-Der Laserscanner sendet bei der Einstellung Dual Return, also der Rückgabe vom stärksten und letzten Signal pro Messung 
+Der Laserscanner sendet bei der Einstellung Dual Return, also der Rückgabe vom stärksten und letzten Echos pro Messung 
 bis zu 1508 Pakete dieser Form pro Sekunde \citep[S. 49]{vlpManual}. Die Ausgangsdaten werden, bei einer Paketgröße von 1248 Bytes mit einer Datenrate von 1,8 MB/s empfangen (siehe \autoref{equ:Ausgangsrate}). Hierbei werden fast 600.000 Messwerte pro Sekunde übertragen (siehe \autoref{equ:MessungenPS}).
 
 \begin{equation}
- \frac{1508 Pakete}{Sekunde} \cdot \frac{12 Datenbloecke}{Paket} \cdot
-\frac{32 Messungen}{Datenblock} = \frac{579.072 Datensaetze}{Sekunde}
+1508~\frac{\text{Pakete}}{\text{Sekunde}}~\cdot~12~\frac{\text{Datenbl\"{o}cke}}{\text{Paket}}~\cdot~
+32~\frac{\text{Messungen}}{\text{Datenblock}}~=~579.072~\frac{\text{Datens\"{a}tze}}{\text{Sekunde}}
  \label{equ:MessungenPS}
 \end{equation}
 
 \begin{equation}
- \frac{1508 Pakete}{Sekunde} \cdot \frac{1248 Bytes}{Paket} = 1,79 MB/s
+1508~\frac{\text{Pakete}}{\text{Sekunde}}~\cdot~1248~\frac{\text{Bytes}}{\text{Paket}}~=~1,79~\text{MB/s}
  \label{equ:Ausgangsrate}
 \end{equation}
 
@@ -461,14 +491,14 @@ Die Daten des Laserscanners sollen in einer einfach lesbaren Textdatei abgelegt 
  \item Zeitstempel in Mikrosekunden
  \item Richtung der Messung in der Rotationsebene in Grad
  \item Höhenwinkel zur Rotationsebene in Grad
- \item Gemessene Entfernung in m
+ \item Gemessene Entfernung in Metern
  \item Reflektivität auf einer Skala von 0 bis 255
 \end{itemize}
 
 Problematisch ist bei diesem Datenmodell jedoch die benötigte Datenrate. Eine Datenzeile erfordert 29 Bytes und somit wird bei über einer halben Million Messungen pro Sekunde (siehe \autoref{equ:MessungenPS}) eine Datenschreibrate von mindestens 16 MB/s benötigt (siehe \autoref{equ:Datenrate}). Da das Schreiben nicht dauerhaft erfolgt, sollte die Datenrate bevorzugt deutlich höher sein.
 
 \begin{equation}
- \frac{579.072 Datensaetze}{Sekunde} * \frac{29 Bytes}{Datenzeile} = 16,02 MB/s
+579.072~\frac{\text{Datens\"{a}tze}}{\text{Sekunde}}~\cdot~29~\frac{\text{Bytes}}{\text{Datenzeile}}~=~16,02~\text{MB/s}
 \label{equ:Datenrate}
 \end{equation}
 
@@ -477,7 +507,7 @@ Erste Test ergaben, dass diese Verarbeitungsgeschwindigkeit nicht mit dem Raspbe
 \section{Weiterverarbeitung der Daten zu Koordinaten}
 Die als Text gespeicherten Rohdaten sollen dann im Rahmen einer weiterführenden Arbeit zu Koordinaten umgewandelt werden. Zu dieser Umwandlung werden die Positionen des Laserscanners mittels dem GNSS-Empfänger in der IMU und die Neigungsdaten aus der IMU verwendet. Die Neigungen werden dazu direkt mit den Winkeldaten verrechnet.
 
-Bei der Berechnung ist jedoch zu beachten, dass der Ursprungspunkt der Laserstrahlen nicht in der Drehachse des Laserscanners liegt, sondern etwa 40mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch ist diese Entfernung für die Nutzung des Höhenwinkels des Laserscanners entscheidend, wenn auch diese Abweichung für den Einsatzzweck zur Erzeugung eines digitalen Geländemodelles nur von geringerer Bedeutung ist.\todo{Satz sortieren}
+Bei der Berechnung ist jedoch zu beachten, dass der Ursprungsort der Entfernungsmessung zwar in der Drehachse des Laserscanners liegt, jedoch der Ursprungsort der ausgesendeten Strahlen etwa 40mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch kann zur Berechnung der Z-Komponente der lokalen Koordinaten nicht einfach der Höhenwinkel und die gemessene Strecke verwendet werden. Die lokalen Koordinaten berechnen sich somit nach der \autoref{equ:koordinaten}.
 
 \begin{figure}[ht!]
  \centering
@@ -487,6 +517,22 @@ Bei der Berechnung ist jedoch zu beachten, dass der Ursprungspunkt der Laserstra
 \citet{vlpCAD}}
  \label{img:strahlengang}
 \end{figure}
+
+\begin{equation}
+\begin{aligned}
+h:&~\text{H\"{o}henwinkel}~(-15^\circ - 15^\circ) \\
+r:&~\text{Horizontalrichtung}~(0^\circ - 360^\circ) \\
+s:&~\text{Gemessene~Strecke} \\
+\\
+s_S &= s - 41,91~mm    		 && \left|\  \text{Schr\"{a}gstrecke nach dem Fokuspunkt} \right. \\
+s_H &= s_S * \cos(h) + 41,91~mm  && \left|\  \text{Horizontalstrecke von der Drehachse} \right. \\
+\\
+X &= s_H \cdot \sin(r) && \left|\  \text{Y-Achse in Nullrichtung} \right. \\
+Y &= s_H \cdot \cos(r) \\
+z &= s_S \cdot \sin(h) \\
+\end{aligned}
+\label{equ:koordinaten}
+\end{equation}
 
 \section{Anforderungen an das Skript}
 Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skript aufweisen muss:
@@ -732,10 +778,11 @@ exit 0
 \listoftables
 %\lstlistoflistings
 
-
+\renewcommand{\appendixpagename}{\appendixname} 
+\renewcommand{\appendixtocname}{\appendixname} 
 \begin{appendices}
 
-\chapter{Python-Scripte}
+\chapter{Python-Skripte}
 \label{a:skripte}
 \section{vdAutoStart.py}
 \label{a:vdAutoStart.py}
@@ -800,11 +847,9 @@ Hiermit versichere ich, dass ich die beiliegende Bachelor-Thesis ohne fremde Hil
 Wörtlich oder dem Sinn nach aus anderen Werken entnommene Stellen sind unter Angabe der Quellen kenntlich gemacht. 
 \\
 \\
-\\ \todo{Linie korrigieren}
 \\
-\noindent{Hamburg, den 12. Dez. 2017}
-%\hline\\
-\vspace{0.2cm}
+\\
+\noindent{\underline{Hamburg, den 12. Dez. 2017~\hspace{10cm}}}\\
 \noindent{\small Ort, Datum \hspace{4.5cm} Florian Timm}
 
 
