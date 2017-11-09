@@ -256,12 +256,28 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hinte
  \label{img:vlp16}
 \end{figure}
 
-\section{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
+\subsection{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
 \label{s:iMar}
-Als inertiale Messeinheit wird ein Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Richtungsmessungen pro Stunde liegt unter 0,5 Grad. \citep{imar}
+Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Richtungsmessungen pro Stunde liegt unter 0,5 Grad. \citep{imar}
 \todo{mehr Daten}
 
-Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/imu.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{iMAR iNAT-M200-Flat im Prototypen des modularen Gehäuses, Leitungen führen zu den GNSS-Antennen (eigene Aufnahme)}
+ \label{img:imu}
+\end{figure}
+
+Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module, siehe \autoref{img:gnss}). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.8\textwidth]{./img/gnss.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{GNSS-Antenennen des (links und rechts) iMAR iNAT-M200-Flat an Prototypen des modularen Gehäuses (eigene Aufnahme)}
+ \label{img:gnss}
+\end{figure}
 
 Im Postprocessing kann aus den Daten der inertialen Messeinheit zusammen mit denen der GNSS-Module und GNSS-Korrekturdaten eine genaue Flugbahn des Multikopters berechnet werden. Die Daten der inertialen Messeinheit werden hierbei regelmäßig durch die Daten der GNSS-Module gestützt.
 
@@ -304,10 +320,18 @@ Watt \citep{raspSheet}.
 \subsection{Multikopter Copterproject CineStar 6HL}
 Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Es gibt entsprechend der Rotoranzahl verschiedene Modelle wie zum Beispiel den weit verbreiteten Quadrokopter oder den Hexakopter, welcher in dieser Arbeit betrachtet wird. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind sie aber auch vermehrt in kleineren Ausführungen im Privatbesitz für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu fünf Kilogramm versprechen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall ist die Anzahl der Rotoren durch zwei teilbar, damit sich das auf das Traggestell wirkende Drehmoment aufhebt. Dies ist der große Vorteil gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass er senkrecht starten kann und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Flugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
 
-In dieser Arbeit soll der Multikopter den Laserscanner, die IMU, das Gimbal, die Stromversorgung, Datenverarbeitung und -speicherung im Betrieb tragen können. Bei der Systementwicklung des Multikopters muss daher darauf geachtet werden, dass das Gewicht möglichst gering bleibt und dennoch müssen die angehängten Messeinrichtungen auch für härtere Landungen ausgelegt sein. Bei dem  verwendeten Hexakopter handelt es sich um einen  mit einer Tragkraft von etwa 5 Kilogramm und eine Flugdauer von bis zu 20 Minuten \citep{Schulz}.
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/uav.jpg}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Multikopter Copterproject CineStar 6HL mit Gimbal Freefly MöVI M5 (eigene Aufnahme)}
+ \label{img:uav}
+\end{figure}
 
-\subsection{Gimbal Freefly MöVI M10}
-Um die Messgeräte an dem Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung durch Flugsteuerung an den Laserscanner übertragen, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:iMar}), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
+In dieser Arbeit soll der Multikopter den Laserscanner, die IMU, das Gimbal, die Stromversorgung, Datenverarbeitung und -speicherung im Betrieb tragen können. Bei der Systementwicklung des Multikopters muss daher darauf geachtet werden, dass das Gewicht möglichst gering bleibt und dennoch müssen die angehängten Messeinrichtungen auch für härtere Landungen ausgelegt sein. Bei dem  verwendeten Hexakopter (siehe \autoref{img:uav}) handelt es sich um einen  mit einer Tragkraft von etwa 5 Kilogramm und eine Flugdauer von bis zu 20 Minuten \citep{Schulz}.
+
+\subsection{Gimbal Freefly MöVI M5}
+Um die Messgeräte während des Fluges des Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung der Flugsteuerung an den Laserscanner überträgt, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:IMU}), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
 
 Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. \todo{mehr...}
 
