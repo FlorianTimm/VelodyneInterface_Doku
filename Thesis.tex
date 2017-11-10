@@ -203,7 +203,7 @@ Die Messung erfolgt mit mehreren Einzelsensoren: Für die Messung der Beschleuni
 
 Die Genauigkeit von inertialen Messeinheiten wird in ihre Messgenauigkeit und in ihre zeitliche Abweichung unterteilt. Die zeitliche Stabilität ist vorallem bei der Inertialnavigation, die ausschließlich auf deren Messungen basiert, wichtig.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/mems.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -249,7 +249,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hinte
  \end{aligned}
 \end{equation}
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/vlp16.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -262,7 +262,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hinte
 Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Richtungsmessungen pro Stunde liegt unter 0,5 Grad. \citep{imar}
 \todo{mehr Daten}
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/imu.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -272,7 +272,7 @@ Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem
 
 Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module, siehe \autoref{img:gnss}). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \citet{wilken} \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.8\textwidth]{./img/gnss.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -310,7 +310,7 @@ Außerdem vorteilhaft ist für die Nutzung am Multikopter ist seine geringe
 Größe und sein relativ geringer Stromverbrauch von maximal 12,5 
 Watt \citep{raspSheet}.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/rpi3.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -321,7 +321,7 @@ Watt \citep{raspSheet}.
 \subsection{Multikopter Copterproject CineStar 6HL}
 Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Es gibt entsprechend der Rotoranzahl verschiedene Modelle wie zum Beispiel den weit verbreiteten Quadrokopter oder den Hexakopter, welcher in dieser Arbeit betrachtet wird. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind sie aber auch vermehrt in kleineren Ausführungen im Privatbesitz für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu fünf Kilogramm versprechen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall ist die Anzahl der Rotoren durch zwei teilbar, damit sich das auf das Traggestell wirkende Drehmoment aufhebt. Dies ist der große Vorteil gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass er senkrecht starten kann und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Flugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/uav.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -379,7 +379,7 @@ Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Ste
 \label{s:GNSSAnschluss}
 Für die Versorgung des Laserscanners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dieses Signal zu nutzen.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/ublox.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -389,7 +389,7 @@ Für die Versorgung des Laserscanners mit einem GNSS-Signal zur Synchronisierung
 
 Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laserscanner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laserscanner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3 Volt \citep[S. 3]{vlpInterface} codiert ist (HIGH), beim GNSS-Modul entspricht  die höhere Spannung Logisch 0.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/oszi.png}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -399,7 +399,7 @@ Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per seriell
 
 Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um ein Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laserscanner versorgt das GNSS-Modull nur mit 5 Volt Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Hierfür wurde ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/GPS_Schaltung.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -411,7 +411,7 @@ Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hie
 \label{s:steuermodul}
 Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Daher ist es notwendig, eine alternative Benutzerschnittstelle zu implementieren. Ein großer Steuerbedarf ist nicht gegeben, so dass wenige Tasten zum Stoppen der Datenaufzeichung und zum Herunterfahren des Raspberry Pi ausreichend sind. Um auch eine Steuermöglichkeit zu implementieren, die im Flug genutzt werden kann, soll ein WLAN-Access-Point und ein simpler Webserver auf dem Raspberry Pi implementiert werden, der den Zugriff zum Beispiel über ein Smartphone oder Laptop ermöglicht.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/steuerung.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -446,17 +446,21 @@ Für den Prototyp soll die Schaltung von Hand aufgebaut und verlötet werden. Er
 
 Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewählt. Bei einer solchen Platine sind alle Kontakte in einer Reihe mit einer Leiterbahn verbunden. Falls keine Verbindung gewünscht ist, kann diese Leiterbahn mit einem Messer oder ähnlichem unterbrochen werden. Da das Unterbrechen der Leiterbahn jedoch zeitaufwändig und fehlerträchtig ist, beispielsweise durch nicht vollständig getrennte Leiterbahnen, sollten diese beim Layouten der Platine möglichst vermieden werden. Auch sollte möglichst viele der benötigten Verbindungen durch diese Leiterbahnen erfolgen und möglichst wenig Drahtbrücken verwendet werden, die diese Leiterbahnreihen verbinden, da diese zusätzlichen Lötaufwand erfordern. Das endgültige Layout der Platine ist der \autoref{abb:platine} zu entnehmen.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/platine.png}
  \caption{Layout der Lochstreifenplatine}
  \label{abb:platine}
 \end{figure}
 
-Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi paltzsparender optimiert und nur die auch am ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist 
-\todo{Gesamtschaltung}%\autoref{abb:gesamtschaltung}
-zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laserscanner die Daten vom GNSS-Modull empfangen kann.
+Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi paltzsparender optimiert und nur die auch am ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laserscanner die Daten vom GNSS-Modull empfangen kann.
 
+\begin{figure}
+ \centering
+ \includegraphics[width=0.7\textwidth]{img/schaltungGesamt.png}
+ \caption{Vereinfachter, endgültiger Schaltplan}
+ \label{abb:gesamtschaltung}
+\end{figure}
 
 
 \chapter{Theoretische Datenverarbeitung}
@@ -475,7 +479,7 @@ Der Laserscanner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in e
 
 Ein Datenpaket (siehe \autoref{tab:datenmodell}) besteht jeweils aus einem Header von 42 Bytes, gefolgt von 12 Datenblöcken mit jeweils 32 Messungen, abgeschlossen von 4 Bytes, die den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern. Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers und darauf folgend die Messwerte von zwei Messungen der 16 Laserstrahlen. Die genaue Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen aus zwei auf einander folgenden Messungen interpoliert werden.
 
-\begin{table}[!ht]
+\begin{table}
 \centering
 \begin{tabular}{|lll|l|l|}
 \hline
@@ -549,7 +553,7 @@ Die als Text gespeicherten Rohdaten sollen dann im Rahmen einer weiterführenden
 
 Bei der Berechnung ist jedoch zu beachten, dass der Ursprungsort der Entfernungsmessung zwar in der Drehachse des Laserscanners liegt, jedoch der Ursprungsort der ausgesendeten Strahlen etwa 40mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch kann zur Berechnung der Z-Komponente der lokalen Koordinaten nicht einfach der Höhenwinkel und die gemessene Strecke verwendet werden. Die lokalen Koordinaten berechnen sich somit nach der \autoref{equ:koordinaten}.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/Strahlengang.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -584,7 +588,7 @@ Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skri
 \end{itemize}
 
 Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schritte und Gegebenheiten. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Raspberry Pi keinen eigenen Zeitgeber. Um die Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig - diese liefert das GNSS-Modul, welches am Laserscanner angeschlossen ist, sofern ein GNSS-Fix besteht. Es muss also vor dem Erzeugen der Dateien auf ein gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der \autoref{img:ablaufplan} zu entnehmen. 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.8\textwidth]{./img/Ablaufplan.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -598,7 +602,7 @@ Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schr
 \section{Klassenentwurf}
 Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hilfe des Ablaufplanes aus \autoref{img:ablaufplan} die benötigten Klassen entworfen. Die endgültigen Klassen sind der \autoref{img:uml} zu entnehmen. Auf die genauen Funktionen der einzelnen Klassen wird im Abschnitt \todo{Verlinken} eingegangen.
 
-\begin{figure}[ht!]
+\begin{figure}
  \centering
  \includegraphics[width=0.8\textwidth]{./img/UML.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -722,7 +726,7 @@ pi	ALL=(ALL) NOPASSWD: VLP
 \section{IP-Adressen-Konfiguration}
 Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laserscanner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
 
-\begin{table}[]
+\begin{table}
 \centering
 \begin{tabular}{l|r|r|l|}
 \cline{2-4}
