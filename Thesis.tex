@@ -11,6 +11,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{todonotes}
 \usepackage{amsmath}
+
 \usepackage{multirow}
 \newcommand{\code}[1]{\texttt{#1}}
 %\usepackage{tocloft}
@@ -269,7 +270,7 @@ Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem
  \label{img:imu}
 \end{figure}
 
-Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module, siehe \autoref{img:gnss}). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
+Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module, siehe \autoref{img:gnss}). Durch Nutzung einer zusätzlichen GNSS-Basisstation oder auch einem entsprechenden Korrekturdienst können diese eine Positionsgenauigkeit von etwa 2 Zentimeter in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. \citet{wilken} \todo{alternativ: Matthias Wilkens} Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \todo{Bild machen}), kann auch die Orientierung des Scanners bestimmt werden. Hierdurch wird die ungenaue Messung des magnetischen Nordpols überflüssig. Außerdem kann die Positionssicherheit durch Mittlung der beiden Positionen erhöht werden.
 
 \begin{figure}[ht!]
  \centering
@@ -402,7 +403,7 @@ Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hie
  \centering
  \includegraphics[width=0.7\textwidth]{img/GPS_Schaltung.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{Schaltplan zum Anschluss des GNSS-Modules an den Laserscanner, gezeichnet in Fritzing}
+ \caption{Entwurf des Schaltplanes zum Anschluss des GNSS-Modules an den Laserscanner, gezeichnet in Fritzing}
  \label{abb:schaltplan}
 \end{figure}
 
@@ -414,7 +415,7 @@ Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Da
  \centering
  \includegraphics[width=0.7\textwidth]{img/steuerung.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{Schaltplan für Steuerung des Raspberry, gezeichnet in Fritzing}
+ \caption{Entwurf des Schaltplanes für Steuerung des Raspberry, gezeichnet in Fritzing}
  \label{abb:steuerung}
 \end{figure}
 
@@ -442,6 +443,21 @@ Für den Prototyp soll die Schaltung von Hand aufgebaut und verlötet werden. Er
 \end{itemize}
 
 \todo{Platine beschreiben, Layout}
+
+Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewählt. Bei einer solchen Platine sind alle Kontakte in einer Reihe mit einer Leiterbahn verbunden. Falls keine Verbindung gewünscht ist, kann diese Leiterbahn mit einem Messer oder ähnlichem unterbrochen werden. Da das Unterbrechen der Leiterbahn jedoch zeitaufwändig und fehlerträchtig ist, beispielsweise durch nicht vollständig getrennte Leiterbahnen, sollten diese beim Layouten der Platine möglichst vermieden werden. Auch sollte möglichst viele der benötigten Verbindungen durch diese Leiterbahnen erfolgen und möglichst wenig Drahtbrücken verwendet werden, die diese Leiterbahnreihen verbinden, da diese zusätzlichen Lötaufwand erfordern. Das endgültige Layout der Platine ist der \autoref{abb:platine} zu entnehmen.
+
+\begin{figure}[ht!]
+ \centering
+ \includegraphics[width=0.7\textwidth]{img/platine.png}
+ \caption{Layout der Lochstreifenplatine}
+ \label{abb:platine}
+\end{figure}
+
+Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi paltzsparender optimiert und nur die auch am ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist 
+\todo{Gesamtschaltung}%\autoref{abb:gesamtschaltung}
+zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laserscanner die Daten vom GNSS-Modull empfangen kann.
+
+
 
 \chapter{Theoretische Datenverarbeitung}
 \label{c:datenverarbeitung}

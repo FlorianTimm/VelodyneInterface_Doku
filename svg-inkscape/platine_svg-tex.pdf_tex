@@ -1,0 +1,74 @@
+%% Creator: Inkscape inkscape 0.92.2, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'platine_svg-tex.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{163.92833612bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.83502933)%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{platine_svg-tex.pdf}}%
+    \put(0.77447602,0.72522518){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Leiterbahn}}}%
+    \put(0.77447622,0.68130359){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Drahtbrucke\\ }}}%
+    \put(0.77447615,0.63738196){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{5 V - Pin}}}%
+    \put(0.77447615,0.59346032){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{3,3 V - Pin}}}%
+    \put(0.77447615,0.54953868){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{GND - Pin\\ }}}%
+    \put(0.77447615,0.50561706){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{GPIO - Pin}}}%
+    \put(0.77447615,0.46169541){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Tx - Pin}}}%
+    \put(0.77447615,0.4177738){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Rx - Pin}}}%
+    \put(0.77447615,0.37385215){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{PPS - Pin}}}%
+    \put(0.77447615,0.32993051){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Widerstand}}}%
+    \put(0.77447615,0.28600889){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{LED}}}%
+    \put(0.77447615,0.22012645){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Taster}}}%
+    \put(0.77447615,0.15424405){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Anschlüsse}}}%
+    \put(0.77447615,0.08836151){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{IC 74HC04}}}%
+    \put(0.77447615,0.0224791){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Platine}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{platine_svg-tex.pdf}}%
+    \put(0.02780845,0.43973456){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lb]{\smash{GNSS-Modul\\ }}}}%
+    \put(0.02780845,0.08836151){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lb]{\smash{Laserscanner}}}}%
+    \put(0.44506396,0.00051828){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{GPIO\\ }}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{platine_svg-tex.pdf}}%
+  \end{picture}%
+\endgroup%
