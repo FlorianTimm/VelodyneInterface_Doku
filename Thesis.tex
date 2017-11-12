@@ -5,6 +5,7 @@
 \usepackage[onehalfspacing]{setspace}
 \renewcommand{\arraystretch}{1.5}
 \usepackage{graphicx}
+\usepackage{color}
 \usepackage[toc,page]{appendix}
 %\usepackage{pdfpages}  
 \usepackage[hyphens]{url}
@@ -801,14 +802,26 @@ wpa_passphrase=raspberry
 \end{lstlisting}
 
 \section{Autostart des Skriptes}
-Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystemes.
+Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystemes. 
 
 \begin{lstlisting}[caption={Startskript startVLP.sh}, label={startskript}]
 su pi -c "python3 VdAutoStart.py"
 exit 0
 \end{lstlisting}
 
+Der Pfad zur dem Startskript wurde dann in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
+
 \todo{zu Ende schreiben}
+
+\chapter{Systemüberprüfungen}
+Nachdem sich bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen System-Komponenten überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners aus gewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme.
+
+\section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
+Für die Synchronisierung der Daten des Laserscanners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Raspberry Pi und am Laserscanner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
+
+
+\section{Messgenauigkeit des Laserscanners im Vergleich}
+
 
 \chapter{Ausblick}
 \label{c:ausblick}
@@ -872,6 +885,78 @@ exit 0
 
 \section{Rohdaten vom Scanner}
 \label{a:Rohdaten}
+
+{\color{gray} Netzwerk-Header}\\
+{\color{red} Flag (FF EE)} {\color{green} Horizontalrichtung}\\
+{\color{blue} Strecke} {\color{orange} Reflektivität}\\
+{\color{yellow} Timestamp } {\color{violet} Return-Modus}\\
+\\
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\noindent\code{0000\tab{\color{gray} ff ff ff ff ff ff 60 76 88 00 00 00 08 00 45 00}\\
+0010\tab{\color{gray} 04 d2 00 00 40 00 ff 11 b4 aa c0 a8 01 c8 ff ff}\\
+0020\tab
+{\color{gray} ff ff 09 40 09 40 04 be 00 00}
+{\color{red} ff ee} {\color{green} 02 4d}
+{\color{blue} 00 00}\\
+0030\tab
+{\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 0a}
+{\color{blue} 00 00} {\color{orange} 16}
+{\color{blue} f0 01} {\color{orange} 04}
+{\color{blue} 00 00} {\color{orange} 0d}
+{\color{blue} 00 00} {\color{orange} 0a}\\
+0040\tab
+{\color{blue} 00 00} {\color{orange} 0d}
+{\color{blue} 00 00} {\color{orange} 06}
+{\color{blue} 00 00} {\color{orange} 0b}
+{\color{blue} 00 00} {\color{orange} 08}
+{\color{blue} 00 00} {\color{orange} 10}
+{\color{blue} 00}\\
+0050\tab
+{\color{blue} 00} {\color{orange} 05}
+{\color{blue} 92 01} {\color{orange} 05}
+{\color{blue} 00 00} {\color{orange} 04}
+{\color{blue} 00 00} {\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 07}
+{\color{blue} 00 00}\\
+0060\tab
+{\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 0a}
+{\color{blue} 00 00} {\color{orange} 16}
+{\color{blue} e6 01} {\color{orange} 08}
+{\color{blue} 00 00} {\color{orange} 0d}
+{\color{blue} 00 00} {\color{orange} 0a}\\
+0070\tab
+{\color{blue} 00 00} {\color{orange} 0d}
+{\color{blue} 00 00} {\color{orange} 06}
+{\color{blue} 00 00} {\color{orange} 0b}
+{\color{blue} 00 00} {\color{orange} 08}
+{\color{blue} 00 00} {\color{orange} 10}
+{\color{blue} 00}\\
+0080\tab
+{\color{orange} 00 05}
+{\color{blue} 7e 01} {\color{orange} 05}
+{\color{blue} 00 00} {\color{orange} 04}
+{\color{blue} 00 00} {\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 07}
+{\color{red} ff ee}\\
+0090\tab
+{\color{green} 02 4d}
+{\color{blue} 00 00} {\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 0a}
+{\color{blue} 00 00} {\color{orange} 16}
+{\color{blue} f0 01} {\color{orange} 04}
+{\color{blue} 00 00}\\
+...\\
+04d0\tab
+{\color{orange} 05}
+{\color{blue} 00 00} {\color{orange} 04} 
+{\color{blue} 00 00} {\color{orange} 0f}
+{\color{blue} 00 00} {\color{orange} 07}
+{\color{yellow} 8c 25 44 63} {\color{violet} 39 22}
+}
+
 
 \section{Dateiformat für Datenspeicherung als Text}
 \label{a:AusgabeTXT}
