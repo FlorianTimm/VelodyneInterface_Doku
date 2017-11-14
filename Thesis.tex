@@ -14,7 +14,16 @@
 \usepackage{amsmath}
 
 \usepackage{multirow}
-\newcommand{\code}[1]{\texttt{#1}}
+
+\newcommand*\justify{%
+  \fontdimen2\font=0.4em% interword space
+  \fontdimen3\font=0.2em% interword stretch
+  \fontdimen4\font=0.1em% interword shrink
+  \fontdimen7\font=0.1em% extra space
+  \hyphenchar\font=`\-% allowing hyphenation
+}
+
+\newcommand{\code}[1]{\texttt{\justify{#1}}}
 %\usepackage{tocloft}
 
 %Boxfehler
@@ -23,6 +32,7 @@
 % Listings
 \usepackage{listings}
 \lstset{
+   breaklines=true,
    captionpos=t,
    basicstyle=\scriptsize\ttfamily,
    keywordstyle=\bfseries\ttfamily\color{orange},
@@ -64,7 +74,7 @@ Studiengang Geomatik\\
 \end{tabular}
 \end{tabular}\\\vspace{5cm}
 \doublespacing 
-{\huge\bfseries Entwurf und Implementierung einer Daten-Schnittstelle zum Betrieb eines Laserscanner VLP-16 an einem
+{\huge\bfseries  Entwurf und Implementation einer Daten-Schnittstelle zum Betrieb des Laser\-scan\-ners VLP-16 an einem
 Raspberry Pi}\vspace{0.5cm}\\
 \onehalfspacing
 {\large\bfseries Bachelorthesis}\vspace{2cm}\\
@@ -99,9 +109,9 @@ HafenCity Universität Hamburg\\
 E-Mail: carlos.acevedo@hcu-hamburg.de\\
 \newpage
 \noindent\textbf{\large Kurzzusammenfassung}\\
-Die vorliegende Arbeit ist Teil eines Projektes, dass die Entwicklung eines Systems zum Ziel hat, welches den modular austauschbaren Betrieb verschiedenster Sensorsysteme an einem Multikopter erlauben soll. Im Speziellen soll hier die Datenschnittstelle von einem Kompakt-Laserscanner Velodyne Lidar Puck VLP-16 zu einem Einplatinencomputer Raspberry Pi entwickelt und implementiert werden. Der Scanner selbst liefert hierbei die Daten in einem proprietären, binären Format, welche in ein einfach lesbares Format, hier eine ASCII-Datei, umgewandelt und gespeichert werden sollen. Außerdem sollen die Daten mit einem eindeutigen Zeitstempel versehen werden, um diese später mit anderen Sensorsystemen verknüpfen zu können. Diese Datentransformation sollte möglichst simultan zur Aufnahme erfolgen.
+Die vorliegende Arbeit ist Teil eines Projektes, dass die Entwicklung eines Systems zum Ziel hat, welches den modular austauschbaren Betrieb verschiedenster Sensorsysteme an einem Multikopter erlauben soll. Im Speziellen soll hier die Datenschnittstelle von einem Kompakt-Laser\-scan\-ner Velodyne Lidar Puck VLP-16 zu einem Einplatinencomputer Raspberry Pi entwickelt und implementiert werden. Der Scanner selbst liefert hierbei die Daten in einem proprietären, binären Format, welche in ein einfach lesbares Format, hier eine ASCII-Datei, umgewandelt und gespeichert werden sollen. Außerdem sollen die Daten mit einem eindeutigen Zeitstempel versehen werden, um diese später mit anderen Sensorsystemen verknüpfen zu können. Diese Datentransformation sollte möglichst simultan zur Aufnahme erfolgen.
 
-Auch Teil der Arbeit ist die Schaffung einer Steuerung der Aufnahme des Laserscanners. Hierfür wurde ein Bedienmodul entwickelt, welches am Raspberry Pi direkt angeschlossen werden kann, sowie eine Steuerungsweboberfläche eingebunden, die die Steuerung während des Fluges ermöglichen soll.\\
+Auch Teil der Arbeit ist die Schaffung einer Steuerung der Aufnahme des Laser\-scan\-ners. Hierfür wurde ein Bedienmodul entwickelt, welches am Raspberry Pi direkt angeschlossen werden kann, sowie eine Steuerungsweboberfläche eingebunden, die die Steuerung während des Fluges ermöglichen soll.\\
 \vspace{2cm}\\
 \noindent\textbf{\large Abstract}\\
 The present work is part of a project aimed the development of a system that allows the modular interchangeable operation of various sensor systems on a multicopter. In particular, the data interface for compact laser scanner Velodyne Lidar Puck VLP-16 to a single-board computer Raspberry Pi will be developed and implemented. The scanner itself provides the data in a proprietary, binary format, which should be converted and stored into an easy-to-read ASCII file. In addition, the data should be provided with a unique timestamp in order to be able to link it later with other sensor systems. This data transformation should be carried out as simultaneously as possible while recording.
@@ -125,28 +135,28 @@ Also part of the work is the creation of a control of the recording of the laser
 \chapter{Einleitung}
 
 \section{Problemstellung}
-Daten aus Airborne Laserscanning, dem Abtasten von Oberflächen mit einem Laser\-scanner aus der Luft, lassen sich für viele verschiedene Zwecke benutzen. Oft werden sie zur Erfassung von digitalen Geländemodellen verwendet, aber auch für die Erstellung von Stadtmodellen oder Vegetationsanalysen sind die Daten nutzbar. Aktuell werden als Trägersysteme des Laserscanners Helikopter oder Flugzeuge verwendet, die mit entsprechender Sensorik ausgerüstet sind. Diese Messmethode lohnt sich allerdings nicht für die Vermessung kleinerer Gebiete und ist auch aufgrund der Größe und die Gefahren des Fluggerätes nicht für die Aufnahme feiner Strukturen wie Fassaden geeignet, bei denen zwischen Häuserschluchten geflogen werden müsste. Außerdem sind die Betriebs- und Anschaffungskosten sind sehr hoch, so dass sich eine solche Messung oft nur für sehr große Gebiete lohnt. Alternativ bietet sich die terrestrische Messungen mittels Tachymeter oder auch per Laserscanner an um kleinere Gebiete abzubilden -- hier benötigt die Aufnahme jedoch viel Zeit und Personal. Hinzukommt, dass die Genauigkeit für viele Anwendungsfälle der 3D-Modelle zu hoch ist. Beide Möglichkeiten, die Messung aus der Luft oder vom Boden, sind sehr kostenintensiv. Ein Lösungsansatz hierfür wäre es, anstatt eines Helikopters als Trägersystem, einen Multikopter zu nutzen. Jedoch ist die Tragfähigkeit für die meisten Laserscanning-Systeme nicht ausreichend. Daher basieren 3D-Erfassungssysteme mittels Multikoptern heutzutage meist auf photogrammetrischen Prinzipien, welche Luftbilder zur nutzen. Hierzu muss jedoch ausreichend Beleuchtung vorhanden sein, welches wiederum die Einsetzbarkeit des Systems in Städten beschränkt, in denen nur nachts für ausreichende Sicherheitszonen zum Betrieb von Multikoptern gesorgt werden kann. 
+Daten aus Airborne Laserscanning, dem Abtasten von Oberflächen mit einem Laser\-scan\-ner aus der Luft, lassen sich für viele verschiedene Zwecke benutzen. Oft werden sie zur Erfassung von digitalen Geländemodellen verwendet, aber auch für die Erstellung von Stadtmodellen oder Vegetationsanalysen sind die Daten nutzbar. Aktuell werden als Trägersysteme des Laser\-scan\-ners Helikopter oder Flugzeuge verwendet, die mit entsprechender Sensorik ausgerüstet sind. Diese Messmethode lohnt sich allerdings nicht für die Vermessung kleinerer Gebiete und ist auch aufgrund der Größe und die Gefahren des Fluggerätes nicht für die Aufnahme feiner Strukturen wie Fassaden geeignet, bei denen zwischen Häuserschluchten geflogen werden müsste. Außerdem sind die Betriebs- und Anschaffungskosten sehr hoch, so dass sich eine solche Messung oft nur für sehr große Gebiete lohnt. Alternativ bietet sich die terrestrische Messung mittels Tachymeter oder auch per Laser\-scan\-ner um kleinere Gebiete abzubilden an -- hier benötigt die Aufnahme jedoch viel Zeit und Personal. Hinzukommt, dass die Genauigkeit für viele Anwendungsfälle der 3D-Modelle zu hoch ist. Beide Möglichkeiten, die Messung aus der Luft oder vom Boden, sind sehr kostenintensiv. Ein Lösungsansatz hierfür wäre es, anstatt eines Helikopters als Trägersystem, einen Multikopter zu nutzen. Jedoch ist die Tragfähigkeit für die meisten Laserscanning-Systeme nicht ausreichend. Daher basieren 3D-Erfassungssysteme, die Multikopter nutzen, heutzutage meist auf photogrammetrischen Prinzipien, welche Luftbilder zur Erfassung nutzen. Hierzu muss jedoch ausreichend Beleuchtung vorhanden sein, welches wiederum die Einsetzbarkeit des Systems in Städten beschränkt, in denen nur nachts für ausreichende Sicherheitszonen zum Betrieb von Multikoptern gesorgt werden kann. 
 
 \section{Zielsetzung}
-Gesamtziel ist es ein Laserscanning-System zu entwickeln, dass von einem Multikopter getragen werden kann. Hierbei soll vorallem auf ein geringes Gewicht geachtet, aber auch die Kosten niedrig gehalten werden. Im Speziellen soll hier als erster Schritt die Datenverarbeitung des Laserscanners in einem solchen System realisiert werden. Hierfür soll ein Ein-Platinen-Computer Typ Raspberry Pi 3 die Speicherung und Aufbereitung der von einem Laserscanner Velodyne Puck VLP-16 aufgezeichneten Laserpunktdaten übernehmen. Hierfür müssen entsprechende Schnittstellen zum Verbinden der Geräte in Hard- und Software entwickelt werden.
+Gesamtziel ist es, ein Laserscanning-System zu entwickeln, dass von einem Multikopter getragen werden kann. Hierbei soll vorallem auf ein geringes Gewicht geachtet, aber auch die Kosten niedrig gehalten werden. Im Speziellen soll hier als erster Schritt die Datenverarbeitung des Laser\-scan\-ners in einem solchen System realisiert werden. Hierfür soll ein Ein-Platinen-Computer Typ Raspberry Pi 3 die Speicherung und Aufbereitung der von einem Laser\-scan\-ner Velodyne Puck VLP-16 aufgezeichneten Laserpunktdaten übernehmen. Hierfür müssen entsprechende Schnittstellen zum Verbinden der Geräte in Hard- und Software entwickelt werden.
 
 \section{Struktur}
-Im \autoref{c:grundlagen} sollen die Grundlagen des luftgestützten Laserscanning erläutert werden. Außerdem wird die benötigte Hardware zur Durchführung eines solchen Laserscannings besprochen. Im Folgenden wird näher auf die Realisierung des Projektes eingegangen: Welche Hardware wurde verwendet und wie wurde Sie angeschlossen (\autoref{c:realisierung}), wie sollen die Daten verarbeitet werden (\autoref{c:datenverarbeitung}) und wie wird die Verarbeitung schließlich durchgeführt (\autoref{c:skript}) und das System konfiguriert (\autoref{c:konfig}). Zum Abschluss soll in \autoref{c:ausblick} noch ein Einblick in die Zukunft des Systems geworfen werden.
+Im \autoref{c:grundlagen} sollen die Grundlagen des luftgestützten Laserscannings erläutert werden. Außerdem wird die benötigte Hardware zur Durchführung eines solchen Laserscannings besprochen. Im Folgenden wird näher auf die Realisierung des Projektes eingegangen: Welche Hardware wurde verwendet und wie wurde Sie angeschlossen (\autoref{c:realisierung}), wie sollen die Daten verarbeitet werden (\autoref{c:datenverarbeitung}) und wie wird die Verarbeitung schließlich durchgeführt (\autoref{c:skript}) und das System konfiguriert (\autoref{c:konfig}). Einzelne Komponenten werden in \autoref{c:systemueberpruefung} auf ihre Genauigkeit und Zuverlässigkeit geprüft. Zum Abschluss soll in \autoref{c:ausblick} noch ein Einblick in die Zukunft des Systems geworfen werden.
 
 \chapter{Grundlagen des Airborne Laserscannings}
 \label{c:grundlagen}
 
-Airborne Laserscanning bezeichnet das Verfahren, bei dem ein Laserscanner, welcher an einem Fluggerät befestigt ist, Oberflächen kontaktlos dreidimensional erfasst \citep[S. 1]{beraldin}. Der Laserscanner liefert hierbei Daten in Form von der Abstrahlrichtung des Strahles und der Entfernung, relativ zu seiner eigenen Ausrichtung und Position. Um diese lokalen Daten in ein globales System zu überführen, werden zusätzlich die Ausrichtung und die Position des Laserscanners zum Zeitpunkt der Messung benötigt \citep[S. 22f]{beraldin}. Diese Daten liefern im Normalfall eine inertiale Messeinheit (siehe \autoref{s:IMU}) und ein Satellitennavigationsempfänger (siehe \autoref{s:GNSS}). Auf diese Bestandteile wird im Folgenden eingangen. Anschließend werden einige bisherige Lösungsansätze zur dreidimensionalen Erfassung auf Basis von Multikopterplattformen vorgestellt.
+Airborne Laserscanning bezeichnet das Verfahren, bei dem ein Laser\-scan\-ner, welcher an einem Fluggerät befestigt ist, Oberflächen kontaktlos dreidimensional erfasst \citep[S. 1]{beraldin}. Der Laser\-scan\-ner liefert hierbei Daten in Form der Abstrahlrichtung des Strahles und der Entfernung, relativ zu seiner eigenen Ausrichtung und Position. Um diese lokalen Daten in ein globales System zu überführen, werden zusätzlich die Ausrichtung und die Position des Laser\-scan\-ners zum Zeitpunkt der Messung benötigt \citep[S. 22f]{beraldin}. Diese Daten liefern im Normalfall eine inertiale Messeinheit (siehe \autoref{s:IMU}) und ein Navigationssatellitenempfänger (siehe \autoref{s:GNSS}). Auf diese Bestandteile wird im Folgenden eingegangen. Anschließend werden einige bisherige Lösungsansätze zur dreidimensionalen Erfassung auf Basis von Multikopterplattformen vorgestellt.
 
-\section{Laserscanner}
-Ein Laserscanner besteht grundlegend aus einer Laser-Entfernungsmesseinheit und einer Ablenkeinheit. Für beide Teile gibt es verschiedenste Bauformen, auf die im Folgenden eingegangen wird.
+\section{Laser\-scan\-ner}
+Ein Laser\-scan\-ner besteht grundlegend aus einer Laser-Entfernungsmesseinheit und einer Ablenkeinheit. Für beide Teile gibt es verschiedenste Bauformen, auf die im Folgenden eingegangen wird.
 
 \subsection{Entfernungsmessung}
-Für Messung der Entfernung werden zwei verschiedene Prinzipien angewandt.
+Für die Messung von Entfernungen mittels Laserscanners gibt es zwei meistgenutzte Verfahren:
 
 \paragraph{Impulsmessverfahren}
 \label{p:tof}
-Das bei Laserscannern am häufigsten eingesetzte Verfahren ist das Impulsmessverfahren, englisch time-of-flight genannt. Hierbei werden einzelne Laserimpulse ausgesandt. Mit dem Aussenden startet ein hochgenauer Timer seine Messung. Beim Eintreffen des an einer Oberfläche reflektierten Strahles beim Laserscanner wird der Timer gestoppt. Aus dieser gemessenen Laufzeiten lässt sich die zurückgelegte Strecke des Lichtstrahles und somit die doppelte Entfernung der Oberfläche bestimmen. Hierzu wird der Brechungsindex \(n\) des vom Laser durchlaufenen Mediums benötigt. Bei der Messung in der Luft lässt sich diese mittels Temperatur, Druck und Luftfeuchtemessung ausreichend genau berechnen. Aus der bekannten Lichtgeschwindigkeit \(c_0\) und der benötigten Zeit \(t\) lässt sich dann die Entfernung \(s\) mit der \autoref{equ:entfernung} berechnen.
+Das bei Laser\-scan\-nern am häufigsten eingesetzte Verfahren ist das Impulsmessverfahren, englisch time-of-flight genannt. Hierbei werden einzelne Laserimpulse ausgesandt. Mit dem Aussenden startet ein hochgenauer Timer seine Messung. Beim Eintreffen des an einer Oberfläche reflektierten Strahles beim Laser\-scan\-ner wird der Timer gestoppt. Aus dieser gemessenen Laufzeit lässt sich die zurückgelegte Strecke des Lichtstrahles und somit die doppelte Entfernung zu der Oberfläche bestimmen. Hierzu wird der Brechungsindex \(n\) des vom Laser durchlaufenen Mediums benötigt. Bei der Messung in der Luft lässt sich dieser aus den Daten von Temperatur-, Druck- und Luftfeuchtemessung ausreichend genau berechnen. Aus der bekannten Lichtgeschwindigkeit \(c_0\) und der benötigten Zeit \(t\) lässt sich dann die Entfernung \(s\) mit der \autoref{equ:entfernung} berechnen.
 
 \begin{equation}
 \begin{aligned}
@@ -156,30 +166,30 @@ s &=  \frac{c_0}{n} \cdot \frac{t}{2}  && \left|\  \text{Streckenberechnung} \ri
 \end{equation}
 
 \paragraph{Phasenvergleichsverfahren}
-Eine andere, für Laserscanner selten verwendete Methode, ist das Phasenvergleichsverfahren. Hierbei wird nicht direkt die Zeit gemessen sondern die Phasenverschiebung eines kontinuierlichen Lichtstrahles, der mit einer Sinusschwingung amplitudenmoduliert wurde (Intensivitäts- bzw. Helligkeitsschwankungen). Hierdurch können weniger frequente Wellen (Modulationswelle) verwendet werden, wodurch sich bei guten Ausbreitungseigenschaften der hochfrequenten Trägerwellen die leichtere Verarbeitbarkeit von längeren Wellen ausnutzen lässt. Durch Messung des Phasenunterschiedes des Messstrahles, kann auf die Reststrecke der nicht-vollständigen Phasen des Messstrahles geschlossen werden. Als Trägerwelle normalerweise Infrarotlicht verwendet, da dieses gute Ausbreitungseigenschaften hat. Die hierfür benötigte Modulationswelle wird durch ein Quarzoszillator erzeugt. Ein hier verbautes Quarzplättchen wird durch Anlegen einer Spannung in eine Schwingung versetzt, die Schwingung verstärkt und an den Infrarot-Laser geleitet, so dass dieser das modulierte Infrarotlicht aussendet. Die maximal eindeutig messbare Entfernung ist direkt von der längsten verwendeten Wellenlänge, dem Grobmaßstab, abhängig: Da nur die Phasenunterschiede und nicht die Anzahl der Schwingungen gemessen werden können, ist die maximale eindeutige  Streckenmessung genau halb so groß wie die maximale Wellenlänge (Messung von Hin- und Rückweg). Wenn längere Strecken als die halbe Wellenlänge gemessen werden, ist nicht bekannt, wie viele ganze Wellen das Licht schon zurückgelegt hat. Die Messung wäre mehrdeutig. Zur Messung der Phase werden die ausgesendete und die eingehende Messwelle mit einer Überlagerungsfrequenz vermischt, die aus diesen beiden hochfrequenten Wellen eine niederfrequente Welle erzeugt. Da die Genauigkeit der Messung der Phasenverschiebung begrenzt ist, wird durch Nutzung verschiedener Wellenlängen eine Genauigkeitssteigerung durchgeführt werden. Nach der groben Messung mit einer langen Wellenlänge, wird die Genauigkeit durch die Verwendung immer kürzerer Modulationswellen gesteigert. Eine grobe Messung ist jedoch vorher notwendig, da ansonsten die Anzahl der ganzen Schwingungen des Messstrahles unbekannt ist. \citep[S. 311ff]{Witte2006}
+Eine andere, für Laser\-scan\-ner selten verwendete Methode, ist das Phasenvergleichsverfahren. Hierbei wird nicht direkt die Zeit gemessen sondern die Phasenverschiebung eines kontinuierlichen Lichtstrahles, der mit einer Sinusschwingung amplitudenmoduliert wurde (Intensivitäts- bzw. Helligkeitsschwankungen). Hierdurch können weniger frequente Wellen (Modulationswelle) verwendet werden, wodurch sich bei guten Ausbreitungseigenschaften der hochfrequenten Trägerwellen die leichtere Verarbeitbarkeit von längeren Wellen ausnutzen lässt. Durch Messung des Phasenunterschiedes des Messstrahles, kann auf die Reststrecke der nicht-vollständigen Phasen des Messstrahles geschlossen werden. Als Trägerwelle wird normalerweise Infrarotlicht verwendet, da dieses gute Ausbreitungseigenschaften hat. Die hierfür benötigte Modulationswelle wird durch ein Quarzoszillator erzeugt. Ein hier verbautes Quarzplättchen wird durch Anlegen einer Spannung in eine Schwingung versetzt, die Schwingung verstärkt und an den Infrarot-Laser geleitet, so dass dieser das modulierte Infrarotlicht aussendet. Die maximal eindeutig messbare Entfernung ist direkt von der längsten verwendeten Wellenlänge, dem Grobmaßstab, abhängig: Da nur die Phasenunterschiede und nicht die Anzahl der Schwingungen gemessen werden können, ist die maximale eindeutige  Streckenmessung genau halb so groß wie die maximale Wellenlänge (Messung von Hin- und Rückweg). Wenn längere Strecken als die halbe Wellenlänge gemessen werden, ist nicht bekannt, wie viele ganze Wellen das Licht schon zurückgelegt hat. Die Messung wäre mehrdeutig. Zur Messung der Phase werden die ausgesendete und die eingehende Messwelle mit einer Überlagerungsfrequenz vermischt, die aus diesen beiden hochfrequenten Wellen eine niederfrequente Welle erzeugt. Da die Genauigkeit der Phasenverschiebungsmessung begrenzt ist, wird durch Nutzung verschiedener Wellenlängen eine Genauigkeitssteigerung durchgeführt. Nach der groben Messung mit einer langen Wellenlänge, wird die Genauigkeit durch die Verwendung immer kürzerer Modulationswellen gesteigert. Eine grobe Messung ist jedoch vorher notwendig, da ansonsten die Anzahl der ganzen Schwingungen des Messstrahles unbekannt ist. \citep[S. 311ff]{Witte2006}
 
 \paragraph{Zeitmessung}
-Bei beiden Verfahren ist ein Problem die genaue Zeitmessung. Eine Möglichkeit dieser Messung ist die Nutzung eines Frequenzgenerators, welcher Zählimpulse erzeugt. Diese werden dann zwischen zwei Flanken der zu messenden Ausgangs- und Eingangswellen mehrfach gezählt und gemittelt und ergeben so zum Beispiel die Phasenverschiebung. Dieses Verfahren wird als digitale Messung bezeichnet. Eine andere Methode ist die analoge Messung. Hierbei öffnet die eine Flanke den Stromfluss zu einem Kondensator, die Flanke der anderen Welle schließt sie wieder. Aus der Ladung des Kondensators kann dann auf den Phasenwinkel und die Phasenverschiebung geschlossen werden.  \citep[S. 314f]{Witte2006}
+Bei beiden Verfahren ist die genaue Zeitmessung ein Problem. Eine Möglichkeit dieser Messung ist die Nutzung eines Frequenzgenerators, welcher Zählimpulse erzeugt. Diese werden dann zwischen zwei Flanken der zu messenden Ausgangs- und Eingangswellen mehrfach gezählt und gemittelt und ergeben so zum Beispiel die Phasenverschiebung. Dieses Verfahren wird als digitale Messung bezeichnet. Eine andere Methode ist die analoge Messung. Hierbei öffnet die eine Flanke den Stromfluss zu einem Kondensator, die Flanke der anderen Welle schließt sie wieder. Aus der Ladung des Kondensators kann dann auf den Phasenwinkel und die Phasenverschiebung geschlossen werden.  \citep[S. 314f]{Witte2006}
 
 \subsection{Ablenkeinheit}
-Bei den meisten Laserscannern ist nur eine Laserentfernungsmesseinheit verbaut. Um hiermit verschiedene Punkte messen zu können, muss der Laserstrahl durch geeignete Verfahren abgelenkt werden. Auch hierfür gibt es im Airborne Laserscanning verschiedenste Ansätze:
+Bei den meisten Laser\-scan\-nern ist nur eine Laserentfernungsmesseinheit verbaut. Um hiermit verschiedene Punkte messen zu können, muss der Laserstrahl durch geeignete Verfahren abgelenkt werden. Auch hierfür gibt es im Airborne Laserscanning verschiedenste Ansätze:
 \citeTwo{S. 23ff}{ALS}{S. 16ff}{beraldin}
 
 \paragraph{Schwenkspiegel}
-Der Laserstrahl wird auf einen schwingenden, flachen Spiegel gerichtet. Durch die Schwingung wird der Laserstrahl in einer Ebene nach Links und Rechts abgelenkt. Durch die Bewegung des Fluggerätes wird der Laser so in Richtung der Schwingachse ensteht so auf der Oberfläche eine Zick-Zack-Linie als Messmuster.
+Der Laserstrahl wird auf einen schwingenden, flachen Spiegel gerichtet. Durch die Schwingung wird der Laserstrahl in einer Ebene nach links und rechts abgelenkt. Durch die Bewegung des Fluggerätes wird der Laser in Richtung der Schwingachse bewegt. Es entsteht eine Zick-Zack-Linie auf der Oberfläche als Messmuster.
 
 \paragraph{Rotierender Polygon-Spiegel}
 Beim drehenden Polygon-Spiegel dreht sich ein Prisma mit einem gleichseitigen Polygon in der Achse der Flugbewegung. Seine rechteckigen Seiten sind verspiegelt und der Laser auf diese gerichtet. Von oben gesehen wird der Strahl somit immer nur in eine Richtung abgelenkt und springt dann wieder zurück auf die andere Seite. Es entsteht ein Streifenmuster.
 
 \paragraph{Palmer Scanner}
-Beim Palmerscanner rotiert ein Flachspiegel um eine Achse, die fast senkrecht zur Spiegeloberfläche steht. Da der Spiegel nicht genau senkrecht auf dieser Achse montiert ist, beschreibt der auf den Spiegel gerichtete Laser einen Kreis. Durch einen im 45 Grad Winkel zur Achse stehenden Spiegel und einem sich in der Drehachse befindenen Scanner können die Strahlen auch rechtwinklig abgelenkt werden und somit eine Ebene scannen. Dies wird häufig bei terrestrischen Laserscannern im Zusammenhang mit einer zweiten Drehachse angewandt.
+Beim Palmerscanner rotiert ein Flachspiegel um eine Achse, die fast senkrecht zur Spiegeloberfläche steht. Da der Spiegel nicht genau senkrecht auf dieser Achse montiert ist, beschreibt der auf den Spiegel gerichtete Laser einen Kreis. Durch einen im 45 Grad Winkel zur Achse stehenden Spiegel und einem sich in der Drehachse befindenen Scanner können die Strahlen auch rechtwinklig abgelenkt werden und somit eine Ebene scannen. Dies wird häufig bei terrestrischen Laser\-scan\-nern im Zusammenhang mit einer zweiten Drehachse angewandt.
 
 \paragraph{Glasfaser-Scanner}
 \label{p:faserscanner}
 Der Glasfaserscanner nutzt zur Ablenkung zusätzlich Glasfasern, welche fest verklebt sind. Hierdurch sind die Winkel zur Seite festgegeben. Zum Beispiel ein Polygonspiegel wie er zuvor beschrieben wurde, reflektiert den Messstrahl in die jeweiligen Faserbündel. Die Ablenkungswinkel sind fest vom Hersteller vorgeben.
 
 \paragraph{Zusätzliche Achsen}
-Zusätzlich zu den Spiegelmechanismen verfügen die terrestrische Laserscanner über eine weitere Achse. Während beim normalen Airborne Laserscanning die weitere Bewegung des Lasers durch die Fortbewegung des Fluggerätes durchgeführt wird, muss hier dies ein Motor übernehmen. Panorama-Laserscanner haben hierfür einen Drehmechanismus um ihre Hochachse. Bei Kamerascannern, sie messen nur eine quadratische Fläche wie eine Kamera, kann die zusätzliche Bewegung auch einfach durch einen zweiten Ablenkungsspiegel erfolgen. \citep[S. 37]{beraldin}
+Zusätzlich zu den Spiegelmechanismen verfügen die terrestrischen Laser\-scan\-ner über eine weitere Achse. Während beim Airborne Laserscanning die weitere Bewegung des Lasers durch die Fortbewegung des Fluggerätes durchgeführt wird, muss dies bei der terrestrischen Messung ein Motor übernehmen. Panorama-Laser\-scan\-ner haben hierfür einen Drehmechanismus um ihre Hochachse. Bei Kamerascannern, sie messen nur eine quadratische Fläche wie eine Kamera, kann die zusätzliche Bewegung auch einfach durch einen zweiten Ablenkungsspiegel erfolgen. \citep[S. 37]{beraldin}
 
 Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Messeinheit, die den Stand des Spiegels misst. Hierdurch lässt sich dann die Abstrahlrichtung des Lasers berechnen, beziehungsweise beim Faserlaser bestimmen, welches Faserbündel genutzt wurde. Die Richtung wird dann wiederum zur Berechnung von Koordinaten benötigt.
 
@@ -190,17 +200,17 @@ Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse ve
 
 \todo{Abbildung}
 
-Laserscannern mit Impulsmessverfahren ermöglichen typischerweise bis zu vier einzelne Echos aufzuzeichnen. Alternativ gibt es Scanner, die das komplette Signal mit einer Abtastrate von bis zu 0,5 Nanosekunden digitalisieren. Hier ist es dann möglich, spezielle Auswertung aufgrund der Wellenform im Postprocessing durchzuführen. \citep[S. 29]{beraldin}
+Laser\-scan\-nern mit Impulsmessverfahren ermöglichen typischerweise bis zu vier einzelne Echos aufzuzeichnen. Alternativ gibt es Scanner, die das komplette Signal mit einer Abtastrate von bis zu 0,5 Nanosekunden digitalisieren. Hier ist es dann möglich, spezielle Auswertung aufgrund der Wellenform im Postprocessing durchzuführen. \citep[S. 29]{beraldin}
 
 \section{Positionsbestimmung mittels globalen Navigationssatellitensystemen}
 \label{s:GNSS}
-Zur Bestimmung der Position des Fluggerätes wird ein Empfänger für globale Navigationssatellitensysteme (global navigation satellite system, GNSS) verwendet. Ein solcher Empfänger kann durch die Laufzeitbestimmung des Signales von verschiedenen Satelliten zum Beispiel des US-amerikanischen Navstar GPS seine aktuelle Position bestimmen. Hierzu ist eine freie Sicht zum Himmel notwendig. Je nach Auswertung und Weiterverarbeitung des Signales sind Genauigkeiten zwischen 10 Metern ohne zusätzliche Daten und wenigen Millimetern bei statischen Dauermessungen und dem Einsatz von Daten von Referenzstationen im Postprocessing möglich. Es befinden sich pro System etwa 30 Satelliten in einer bekannten Umlaufbahn. Durch an Bord befindlich Atomuhren können die Satelliten hochgenaue Zeitstempel und sich wiederholende Codemuster aussenden. Im Fall von Navstar GPS erfolgt die Aussendung aktuell auf drei verschiedenen Frequenzen L1, L2 und L5. Für die öffentliche Nutzung ist nur L1 freigegeben. L2 und L5 sind der militärischen Nutzung vorbehalten. Durch reine Auswertung des ausgesendeten L1-Codes können Genauigkeiten bis 5 Meter erreicht werden. Für geodätische Anwendungsfälle wird zusätzlich die Phasenmessung benutzt. Hierbei wird nicht nur das dem Funksignal aufmodelierte Codemuster ausgewertet, sondern auch die Phase des Signals. Hierdurch ist es auch möglich, dass verschlüsselte L2-Signal mitzunutzen. Durch die Nutzung von Referenzstationsnetzen wie SAPOS Genauigkeiten von 1-2cm in Echtzeit und von unter Zentimetergenauigkeit im Postprocessing erreicht werden \citep[S. 375]{Witte2006}.
+Zur Bestimmung der Position des Fluggerätes wird ein Empfänger für globale Navigationssatellitensysteme (global navigation satellite system, GNSS) verwendet. Ein solcher Empfänger kann durch die Laufzeitbestimmung des Signales von verschiedenen Satelliten zum Beispiel des US-amerikanischen Navstar GPS seine aktuelle Position bestimmen. Hierzu ist eine freie Sicht zum Himmel notwendig. Je nach Auswertung und Weiterverarbeitung des Signales sind Genauigkeiten zwischen 10 Metern ohne zusätzliche Daten und wenigen Millimetern bei statischen Dauermessungen und dem Einsatz von Daten von Referenzstationen im Postprocessing möglich. Es befinden sich pro System etwa 30 Satelliten in einer bekannten Umlaufbahn. Durch an Bord befindliche Atomuhren können die Satelliten hochgenaue Zeitstempel und sich wiederholende Codemuster aussenden. Im Fall von Navstar GPS erfolgt die Aussendung aktuell auf drei verschiedenen Frequenzen L1, L2 und L5. Für die öffentliche Nutzung ist nur L1 freigegeben. L2 und L5 sind der militärischen Nutzung vorbehalten. Durch reine Auswertung des ausgesendeten L1-Codes können Genauigkeiten bis 5 Meter erreicht werden. Für geodätische Anwendungsfälle wird zusätzlich die Phasenmessung benutzt. Hierbei wird nicht nur das dem Funksignal aufmodelierte Codemuster ausgewertet, sondern auch die Phase des Signals. Hierdurch ist es auch möglich, dass verschlüsselte L2-Signal mitzunutzen. Durch die Nutzung von Referenzstationsnetzen wie SAPOS können Genauigkeiten von 1-2cm in Echtzeit und von unter Zentimetergenauigkeit im Postprocessing erreicht werden \citep[S. 375]{Witte2006}.
 
 \section{Inertiale Messeinheit}
 \label{s:IMU}
-Bei der inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie wird benötigt, um beim Airborne Laserscanning die genaue Ausrichtung des Laserscanners zu bestimmen. Daher muss diese auch unverwindbar mit dem Laserscanner verbunden sein. In Kombination mit den Positionsdaten des GNSS-Modules ermöglicht sie die Rekonstruktion der Flugbewegungen (Trajektorie). Ein weiterer Vorteil der inertialen Messeinheit ist ihre Messfrequenz: Im Gegensatz zum GNSS, dass im Normalfall nur eine Messung pro Sekunde durchführt, kann die IMU bis zu 500 Messungen pro Sekunde ausführen. Sie stützt daher nicht nur die GNSS-Messung sondern hilf auch, die Trajektorie zu interpolieren und somit auch für den Bereich zwischen den GNSS-Messungen genaue Positionen zu bestimmen. \citep[S. 23ff]{beraldin}
+Bei der inertialen Messeinheit (inertial measurement unit, IMU) handelt es sich um einen Sensor, der die Neigung sowie Drehbewegungen der Sensoreinheit misst. Sie wird benötigt, um beim Airborne Laserscanning die genaue Ausrichtung des Laser\-scan\-ners zu bestimmen. Daher muss diese auch verwindungssteif mit dem Laser\-scan\-ner verbunden sein. In Kombination mit den Positionsdaten des GNSS-Modules ermöglicht sie die Rekonstruktion der Flugbewegungen (Trajektorie). Ein weiterer Vorteil der inertialen Messeinheit ist ihre Messfrequenz: Im Gegensatz zum GNSS, dass im Normalfall nur eine Messung pro Sekunde durchführt, kann die IMU bis zu 500 Messungen pro Sekunde ausführen. Sie stützt daher nicht nur die GNSS-Messung sondern hilft auch, die Trajektorie zu interpolieren und somit auch für den Bereich zwischen den GNSS-Messungen genaue Positionen zu bestimmen. \citep[S. 23ff]{beraldin}
 
-Die Messung erfolgt mit mehreren Einzelsensoren: Für die Messung der Beschleunigung in drei Dimensionen sind drei jeweils rechtwinklig zu einander stehende Beschleunigungsmesser verbaut. In der klassischen Bauform ist hierfür jeweils eine Probemasse zwischen zwei Federn gelagert. Durch eine auf die Probemasse wirkende Beschleunigung wird diese zwischen den Federn ausgelenkt. Die Messung der Drehrate erfolgt mittels drei einzelnen Kreiselinstrumenten (Gyroskop) in drei Achsen. Sie basieren auf Kreiseln, welche drehbar gelagert sind. Sie streben dazu, die Ausrichtung ihrer Drehachsen im Raum beizubehalten. Durch Messung der Kräfte kann die Drehrate berechnet werden. Einige inertiale Messeinheiten enthalten auch ein dreidimensionales Magnetometer, mit dem sich die magnetische Nordrichtung dreidimensional feststellen lässt.
+Die Messung erfolgt mit mehreren Einzelsensoren: Für die Messung der Beschleunigung in drei Dimensionen sind drei jeweils rechtwinklig zueinander stehende Beschleunigungsmesser verbaut. In der klassischen Bauform ist hierfür jeweils eine Probemasse zwischen zwei Federn gelagert. Durch eine auf die Probemasse wirkende Beschleunigung wird diese zwischen den Federn ausgelenkt. Die Messung der Drehrate erfolgt mittels drei einzelnen Kreiselinstrumenten (Gyroskop) in drei Achsen. Sie basieren auf Kreiseln, welche drehbar gelagert sind. Sie streben dazu, die Ausrichtung ihrer Drehachsen im Raum beizubehalten. Durch Messung der Kräfte kann die Drehrate berechnet werden. Einige inertiale Messeinheiten enthalten auch ein dreidimensionales Magnetometer, mit dem sich die magnetische Nordrichtung dreidimensional feststellen lässt.
 
 Die Genauigkeit von inertialen Messeinheiten wird in ihre Messgenauigkeit und in ihre zeitliche Abweichung unterteilt. Die zeitliche Stabilität ist vorallem bei der Inertialnavigation, die ausschließlich auf deren Messungen basiert, wichtig.
 
@@ -217,14 +227,14 @@ Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, 
 \todo{Quelle}
 
 \section{Kombination des Messsysteme}
-Um die drei eigenständigen Messsysteme kombiniert nutzen zu können, muss die relative Position der Systeme genau bekannt sein und darf sich während des Fluges nicht verändern. Beim klassischen Airborne Laserscanning vom Helikopter werden hierfür zum Beispiel eigenständige Module entwickelt, die alle benötigten Systeme verdrehsicher enthalten und an den Kuffen des Helikopters montiert werden können \citep[S. 23f]{beraldin}
+Um die drei eigenständigen Messsysteme kombiniert nutzen zu können, muss die relative Position der Systeme genau bekannt sein und darf sich während des Fluges nicht verändern. Beim klassischen Airborne Laserscanning vom Helikopter werden hierfür zum Beispiel eigenständige Module entwickelt, die alle benötigten Systeme verdrehsicher enthalten und an den Kufen des Helikopters montiert werden können \citep[S. 23f]{beraldin}
 
 Außerdem müssen alle Systeme synchronisiert werden, damit die Daten später miteinander verarbeitet werden können. Hierfür wird üblicherweise das Sekundensignal des Navigationssatellitensystems (pulse per second, PPS) genutzt. Das GNSS-System sendet dazu zu jeder vollen Sekunde der GNSS-Zeit ein Impuls aus, mit welchen sich die anderen Sensorsysteme synchronisieren können. 
 
 \section{Bisherige Systeme zur dreidimensionalen Erfassung mittels Multikoptern}
 Die meisten aktuellen Verfahren zur Erzeugung von 3D-Modellen unter Nutzung von kompakten Multikoptern mit einer Tragkraft von bis zu 5kg, basieren auf photogrammetrischen Verfahren. Sie erzeugen Bilder, meist unter direkter Georeferenzierung, welche im Postprocessing zu Bildverbänden verknüpft werden. Mittels Bilderkennung werden hieraus 3D-Punktwolken berechnet. Nachteil dieses Verfahrens ist es, dass ausreichende Beleuchtung vorhanden sein muss. Es kann somit nur tagsüber geflogen werden, aber auch starke Schatten können das Ergebnis verschlechtern. Für die automatische Erstellung von Punktwolken muss außerdem das Gelände ausreichende Strukturen aufweisen, damit automatische Verknüpfungen der Pixel erfolgen können.
 
-Laserscanning als aktiver Sensor hat hier den Vorteil, dass keine zusätzliche Beleuchtung benötigt wird -- der Sensor bringt sein Licht selber mit. Problematisch ist hierbei jedoch die Größe der Systeme. Aus diesem Grund wurden bisher hauptsächlich Systeme mit großen UAVs erprobt und verwendet \citep[S. 19]{uav}. Durch die immer weiter fortschreitende Miniaturisierung und die Weiterentwicklung von Laserscannern zum Beispiel für die Entwicklung von autonomen Fahrzeugen werden die Scanner auch inzwischen kleiner und leistungsfähiger.
+Laserscanning als aktiver Sensor hat hier den Vorteil, dass keine zusätzliche Beleuchtung benötigt wird -- der Sensor bringt sein Licht selber mit. Problematisch ist hierbei jedoch die Größe der Systeme. Aus diesem Grund wurden bisher hauptsächlich Systeme mit großen UAVs erprobt und verwendet \citep[S. 19]{uav}. Durch die immer weiter fortschreitende Miniaturisierung und die Weiterentwicklung von Laser\-scan\-nern zum Beispiel für die Entwicklung von autonomen Fahrzeugen werden die Scanner auch inzwischen kleiner und leistungsfähiger.
 
 \todo{Quelle, füllen}
 
@@ -238,9 +248,9 @@ Im Folgenden wird zunächst auf die verwendeten Geräte und ihre technischen Eig
 
 \subsection{Velodyne VLP-16}
 \label{sss:vlp16}
-Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laserscanner eingesetzt. Einer dieser Kompakt-Laserscanner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Er hat einen Durchmesser von etwa 10 cm und eine Höhe von 7 cm bei einem Gewicht von etwa 830 g ohne Kabel und Schnittstellenbox. Es handelt sich beim VLP-16 sehr wahrscheinlich um einen Faserscanner (siehe \autoref{p:faserscanner}) mit 16 Messstrahlen, der sich zusätzlich um seine Hochachse dreht. Seine Messgenauigkeit beträgt laut Datenblatt \(3~cm\). Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem Infrarotlaser mit einer Wellenlänge von 903nm. \citep{vlpSheet}
+Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laser\-scan\-ner eingesetzt. Einer dieser Kompakt-Laser\-scan\-ner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Er hat einen Durchmesser von etwa 10 cm und eine Höhe von 7 cm bei einem Gewicht von etwa 830 g ohne Kabel und Schnittstellenbox. Es handelt sich beim VLP-16 wahrscheinlich um einen Faserscanner (siehe \autoref{p:faserscanner}) mit 16 Messstrahlen, der sich zusätzlich um seine Hochachse dreht. Genaue Angaben macht der Hersteller hierzu keine. Seine Messgenauigkeit beträgt laut Datenblatt \(3~cm\). Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem Infrarotlaser mit einer Wellenlänge von 903nm. \citep{vlpSheet}
 
-Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hintereinander aus, gefolgt von einer Nachladezeit von \(18,4\mu s\), so dass jeder Messstrahl alle \(55,3~\mu s\) ausgesendet werden kann \citep[S. 16]{vlpManual}. Es ergibt sich somit eine durchschnittliche Messfrequenz von \(289.357~Hz\) (siehe \autoref{equ:XproS}). Während der Messungen dreht sich der Laserscanner je nach Einstellung über das Webinterface des Scanners mit 5 bis 20 Umdrehungen pro Sekunde \citep{vlpSheet}. Pro ausgesendeten Strahl können jeweils die erste und die stärkste Reflexion zurück gegeben werden, so dass über eine halbe Million Punkte pro Sekunde gemessen werden können (siehe \autoref{equ:XproS}). Die Daten werden anschließend über den Netzwerkanschluss gestreamt (siehe auch \autoref{ss:Datenlieferung}). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul des Types Garmin GPS 18x LVC. Auch andere GNSS-Module sind nutzbar, so dass im Weiteren der Versuch unternommen wurde, hier das GNSS-Modul der inertialen Messeinheit (siehe \autoref{s:iMar}) oder eines uBlox-GNSS-Modules zu nutzen (siehe \autoref{s:GNSSAnschluss}). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so in der Nachbearbeitung mit den Daten aus der inertialen Messeinheit zu verknüpfen.
+Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hintereinander aus, gefolgt von einer Nachladezeit von \(18,4\mu s\), so dass jeder Messstrahl alle \(55,3~\mu s\) ausgesendet werden kann \citep[S. 16]{vlpManual}. Es ergibt sich somit eine durchschnittliche Messfrequenz von \(289.357~Hz\) (siehe \autoref{equ:XproS}). Während der Messungen dreht sich der Laser\-scan\-ner je nach Einstellung über das Webinterface des Scanners mit 5 bis 20 Umdrehungen pro Sekunde \citep{vlpSheet}. Pro ausgesendeten Strahl können jeweils die erste und die stärkste Reflexion zurück gegeben werden, so dass über eine halbe Million Punkte pro Sekunde gemessen werden können (siehe \autoref{equ:XproS}). Die Daten werden anschließend über den Netzwerkanschluss gestreamt (siehe auch \autoref{ss:Datenlieferung}). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul des Types Garmin GPS 18x LVC. Auch andere GNSS-Module sind nutzbar, so dass im Weiteren der Versuch unternommen wurde, hier das GNSS-Modul der inertialen Messeinheit (siehe \autoref{s:iMar}) oder eines uBlox-GNSS-Modules zu nutzen (siehe \autoref{s:GNSSAnschluss}). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so in der Nachbearbeitung mit den Daten aus der inertialen Messeinheit zu verknüpfen.
 
 \begin{equation}
  \label{equ:XproS}
@@ -254,7 +264,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hinte
  \centering
  \includegraphics[width=0.7\textwidth]{./img/vlp16.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{Laserscanner Velodyne VLP-16 (eigene Aufnahme)}
+ \caption{Laser\-scan\-ner Velodyne VLP-16 (eigene Aufnahme)}
  \label{img:vlp16}
 \end{figure}
 
@@ -287,7 +297,7 @@ Im Postprocessing kann aus den Daten der inertialen Messeinheit zusammen mit den
 \label{ss:Raspberry}
 Es wurde sich entschieden, die Datenverarbeitung mit einem Raspberry Pi 3 (siehe \autoref{img:rpi3}) durchzuführen. Es handelt sich hierbei um einen von der Raspberry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an den Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Raspberry Pi kam im Februar 2012 auf den Markt. Er verfügte über 256 MB Arbeitsspeicher und einen 700 MHz Ein-Kernprozessor. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor mit 1,2 Ghz und 1 GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über 11 Millionen mal verkauft. \citep{heise5Rasp}
 
-Alle Modelle der Raspberry Pi Serie basieren auf Ein-Chip-System von des Halbleiterherstellers Broadcom. In diesem Chip sind die wichtigsten Bauteile des Systems integriert wie ein ARM-Prozessor, eine Grafikeinheit sowie verschiedene andere Komponenten. Die so gering gehaltene Anzahl an einzelnen Bauelementen beim Raspberry Pi ermöglichen den geringen Preis - ein Ziel der Raspberry Pi Foundation.
+Alle Modelle der Raspberry Pi Serie basieren auf Ein-Chip-Systemen des Halbleiterherstellers Broadcom. In diesem Chip sind die wichtigsten Bauteile des Systems integriert wie ein ARM-Prozessor, eine Grafikeinheit sowie verschiedene andere Komponenten. Die so gering gehaltene Anzahl an einzelnen Bauelementen beim Raspberry Pi ermöglichen den geringen Preis - ein Ziel der Raspberry Pi Foundation.
 
 Der Vorteil des Raspberry Pi zur Datenverarbeitung sind vor allem seine verschiedensten Schnittstellen zur Daten Ein- und Ausgabe \citep{raspSheet}:
 \begin{itemize}
@@ -307,9 +317,7 @@ Der Vorteil des Raspberry Pi zur Datenverarbeitung sind vor allem seine verschie
  \item verschiedene Video- und Audioausgänge
  \end{itemize}
 
-Außerdem vorteilhaft ist für die Nutzung am Multikopter ist seine geringe 
-Größe und sein relativ geringer Stromverbrauch von maximal 12,5 
-Watt \citep{raspSheet}.
+Außerdem vorteilhaft für die Nutzung am Multikopter ist seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5 Watt \citep{raspSheet}, welche aber im Betrieb ohne Peripherie nicht erreicht wird.
 
 \begin{figure}
  \centering
@@ -330,10 +338,10 @@ Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotor
  \label{img:uav}
 \end{figure}
 
-In dieser Arbeit soll der Multikopter den Laserscanner, die IMU, das Gimbal, die Stromversorgung, Datenverarbeitung und -speicherung im Betrieb tragen können. Bei der Systementwicklung des Multikopters muss daher darauf geachtet werden, dass das Gewicht möglichst gering bleibt und dennoch müssen die angehängten Messeinrichtungen auch für härtere Landungen ausgelegt sein. Bei dem  verwendeten Hexakopter (siehe \autoref{img:uav}) handelt es sich um einen  mit einer Tragkraft von etwa 5 Kilogramm und eine Flugdauer von bis zu 20 Minuten \citep{Schulz}.
+In dieser Arbeit soll der Multikopter den Laser\-scan\-ner, die IMU, das Gimbal, die Stromversorgung, Datenverarbeitung und -speicherung im Betrieb tragen können. Bei der Systementwicklung des Multikopters muss daher darauf geachtet werden, dass das Gewicht möglichst gering bleibt und dennoch müssen die angehängten Messeinrichtungen auch für härtere Landungen ausgelegt sein. Der verwendete Hexakopter (siehe \autoref{img:uav}) hat eine Tragkraft von maximal 5 Kilogramm und eine Flugdauer von bis zu 20 Minuten \citep{Schulz}.
 
 \subsection{Gimbal Freefly MöVI M5}
-Um die Messgeräte während des Fluges des Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung der Flugsteuerung an den Laserscanner überträgt, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:IMU}), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
+Um die Messgeräte während des Fluges des Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung der Flugsteuerung an den Laser\-scan\-ner überträgt, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:IMU}), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
 
 Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. \todo{mehr...}
 
@@ -348,12 +356,12 @@ Vorteile eines Arduinos wären vorallem der geringere Stromverbrauch und die Ech
 \section{Stromversorgung}
 Die Stromversorgung des Raspberry-Pi an der Drohne soll mittels Lithium-Ionen-Zellen erfolgen. Der Raspberry-Pi erfordert hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann hierbei zu Systeminstabilitäten führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
 
-\autoref{tab:strom} listet die verschiedenen Module und den die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
+\autoref{tab:strom} listet die verschiedenen Module und die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
 
 \begin{table}
 \centering
 \begin{tabular}{ l | r | r | r }
-  Gerät 	& Laserscanner	& IMU		& Raspberry Pi\\
+  Gerät 	& Laser\-scan\-ner	& IMU		& Raspberry Pi\\
   \hline
   Spannung 	& 9 - 18 V 	& 10 - 36 V	& 5,0 V \\
   \hline
@@ -372,12 +380,12 @@ Für eine geplante Flugdauer von 30 Minuten wird bei einem angenommenen Wirkungs
 E = \frac{ P \cdot t}{\eta} = \frac{(8~W + 12,5~W + 7,5W) \cdot 0,5~h}{90~\%} \approx 15,6~Wh
 \end{equation}
 
-\section{Anbindung des Raspberry Pi an den Laserscanner}
-Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Sternpunkt der Schnittstellen. Der Laserscanner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle angeschlossen. Die inertiale Messeinheit zeichnet die Daten selbstständig auf, kann aber auch mittels der als serieller Schnittstelle nutzbaren GPIO-Pins an den Raspberry Pi angeschlossen werden. Außerdem kann an diesem Port auch ein GNSS-Modul angeschlossen werden. Dieses GNSS-Modul kann im Folgenden dem Raspberry Pi zu einer genauen Uhrzeit verhelfen, die für die Verarbeitung der Daten benötigt wird. Alternativ kann auch ein an den Laserscanner angeschlossenes GNSS-Modul sein Zeitstempel per Netzwerk an den Raspberry Pi liefern. Diese Methode soll hier verwendet werden.
+\section{Anbindung des Raspberry Pi an den Laser\-scan\-ner}
+Durch seine vielseitigen Anschlussmöglichkeiten bildet der Raspberry Pi den Sternpunkt der Schnittstellen. Der Laser\-scan\-ner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle angeschlossen. Die inertiale Messeinheit zeichnet die Daten selbst\-stän\-dig auf, kann aber auch mittels der als serieller Schnittstelle nutzbaren GPIO-Pins an den Raspberry Pi angeschlossen werden. Außerdem kann an diesem Port auch ein GNSS-Modul angeschlossen werden. Dieses GNSS-Modul kann im Folgenden dem Raspberry Pi zu einer genauen Uhrzeit verhelfen, die für die Verarbeitung der Daten benötigt wird. Alternativ kann auch ein an den Laser\-scan\-ner angeschlossenes GNSS-Modul sein Zeitstempel per Netzwerk an den Raspberry Pi liefern. Diese Methode soll hier verwendet werden.
 
-\section{Verbindung des GNSS-Modules zum Laserscanner}
+\section{Verbindung des GNSS-Modules zum Laser\-scan\-ner}
 \label{s:GNSSAnschluss}
-Für die Versorgung des Laserscanners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dieses Signal zu nutzen.
+Für die Versorgung des Laser\-scan\-ners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dieses Signal zu nutzen.
 
 \begin{figure}
  \centering
@@ -387,7 +395,7 @@ Für die Versorgung des Laserscanners mit einem GNSS-Signal zur Synchronisierung
  \label{img:ublox}
 \end{figure}
 
-Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laserscanner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laserscanner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3 Volt \citep[S. 3]{vlpInterface} codiert ist (HIGH), beim GNSS-Modul entspricht  die höhere Spannung Logisch 0.
+Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Bei dem vom Laser\-scan\-ner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15 Volt. Der direkte Anschluss eines uBlox GNSS-Modules vom Typ NEO-6M brachte zunächst keinen Erfolg. Messungen mit einem Ardunio (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeteten GNSS-Moduls nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laser\-scan\-ner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3 Volt \citep[S. 3]{vlpInterface} codiert ist (HIGH), beim GNSS-Modul entspricht  die höhere Spannung Logisch 0.
 
 \begin{figure}
  \centering
@@ -397,13 +405,13 @@ Die Übertragung der Daten des GNSS-Modules zum Laserscanner erfolgt per seriell
  \label{abb:oszi}
 \end{figure}
 
-Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um ein Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laserscanner versorgt das GNSS-Modull nur mit 5 Volt Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Hierfür wurde ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
+Um das Signal zu drehen wurde ein Integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um ein Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laser\-scan\-ner versorgt das GNSS-Modull nur mit 5 Volt Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Hierfür wurde ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
 
 \begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/GPS_Schaltung.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{Entwurf des Schaltplanes zum Anschluss des GNSS-Modules an den Laserscanner, gezeichnet in Fritzing}
+ \caption{Entwurf des Schaltplanes zum Anschluss des GNSS-Modules an den Laser\-scan\-ner, gezeichnet in Fritzing}
  \label{abb:schaltplan}
 \end{figure}
 
@@ -451,7 +459,7 @@ Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewäh
  \label{abb:platine}
 \end{figure}
 
-Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi paltzsparender optimiert und nur die auch am ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laserscanner die Daten vom GNSS-Modull empfangen kann.
+Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi platzsparender optimiert und nur die auch an dem ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angeschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laser\-scan\-ner die Daten vom GNSS-Modul empfangen kann.
 
 \begin{figure}
  \centering
@@ -465,15 +473,15 @@ Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, eini
 \label{c:datenverarbeitung}
 
 \section{Verwendung von Python}
-Zur Realisierung der Programmierung wurde die Skriptsprache Python ausgewählt. Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken genutzt sondern Texteinrückungen verplichtend hierfür eingesetzt \citep[S. 13f]{python}. Die Struktur des Programmes ist so schnell erfassbar. Außerdem ist es nicht notwendig, den Quellcode zu kompilieren. Er wird vom Interpreter direkt ausgeführt. So sind kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren möglich. Änderungen und Anpassungen können schnell durchgeführt werden.
+Zur Realisierung der Programmierung wurde die Skriptsprache Python ausgewählt. Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken genutzt, sondern Texteinrückungen verpflichtend hierfür eingesetzt \citep[S. 13f]{python}. Die Struktur des Programmes ist so schnell erfassbar. Außerdem ist es nicht notwendig, den Quellcode zu kompilieren. Er wird vom Interpreter direkt ausgeführt. So sind kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren möglich. Änderungen und Anpassungen können schnell durchgeführt werden.
 
-Python wurde in seiner ersten Version 1991 von Guido van Rossum freigegeben. Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach zu lösenden Problem objektorientiert oder strukturiert programmiert werden kann \citep[S. 14]{python}.
+Python wurde in seiner ersten Version 1991 von Guido van Rossum freigegeben. Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach zu lösendem Problem objektorientiert oder strukturiert programmiert werden kann \citep[S. 14]{python}.
 
 Die aktuelle Version von Python (Oktober 2017) ist die Version 3.6. Das Skript wurde unter Verwendung dieser Version entwickelt. Es wurde aber auch auf eine Kompatibilität mit Python 2.7, der neusten Version von Python 2, die noch sehr häufig im Einsatz ist, geachtet. Um Teile des Quellcodes als Python-Module auch in andere Skripte einfach einbinden zu können, aber auch den Quelltext übersichtlich zu halten, wurde der objektorientierte Programmierstil gewählt.
 
-\section{Datenlieferung vom Laserscanner}
+\section{Datenlieferung vom Laser\-scan\-ner}
 \label{ss:Datenlieferung}
-Der Laserscanner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Skriptes durchgeführt werden.
+Der Laser\-scan\-ner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Skriptes durchgeführt werden.
 
 Ein Datenpaket (siehe \autoref{tab:datenmodell}) besteht jeweils aus einem Header von 42 Bytes, gefolgt von 12 Datenblöcken mit jeweils 32 Messungen, abgeschlossen von 4 Bytes, die den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern. Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers und darauf folgend die Messwerte von zwei Messungen der 16 Laserstrahlen. Die genaue Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen aus zwei auf einander folgenden Messungen interpoliert werden.
 
@@ -511,7 +519,7 @@ Factory                                        & \multicolumn{1}{l|}{}
 \label{tab:datenmodell}
 \end{table}
 
-Der Laserscanner sendet bei der Einstellung Dual Return, also der Rückgabe vom stärksten und letzten Echos pro Messung 
+Der Laser\-scan\-ner sendet bei der Einstellung Dual Return, also der Rückgabe vom stärksten und letzten Echos pro Messung 
 bis zu 1508 Pakete dieser Form pro Sekunde \citep[S. 49]{vlpManual}. Die Ausgangsdaten werden, bei einer Paketgröße von 1248 Bytes mit einer Datenrate von 1,8 MB/s empfangen (siehe \autoref{equ:Ausgangsrate}). Hierbei werden fast 600.000 Messwerte pro Sekunde übertragen (siehe \autoref{equ:MessungenPS}).
 
 \begin{equation}
@@ -527,7 +535,7 @@ bis zu 1508 Pakete dieser Form pro Sekunde \citep[S. 49]{vlpManual}. Die Ausgang
 
 \section{Geplantes Datenmodell}
 \label{s:datenmodell}
-Die Daten des Laserscanners sollen in einer einfach lesbaren Textdatei abgelegt werden. In der Nachbereitung sollen die Daten aus dieser Textdatei mit den Daten der inertialen Messeinheit und des GNSS-Empfängers verknüpft werden, um so die Daten georeferenzieren zu können. Als Verknüpfung bietet sich hier der Zeitstempel an. Die inertialen Messeinheit und der Laserscanner können hierbei die Zeitdaten aus dem GNSS-Signal verwenden. Hierdurch sind hochgenaue Zeitstempel möglich. Die Zeitinformation bildet also einen wichtigen Schlüssel in den Daten. Als einfaches Textformat wurden durch Tabulator getrennte Daten, jeweils eine Zeile je Messung, gewählt. Folgende Daten sind in dieser Reihenfolge enthalten:
+Die Daten des Laser\-scan\-ners sollen in einer einfach lesbaren Textdatei abgelegt werden. In der Nachbereitung sollen die Daten aus dieser Textdatei mit den Daten der inertialen Messeinheit und des GNSS-Empfängers verknüpft werden, um so die Daten georeferenzieren zu können. Als Verknüpfung bietet sich hier der Zeitstempel an. Die inertialen Messeinheit und der Laser\-scan\-ner können hierbei die Zeitdaten aus dem GNSS-Signal verwenden. Hierdurch sind hochgenaue Zeitstempel möglich. Die Zeitinformation bildet also einen wichtigen Schlüssel in den Daten. Als einfaches Textformat wurden durch Tabulator getrennte Daten, jeweils eine Zeile je Messung, gewählt. Folgende Daten sind in dieser Reihenfolge enthalten:
 
 \begin{itemize}
  \item Zeitstempel in Mikrosekunden
@@ -544,18 +552,18 @@ Problematisch ist bei diesem Datenmodell jedoch die benötigte Datenrate. Eine D
 \label{equ:Datenrate}
 \end{equation}
 
-Erste Test ergaben, dass diese Verarbeitungsgeschwindigkeit nicht mit dem Raspberry Pi erreicht werden konnte. Außerdem benötigen die Daten sehr viel Speicher. Daher wurde sich später für eine Hybridlösung entschieden (siehe \autoref{c:skript}).
+Erste Tests ergaben, dass diese Verarbeitungsgeschwindigkeit nicht mit dem Raspberry Pi erreicht werden konnte. Außerdem benötigen die Daten sehr viel Speicher. Daher wurde sich später für eine Hybridlösung entschieden (siehe \autoref{c:skript}).
 
 \section{Weiterverarbeitung der Daten zu Koordinaten}
-Die als Text gespeicherten Rohdaten sollen dann im Rahmen einer weiterführenden Arbeit zu Koordinaten umgewandelt werden. Zu dieser Umwandlung werden die Positionen des Laserscanners mittels dem GNSS-Empfänger in der IMU und die Neigungsdaten aus der IMU verwendet. Die Neigungen werden dazu direkt mit den Winkeldaten verrechnet.
+Die als Text gespeicherten Rohdaten sollen dann im Rahmen einer weiterführenden Arbeit zu Koordinaten umgewandelt werden. Zu dieser Umwandlung werden die Positionen des Laser\-scan\-ners mittels dem GNSS-Empfänger in der IMU und die Neigungsdaten aus der IMU verwendet. Die Neigungen werden dazu direkt mit den Winkeldaten verrechnet.
 
-Bei der Berechnung ist jedoch zu beachten, dass der Ursprungsort der Entfernungsmessung zwar in der Drehachse des Laserscanners liegt, jedoch der Ursprungsort der ausgesendeten Strahlen etwa 40mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch kann zur Berechnung der Z-Komponente der lokalen Koordinaten nicht einfach der Höhenwinkel und die gemessene Strecke verwendet werden. Die lokalen Koordinaten berechnen sich somit nach der \autoref{equ:koordinaten}.
+Bei der Berechnung ist jedoch zu beachten, dass der Ursprungsort der Entfernungsmessung zwar in der Drehachse des Laser\-scan\-ners liegt, jedoch der Ursprungsort der ausgesendeten Strahlen etwa 40mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch kann zur Berechnung der Z-Komponente der lokalen Koordinaten nicht einfach der Höhenwinkel und die gemessene Strecke verwendet werden. Die lokalen Koordinaten berechnen sich somit nach der \autoref{equ:koordinaten}.
 
 \begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/Strahlengang.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
- \caption{Strahlengang im Laserscanner VLP-16, Werte in Millimetern, nach 
+ \caption{Strahlengang im Laser\-scan\-ner VLP-16, Werte in Millimetern, nach 
 \citet{vlpCAD}}
  \label{img:strahlengang}
 \end{figure}
@@ -585,7 +593,7 @@ Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skri
  \item Umwandlung in eigenes Datenmodell
 \end{itemize}
 
-Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schritte und Gegebenheiten. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Raspberry Pi keinen eigenen Zeitgeber. Um die Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig - diese liefert das GNSS-Modul, welches am Laserscanner angeschlossen ist, sofern ein GNSS-Fix besteht. Es muss also vor dem Erzeugen der Dateien auf ein gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der \autoref{img:ablaufplan} zu entnehmen. 
+Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schritte und Gegebenheiten. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Raspberry Pi keinen eigenen Zeitgeber. Um die Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig - diese liefert das GNSS-Modul, welches am Laser\-scan\-ner angeschlossen ist, sofern ein GNSS-Fix besteht. Es muss also vor dem Erzeugen der Dateien auf ein gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der \autoref{img:ablaufplan} zu entnehmen. 
 \begin{figure}
  \centering
  \includegraphics[width=0.8\textwidth]{./img/Ablaufplan.png}
@@ -609,22 +617,22 @@ Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hil
 \end{figure}
 
 \section{Evaluation einzelner Methoden}
-Um eine einfache Fehlersuche zu ermöglichen, wurde die grundlegenden Funktionen in einzelnen Skripte entwickelt und geprüft. Diese kleineren Skripte haben den Vorteil, Fehler schneller eingrenzen zu können und auch schon früh konzeptionelle Fehler zu entdecken. In diesem Schritt wurde bemerkt, dass das ein großes Problem die Geschwindigkeit der Datenverarbeitung ist. 
+Um eine einfache Fehlersuche zu ermöglichen, wurden die grundlegenden Funktionen in einzelnen Skripten entwickelt und geprüft. Diese kleineren Skripte haben den Vorteil, dass Fehler schneller eingegrenzt und auch schon früh konzeptionelle Fehler entdeckt werden können. In diesem Schritt wurde bemerkt, dass ein großes Problem die Geschwindigkeit der Datenverarbeitung ist. 
 
 \paragraph{Datenempfang}
-Die Verbindung zum Laserscanner mittels Python-Socket funktionierte ohne weitere Probleme. Die binären Daten konnten zeitgleich abgespeichert werden.
+Die Verbindung zum Laser\-scan\-ner mittels Python-Socket funktionierte ohne weitere Probleme. Die binären Daten konnten zeitgleich abgespeichert werden.
 
 \paragraph{Datentransformation}
-Zunächst war es geplant, die Daten direkt in das in \autoref{s:datenmodell} vorgestellte Datenmodell umzuformen. Hierzu sollte der Empfang der Daten direkt eine Umformmethode starten. Die Versuche erfolgten zunächst mit dem im vorherigen Test aufgezeichneten Daten. Schon hier zeigte sich, dass die Umwandlung der aufgezeichneten Daten etwa die fünffache Zeit als für deren Messung und Aufzeichnung benötigt wurde beanspruchte. Wie erwartet, brachte auch das direkte Einlesen der Daten vom Scanner keinen Erfolg. Es folgte ein Überlauf des Netzwerk-Buffer und somit der Verlust von Messdaten. Grund hierfür war hauptsächlich die benötigte Prozessorzeit. Die Nutzung einer schnelleren Datenspeicherung auf einer Solid-State-Disk mit einer Schreibrate von bis zu 300 MB/Sekunde änderte nichts an der Geschwindigkeit des Skriptes. Auch das Erzeugen eines neuen Threads für jeden empfangenen Datensatz war nicht erfolgsversprechend, da bis zu 1500 Threads pro Sekunde hierdurch gestartet wurden und das gesamte System überlastet wurde. Die Umformung musste daher von dem Datenempfang entkoppelt werden und das Skript für die Nutzung von Mehrkernprozessoren optimiert werden. Threads in Python laufen dennoch in einem Prozess und somit nur auf einem Prozessor. Es wurde das in \autoref{s:multikern} vorgestellte Multikern-Konzept erarbeitet.
+Zunächst war es geplant, die Daten direkt in das in \autoref{s:datenmodell} vorgestellte Datenmodell umzuformen. Hierzu sollte der Empfang der Daten direkt eine Umformmethode starten. Die Versuche erfolgten zunächst mit dem im vorherigen Test aufgezeichneten Daten. Schon hier zeigte sich, dass die Umwandlung der aufgezeichneten Daten etwa das Fünffache der Mess- und Aufzeichnungzeit beanspruchte. Wie erwartet, brachte auch das direkte Einlesen der Daten vom Scanner keinen Erfolg. Es folgte ein Überlauf des Netzwerk-Buffers und somit der Verlust von Messdaten. Grund hierfür war hauptsächlich die benötigte Prozessorzeit. Die Nutzung einer schnelleren Datenspeicherung auf einer Solid-State-Disk mit einer Schreibrate von bis zu 300 MB/Sekunde änderte nichts an der Geschwindigkeit des Skriptes. Auch das Erzeugen eines neuen Threads für jeden empfangenen Datensatz war nicht erfolgsversprechend, da bis zu 1500 Threads pro Sekunde hierdurch gestartet wurden und das gesamte System überlastet wurde. Die Umformung musste daher von dem Datenempfang entkoppelt werden und das Skript für die Nutzung von Mehrkernprozessoren optimiert werden. Threads in Python laufen dennoch in einem Prozess und somit nur auf einem Prozessor. Es wurde das in \autoref{s:multikern} vorgestellte Multikern-Konzept erarbeitet.
 
 \paragraph{Hardware-Steuerung}
-Ein Tastendruck auf dem Steuerungsmodul (siehe \autoref{s:steuermodul}) sollte den Raspberry Pi zum Beispiel herunterfahren. Auch dieses Skript wurde getestet. Ein Problem hierbei war es, dass das Skript Administratorrechte (\code{root}) benötigte, um den Rechner herunterfahren zu können. Hierfür wurde jedoch eine Lösung gefunden, indem dem Nutzer \code{pi} die entsprechenden Rechte zum Herunterfahren gegeben wurden (siehe \autoref{s:root}). Eher zufällig zeigte sich aber noch ein anderes Problem: Sofern das Skript im automatisch mit dem Start des Raspberry Pi gestartet wurde und das Steuermodul nicht angeschlossen war, fuhr der Raspberry Pi automatisch nach wenigen Sekunden Betrieb herunter. Da mit dem fehlenden Modul auch die Pull-Down-Widerstände fehlten, war der GPIO-Pin auf einem nicht definierten Zustand. Es kam dazu, dass er zufällig auf einem HIGH-Niveau war, welches als Drücken des Tasters interpretiert wurde. Nach Überschreiten der konfigurierten Haltezeit des Ausschalters von zwei Sekunden, wurde der Herunterfahrprozess gestartet. Um dieses Problem zu unterdrücken, wurde dem Skript eine vorherige Abfrage hinzugefügt, die beim Start überprüft, ob die beiden Taster auf einem Low-Niveau sich befinden, dass durch die beiden angeschlossenen Pull-Down-Widerstände erreicht wird. Falls dieses nicht der Fall ist, beendet sich die Hardwaresteuerung selbstständig.
+Ein Tastendruck auf dem Steuerungsmodul (siehe \autoref{s:steuermodul}) sollte den Raspberry Pi zum Beispiel herunterfahren. Auch dieses Skript wurde getestet. Ein Problem hierbei war es, dass das Skript Administratorrechte (\code{root}) benötigte, um den Rechner herunterfahren zu können. Hierfür wurde jedoch eine Lösung gefunden, indem dem Nutzer \code{pi} die entsprechenden Rechte zum Herunterfahren gegeben wurden (siehe \autoref{s:root}). Eher zufällig zeigte sich aber noch ein anderes Problem: Sofern das Skript automatisch mit dem Start des Raspberry Pi gestartet wurde und das Steuermodul nicht angeschlossen war, fuhr der Raspberry Pi automatisch nach wenigen Sekunden Betrieb herunter. Da mit dem fehlenden Modul auch die Pull-Down-Widerstände fehlten, war der GPIO-Pin auf einem nicht definierten Zustand. Es kam dazu, dass er zufällig auf einem HIGH-Niveau war, welches als Drücken des Tasters interpretiert wurde. Nach Überschreiten der konfigurierten Haltezeit des Ausschalters von zwei Sekunden, wurde der Herunterfahrprozess gestartet. Um dieses Problem zu unterdrücken, wurde dem Skript zuerst eine vorherige Abfrage hinzugefügt, die beim Start überprüft, ob die beiden Taster sich auf einem Low-Niveau befinden, dass durch die beiden angeschlossenen Pull-Down-Widerstände erreicht wird. Falls dieses nicht der Fall ist, beendet sich die Hardwaresteuerung selbst\-stän\-dig. Im weiteren Verlauf der Entwicklung wurden dann jedoch das Signal gedreht und die internen Pull-Down-Widerstände des Raspberry Pi verwendet. Somit wurde diese Abfrage überflüssig.
 
 \section{Multikern-Verarbeitung der Daten}
 \label{s:multikern}
-Da bei der Evaluation der einzelnen Methode herausgefunden wurde, dass die Verarbeitungsgeschwindigkeit des Raspberry Pi für eine sofortige Transformation der Daten nach deren Eingang zu langsam ist, wurde ein Konzept erarbeitet, den hierdurch auftretenden Messdatenverlust zu unterdrücken.
+Da bei der Evaluation der einzelnen Methoden herausgefunden wurde, dass die Verarbeitungsgeschwindigkeit des Raspberry Pi für eine sofortige Transformation der Daten nach deren Eingang zu langsam ist, wurde ein Konzept erarbeitet, den hierdurch auftretenden Messdatenverlust zu unterdrücken.
 
-Der Verarbeitung musste ein weiterer Buffer vorgeschaltet werden. Da aber das Abschalten des Raspberry Pi, zum Beispiel durch einen Verlust der Energieversorgung, nicht zu Datenverlusten führen sollte, konnten nicht die in Python integrierten Funktionen zur Datenzwischenspeicherung verwendet werden -- diese setzen zur Zwischenspeicherung auf den Arbeitsspeicher, der durch Stromverlust gelöscht wird. Das dauerhafte Schreiben auf die Festplatte -- im Fall des Raspberry Pi einer MicroSD-Speicherkarte -- fuhrt aber zur weiteren Verlangsamerung. Es wurde daher eine Hybridlösung erarbeitet.
+Der Verarbeitung musste ein weiterer Buffer vorgeschaltet werden. Da aber das Abschalten des Raspberry Pi, zum Beispiel durch einen Verlust der Energieversorgung, nicht zu Datenverlusten führen sollte, konnten nicht die in Python integrierten Funktionen zur Datenzwischenspeicherung verwendet werden -- diese setzen zur Zwischenspeicherung auf den Arbeitsspeicher, der durch Stromverlust gelöscht wird. Das dauerhafte Schreiben auf die Festplatte -- im Fall des Raspberry Pi einer MicroSD-Speicherkarte -- führt aber zur weiteren Verzögerung. Es wurde daher eine Hybridlösung erarbeitet.
 
 Die Arbeit wird nun auf mehrere Prozesse verteilt:
 \begin{itemize}
@@ -633,9 +641,9 @@ Die Arbeit wird nun auf mehrere Prozesse verteilt:
  \item Umformen der Daten durch mehrere Prozesse je nach Prozessorkernanzahl mit erhöhter Priorität (Klasse \code{VdTransformer})
 \end{itemize}
 
-Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sofern 7.500 Datensätze zwischengespeichert wurden -- je nach Einstellung des Laserscanners in etwa fünf oder zehn Sekunden -- werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binäre Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt. Damit die Umformer-Prozesse beim Schreiben nicht auf einander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls nun zum Beispiel die Stromversorgung unterbrochen wird, sind nur die Daten der maximal letzten 10 Sekunden verloren. Daten, die älter sind, sind entweder als binäre Daten oder als Textdatei gespeichert. Durch neues Starten des Umformerprozesses können die restlichen, noch nicht gewandelten Daten umgeformt werden.
+Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sofern 7.500 Datensätze zwischengespeichert wurden -- je nach Einstellung des Laser\-scan\-ners in etwa fünf oder zehn Sekunden -- werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binären Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt. Damit die Umformer-Prozesse beim Schreiben nicht auf einander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls nun zum Beispiel die Stromversorgung unterbrochen wird, sind nur die Daten der maximal letzten 10 Sekunden verloren. Daten, die älter sind, sind entweder als binäre Daten oder als Textdatei gespeichert. Durch neues Starten des Umformerprozesses können die restlichen, noch nicht gewandelten Daten umgeformt werden.
 
-Durch diese Prinzip stört eine stockende Datenumformung nicht das Aufzeichnen der Daten vom Scanner. Sofern der Raspberry Pi nicht die Geschwindigkeit der Umformung halten kann, werden einfach mehr binäre Dateien zwischengespeichert, die gegebenenfalls im Postprocessing umgewandelt werden können.
+Durch dieses Prinzip stört eine stockende Datenumformung nicht die Aufzeichnung der Daten vom Scanner. Sofern der Raspberry Pi nicht die Geschwindigkeit der Umformung halten kann, werden einfach mehr binäre Dateien zwischengespeichert, die gegebenenfalls im Postprocessing umgewandelt werden können.
 
 \section{Klassen}
 \label{s:klassen}
@@ -649,7 +657,7 @@ Zu Beginn wird geprüft, auf welcher Umgebung das Skript läuft. Sofern es auf e
 \paragraph{run()}
 Das Skript startet mit dieser Methode. Als erstes wird die Hardwaresteuerung in einem neuen Thread aktiviert, sofern es sich bei der Umgebung um einen Raspberry Pi handelt und die entsprechenden Module zur Steuerung der GPIO-Pins installiert sind. Sofern auf ein GNSS-Fix zur Einstellung der Uhrzeit gewartet werden soll, wird zunächst die Methode \code{getGNSSTime()} der Klasse \code{VdInterface} aufgerufen. Außerdem wird der für die zu speichernden Daten genutzte Ordner angelegt.
 
-Folgend wird ein Prozess der Klasse Buffer gestartet. Um eine Kommunikation zu diesem neuen Prozess zu ermöglichen, werden einige Pipes und eine Warteschlange (Queue) mit an den neuen Prozess übergeben.
+Folgend wird ein Prozess der Klasse \code{VdBuffer} gestartet. Um eine Kommunikation zu diesem neuen Prozess zu ermöglichen, werden einige Pipes und eine Warteschlange (Queue) mit an den neuen Prozess übergeben.
 
 Sofern die Daten simultan transformiert werden sollen, wird abgefragt, wie viele Prozessoren dem System zur Verfügung stehen und eine entsprechende Anzahl an Transformer-Prozessen gestartet (n - 1, mindestens 1). Auch hier werden zur Kommunikation Pipes und die Queue verwendet.
 
@@ -669,13 +677,13 @@ Die Methode \code{\_\_main\_\_()} gehört nicht zu der Klasse sondern ist nur mi
 Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet.
 
 \subsection{VdInterface}
-Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laserscanner.
+Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner.
 
 \paragraph{getDataStream()}
-DIe Methode öffnet den Netzwerk-Stream, der die Messdaten des Laserscanners überträgt. Das Auslesen der Daten aus dem Stream erfolgt dann in der Klasse \code{VdBuffer}.
+Die Methode öffnet den Netzwerk-Stream, der die Messdaten des Laser\-scan\-ners überträgt. Das Auslesen der Daten aus dem Stream erfolgt dann in der Klasse \code{VdBuffer}.
 
 \paragraph{getGNSSStream()}
-Durch die Methode wird der Netzwerkstream geöffnet, der die aktuellen Datensätze des an den Laserscanner angeschlossenen GNSS-Modules überträgt. Aus den Daten kann zum Beispiel die Uhrzeit gewonnen werden.
+Durch die Methode wird der Netzwerkstream geöffnet, der die aktuellen Datensätze des an den Laser\-scan\-ner angeschlossenen GNSS-Modules überträgt. Aus den Daten kann zum Beispiel die Uhrzeit gewonnen werden.
 
 \paragraph{getStream()}
 Da die benötigten Schritte zum Öffnen der beiden vorher vorgestellten Streams identisch sind, wurden diese Funktionalitäten in diese Methode ausgelagert, um den Code möglichst redundanzfrei zu halten.
@@ -684,7 +692,7 @@ Da die benötigten Schritte zum Öffnen der beiden vorher vorgestellten Streams 
 Diese Methode fragt die Daten, die über den GNSS-Netzwerkstream geliefert werden, solange ab, bis der NMEA-Datensatz eine GPRMC-Nachricht mit einem GNSS-Fix, also einer gültigen Position, enthält. Diese Nachricht enthält außer der aktuellen Position und dem GNSS-Fix-Status auch den aktuellen Datums- und Zeitstempel. Die erkannte Uhrzeit wird als Python-timestamp an die Methode \code{setSystemZeit()} weitergegeben.
 
 \paragraph{setSystemZeit()}
-Die Methode setzt die aktuelle Systemzeit auf Basis eines ihr übergebenen Zeitstempels. Hierzu werden Befehle des Linuxbetriebssystems angesprochen, dessen Verwendung vorher freigegeben werden muss (siehe \autoref{s:root}). Zuerst wird die Netzwerk-Zeitsynchronisierung abgeschaltet, dann die Uhrzeit gesetzt und die Synchronisierung wieder aktiviert. Die Deaktivierung ist notwendig, da ansonsten Linux keine Änderung an der Uhrzeit erlaubt. Eine komplette Deaktivierung der Netzwerk-Zeitsynchronisierung ist nicht zu empfehlen, da so die Uhr immer manuell gestellt werden muss.
+Die Methode setzt die aktuelle Systemzeit auf Basis eines ihr über\-geb\-enen Zeitstempels. Hierzu werden Befehle des Linuxbetriebssystems angesprochen, dessen Verwendung vorher freigegeben werden muss (siehe \autoref{s:root}). Zuerst wird die Netzwerk-Zeitsynchronisierung abgeschaltet, dann die Uhrzeit gesetzt und die Synchronisierung wieder aktiviert. Die Deaktivierung ist notwendig, da ansonsten Linux keine Änderung an der Uhrzeit erlaubt. Eine komplette Deaktivierung der Netzwerk-Zeitsynchronisierung ist nicht zu empfehlen, da so die Uhr immer manuell gestellt werden muss.
 
 \subsection{VdHardware}
 
@@ -703,7 +711,7 @@ Die Daten werden eingelesen (siehe Zeile 18, \autoref{pySource})
 
 Als Grundlage wurde auf die MicroSD-Karte, die dem Raspberry Pi als Festplatte dient, das Betriebssystem Raspbian aufgespielt. Hierbei handelt es sich um ein Derivat von Debian GNU/Linux, das speziell auf die Hardware des Raspberry Pi angepasst wurde. Die aktuelle Version (Stand 27.10.2017) nennt sich Raspian Stretch. Für die Verwendung als Verarbeitungsgerät ohne angeschlossenen Display reicht die Variante ohne grafische Benutzeroberfläche aus (Raspbian Stretch Lite). Die Konfiguration des Raspberry Pi erfolgt vollständig über Konfigurationsdateien. In dieser Arbeit erfolgte die Konfiguration per Fernzugriff über SSH, einem Standard für das Fernsteuern der Konsole über das Netzwerk. Eine Konfiguration hätte aber auch mittels einem angeschlossenen Display und einer USB-Tastatur erfolgen können.
 
-Die Änderungen der Konfigurationsdateien erfolgte mit vorinstallierten Editor \code{nano} unter Nutzung der Administratorrechte. Ein solcher Aufruf erfolgt zum Beispiel mit dem Befehl \code{sudo nano /pfad/zur/konfiguration.txt}. Nachfolgend müssen die betroffenen Programme oder sogar das komplette Betriebssystem neugestartet werden. Der Neustart eines Services erfolgt zum Beispiel mit dem Aufruf \code{sudo service programmname restart}, der Neustart des Betriebssystems mit \code{sudo shutdown -r now}. Es empfiehlt sich, von allen zu ändernden Konfigurationsdateien Sicherungskopien anzulegen. Dies erfolgt zum Beispiel mit \code{sudo cp original.txt original.old.txt} (Kopieren) oder \code{sudo mv original.txt original.old.txt} (Verschieben, zum Beispiel zum Anlegen einer komplett neuen Datei). Auf diese Linux-Grundlagen wird im Folgenden nicht mehr eingegangen.
+Die Änderungen der Konfigurationsdateien erfolgten mit dem vorinstallierten Editor \code{nano} unter Nutzung von Administratorrechten. Ein solcher Aufruf erfolgt zum Beispiel mit dem Befehl \code{sudo nano /pfad/zur/konfiguration.txt}. Nachfolgend müssen die betroffenen Programme oder sogar das komplette Betriebssystem neugestartet werden. Der Neustart eines Services erfolgt zum Beispiel mit dem Aufruf \code{sudo service programmname restart}, der Neustart des Betriebssystems mit \code{sudo shutdown -r now}. Es empfiehlt sich, von allen zu ändernden Konfigurationsdateien Sicherungskopien anzulegen. Dies erfolgt zum Beispiel mit \code{sudo cp original.txt original.old.txt} (Kopieren) oder \code{sudo mv original.txt original.old.txt} (Verschieben, zum Beispiel zum Anlegen einer komplett neuen Datei). Auf diese Linux-Grundlagen wird im Folgenden nicht mehr eingegangen.
 
 \section{Installation von Raspbian}
 Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden.
@@ -712,7 +720,7 @@ Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaket
 
 \section{Befehle mit Root-Rechten}
 \label{s:root}
-Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurde dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Admin ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{visudo} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep{sudoers}
+Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Admin ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{visudo} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep{sudoers}
 
 \begin{lstlisting}[caption={Änderung der \code{/etc/sudoers}}, label={Lsudoers}]
 # Cmnd alias specification
@@ -723,14 +731,14 @@ pi	ALL=(ALL) NOPASSWD: VLP
 \end{lstlisting}
 
 \section{IP-Adressen-Konfiguration}
-Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laserscanner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
+Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
 
 \begin{table}
 \centering
 \begin{tabular}{l|r|r|l|}
 \cline{2-4}
                                                     & Schnittstelle & \multicolumn{2}{c|}{IP-Adresse bzw. Bereich} \\ \hline
-\multicolumn{1}{|l|}{Laserscanner}                  & Ethernet      & 192.168.1.111        & statisch              \\ \hline
+\multicolumn{1}{|l|}{Laser\-scan\-ner}                  & Ethernet      & 192.168.1.111        & statisch              \\ \hline
 \multicolumn{1}{|l|}{\multirow{2}{*}{Raspberry Pi}} & Ethernet      & 192.168.2.110        & statisch              \\ \cline{2-4} 
 \multicolumn{1}{|l|}{}                              & WiFi          & 10.10.10.10          & statisch              \\ \hline
 \multicolumn{1}{|l|}{Client}                        & WiFi          & 10.10.10.100         & - 10.10.10.254        \\ \hline
@@ -773,7 +781,7 @@ interface=wlan0
 \end{lstlisting}
 
 \section{Konfiguration als WLAN-Access-Point}
-Um einen Zugriff auf die Python-Weboberfläche des Skriptes und die Konfiguration des Laserscanners zu ermöglichen, soll der Raspberry Pi selbst als WLAN-Access-Point fungieren. Hierzu das Paket \code{hostapd} verwendet. Zur Konfiguration werden die Einstellungen in die Datei \code{/etc/hostapd/hostapd.conf} geschrieben. \cite{accesspoint}
+Um einen Zugriff auf die Python-Weboberfläche des Skriptes und die Konfiguration des Laser\-scan\-ners zu ermöglichen, soll der Raspberry Pi selbst als WLAN-Access-Point fungieren. Hierzu wurde das Paket \code{hostapd} verwendet. Zur Konfiguration werden die Einstellungen in die Datei \code{/etc/hostapd/hostapd.conf} geschrieben. \cite{accesspoint}
 
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/hostapd/hostapd.conf}}, label={hostapd}]
 # WLAN-Router-Betrieb
@@ -812,13 +820,14 @@ Der Pfad zur dem Startskript wurde dann in der Autostart-Konfigurationsdatei \co
 \todo{zu Ende schreiben}
 
 \chapter{Systemüberprüfungen}
-Nachdem sich bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen System-Komponenten überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners aus gewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme.
+\label{c:systemueberpruefung}
+Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen Systemkomponenten überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners ausgewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme.
 
 \section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
-Für die Synchronisierung der Daten des Laserscanners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Raspberry Pi und am Laserscanner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
+Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Raspberry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
 
 
-\section{Messgenauigkeit des Laserscanners im Vergleich}
+\section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
 
 
 \chapter{Ausblick}
@@ -969,7 +978,7 @@ Für die Synchronisierung der Daten des Laserscanners und der inertialen Messein
 
 \newpage
 \noindent\textbf{\large Erklärung}\\
-Hiermit versichere ich, dass ich die beiliegende Bachelor-Thesis ohne fremde Hilfe selbstständig verfasst und nur die angegebenen Quellen und Hilfsmittel benutzt habe.\\
+Hiermit versichere ich, dass ich die beiliegende Bachelor-Thesis ohne fremde Hilfe selbst\-stän\-dig verfasst und nur die angegebenen Quellen und Hilfsmittel benutzt habe.\\
 \\
 Wörtlich oder dem Sinn nach aus anderen Werken entnommene Stellen sind unter Angabe der Quellen kenntlich gemacht. 
 \\
