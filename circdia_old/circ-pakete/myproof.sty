@@ -1,0 +1,35 @@
+% myproof.sty
+% from http://www.jokr.de/stefan/
+% File created by Stefan Krause -- version 1.3.
+% Defines a proof environment.
+% Package options:
+%  german
+%  ngerman
+% You may access
+%  \proofname
+%  \begin{proof}[]
+%   \qedhere
+%   \raiseqed{}
+%  \end{proof}%   <-- Please use a % sign here!
+% from this document.
+% When you combine my proof environment with ntheorem environments, use a nested structure as follows:
+%  \begin{some-ntheorem}
+%   some-lemma-text
+%   \begin{proof}
+%    some-proof-text
+%   \end{proof}%
+%  \end{some-ntheorem}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{myproof}[2009/01/29]
+\RequirePackage{amssymb,ifthen}
+\newcommand{\proofname}{Proof}
+\DeclareOption{german}{\renewcommand{\proofname}{Beweis}}
+\DeclareOption{ngerman}{\renewcommand{\proofname}{Beweis}}
+\ProcessOptions
+\newcommand{\qed}{\ensuremath{\Box}}
+\newcommand{\proofqed}{}
+\newenvironment{proof}[1][]{\normalfont\renewcommand{\proofqed}{\hspace*{\fill}\qed}%
+ \par\smallskip\noindent\textbf{\proofname\ifthenelse{\equal{#1}{}}{}{ (#1)}}\quad}%
+ {\proofqed\par\smallskip\noindent}
+\newcommand{\qedhere}{\ifmmode\tag*{\qed}\else\proofqed\fi\xdef\proofqed{}}
+\newcommand{\raiseqed}[1]{\vspace*{-#1}\proofqed\xdef\proofqed{}}

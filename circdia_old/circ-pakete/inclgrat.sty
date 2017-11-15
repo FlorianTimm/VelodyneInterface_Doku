@@ -1,0 +1,31 @@
+% inclgrat.sty
+% from http://www.jokr.de/stefan/
+% File created by Stefan Krause -- version 1.2.
+% Allows a special positioning of graphics inside a text line.
+% You may access
+%  \includegraphicsat[]{}{}
+% and redefine
+%  \includegraphicsattext
+% from this document.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{inclgrat}[2009/01/29]
+\RequirePackage{calc,graphicx,ifthen}
+\newcommand{\includegraphicsattext}{\"A/}
+\newlength{\includegraphicsatheight}
+\newcommand{\includegraphicsat}[3][]{%
+ \ifthenelse{\equal{#3}{t}}{%
+  \setlength{\includegraphicsatheight}{\heightof{\includegraphics[#1]{#2}}}
+  \setlength{\includegraphicsatheight}{-\includegraphicsatheight}%
+  \addtolength{\includegraphicsatheight}{\heightof{\includegraphicsattext}}%
+ }{\ifthenelse{\equal{#3}{b}}{%
+  \setlength{\includegraphicsatheight}{\depthof{\includegraphicsattext}}%
+  \setlength{\includegraphicsatheight}{-\includegraphicsatheight}%
+ }{%
+  \setlength{\includegraphicsatheight}{\heightof{\includegraphics[#1]{#2}}}%
+  \addtolength{\includegraphicsatheight}{\depthof{\includegraphicsattext}}%
+  \setlength{\includegraphicsatheight}{-\includegraphicsatheight}%
+  \addtolength{\includegraphicsatheight}{\heightof{\includegraphicsattext}}%
+  \setlength{\includegraphicsatheight}{\includegraphicsatheight / 2}%
+ }}%
+ \raisebox{\includegraphicsatheight}{\includegraphics[#1]{#2}}%
+}

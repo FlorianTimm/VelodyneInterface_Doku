@@ -12,6 +12,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{todonotes}
 \usepackage{amsmath}
+%\usepackage{circdia/circdia}
 
 \usepackage{multirow}
 
@@ -468,7 +469,6 @@ Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, eini
  \label{abb:gesamtschaltung}
 \end{figure}
 
-
 \chapter{Theoretische Datenverarbeitung}
 \label{c:datenverarbeitung}
 
@@ -675,6 +675,7 @@ Die Methode \code{\_\_main\_\_()} gehört nicht zu der Klasse sondern ist nur mi
 
 \paragraph{Flask-Webinterface app}
 Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet.
+Die Weboberfläche ist entsprechend ihrem geplanten Einsatzzweck optimiert für die mobile Anzeige auf Smartphones, lässt sich aber auch vom Laptop bedienen. Die Oberfläche selbst nutzt nur HTML und CSS - ist also nicht zusätzlichen Skriptsprachen auf dem verwendeten Gerät abhängig. 
 
 \subsection{VdInterface}
 Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner.
@@ -695,8 +696,27 @@ Diese Methode fragt die Daten, die über den GNSS-Netzwerkstream geliefert werde
 Die Methode setzt die aktuelle Systemzeit auf Basis eines ihr über\-geb\-enen Zeitstempels. Hierzu werden Befehle des Linuxbetriebssystems angesprochen, dessen Verwendung vorher freigegeben werden muss (siehe \autoref{s:root}). Zuerst wird die Netzwerk-Zeitsynchronisierung abgeschaltet, dann die Uhrzeit gesetzt und die Synchronisierung wieder aktiviert. Die Deaktivierung ist notwendig, da ansonsten Linux keine Änderung an der Uhrzeit erlaubt. Eine komplette Deaktivierung der Netzwerk-Zeitsynchronisierung ist nicht zu empfehlen, da so die Uhr immer manuell gestellt werden muss.
 
 \subsection{VdHardware}
+Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Raspberry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. 
+
+Bei der Initialisierung der Klasse werden die GPIO-Ports des Raspberry Pi entsprechend des Hardwaresteuerungsmodules aus \autoref{s:steuermodul} eingerichtet. Hierbei werden bei den Eingangsports die internen Pull-Up-Widerstände aktiviert. Beim Start des Threads wird dann zusätzlich ein Eventhandler für die Eingangspins eingerichtet, der entsprechende Funktionen zum Starten oder Stoppen der Aufzeichnung sowie zum Herunterfahren aufrufen. Desweiteren wird ein Timer aktiviert, der dafür sorgt, dass die LED-Anzeigen einmal sekündlich aktualisiert werden.
+
+\subsection{VdPoint}
+Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf.
+
+\subsection{VdDataset}
+Die Klasse \code{VdDataset} nimmt eine Menge von Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Klasse \code{VdFile} können diese dann als Datei gespeichert werden.
+
+\paragraph{getAzimuts()}
+
+\subsection{VdFile}
 
 
+
+\subsection{VdBuffer}
+
+\subsection{VdTransformer}
+
+\subsection{VdConfig}
 
 
 \section{Beispiel-Quelltext-Zitat}

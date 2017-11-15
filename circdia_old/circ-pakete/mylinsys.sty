@@ -1,0 +1,13 @@
+% mylinsys.sty
+% from http://www.jokr.de/stefan/
+% File created by Stefan Krause -- version 1.3.
+% Defines an environment for typesetting systems of linear equations.
+% You may access
+%  \begin{mylinsys}[]{}{} \end{mylinsys}
+% from this document.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mylinsys}[2009/01/29]
+\newenvironment{mylinsys}[3][0.143em]{%
+ \setlength{\arraycolsep}{#1}%
+ \begin{array}{*{#2}{rc}#3}%
+}{\end{array}}
