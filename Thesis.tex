@@ -464,8 +464,8 @@ Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, eini
 
 \begin{figure}
  \centering
- \includegraphics[width=0.7\textwidth]{img/schaltungGesamt.png}
- \caption{Vereinfachter, endgültiger Schaltplan}
+ \includegraphics[width=1\textwidth]{img/schaltung_neu.png}
+ \caption{Endgültiger Schaltplan}
  \label{abb:gesamtschaltung}
 \end{figure}
 
@@ -604,13 +604,16 @@ Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schr
 
 \chapter{Entwicklung des Skriptes}
 \label{c:skript}
+\nocite{oopPython}
+\nocite{uml}
+\nocite{flask}
 
 \section{Klassenentwurf}
 Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hilfe des Ablaufplanes aus \autoref{img:ablaufplan} die benötigten Klassen entworfen. Die endgültigen Klassen sind der \autoref{img:uml} zu entnehmen. Auf die genauen Funktionen der einzelnen Klassen wird im \autoref{s:klassen} eingegangen.
 
 \begin{figure}
  \centering
- \includegraphics[width=0.8\textwidth]{./img/UML.png}
+ \includegraphics[width=1\textwidth]{./img/UML.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
  \caption{UML-Klassendiagramm}
  \label{img:uml}
@@ -911,6 +914,10 @@ Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Mes
 \section{convTxt2Obj.py}
 \label{a:convToObj.py}
 \lstinputlisting[language=Python]{../Quelltext/convTxt2Obj.py}
+
+\section{convBin2Obj.py}
+\label{a:convBin2Obj.py}
+\lstinputlisting[language=Python]{../Quelltext/convBin2Obj.py}
 
 \chapter{Beispieldateien}
 
