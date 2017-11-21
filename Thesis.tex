@@ -461,7 +461,7 @@ Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewäh
 
 \begin{figure}
  \centering
- \includegraphics[width=0.7\textwidth]{img/platine.pdf}
+ \includegraphics[width=0.9\textwidth]{img/platine.pdf}
  \caption{Layout der Lochstreifenplatine}
  \label{abb:platine}
 \end{figure}
@@ -660,31 +660,32 @@ Es folgt die Beschreibung der einzelnen Klassen. Auf die Konstruktor-Methoden \c
 
 \subsection{VdAutoStart}
 Die Klasse \code{VdAutoStart} (siehe Anhang~\ref{a:vdAutoStart.py}) steuert den automatischen Start des Skriptes beim Hochfahren des Raspberry Pi. Sie ist verantwortlich für den korrekten Start der einzelnen Skriptteile in der richten Reihenfolge. Außerdem sind in der zugehörigen Datei auch alle Programmteile abgelegt, die nicht zu einer Klasse gehören, wie zum Beispiel der Startaufruf.
-
-
-\paragraph{run()}
+\todo{erweitern}
 
 \paragraph{Flask-Webinterface app}
 Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet.
 Die Weboberfläche ist entsprechend ihrem geplanten Einsatzzweck optimiert für die mobile Anzeige auf Smartphones, lässt sich aber auch vom Laptop bedienen. Die Oberfläche selbst nutzt nur HTML und CSS - ist also nicht zusätzlichen Skriptsprachen auf dem verwendeten Gerät abhängig. 
 
 \subsection{VdInterface}
-Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner.
+Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner. Sie stellt die UDP-Socket-Verbindungen zum Datenstream des Scanners her.
+\todo{zu kurz}
 
 
 \subsection{VdHardware}
-Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Raspberry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. 
+Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Raspberry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. Hierdurch werden die Abläufe des Hauptskriptes nicht durch die Abfrageschleifen der Hardwaresteuerung unterbrochen.
 
 Bei der Initialisierung der Klasse werden die GPIO-Ports des Raspberry Pi entsprechend des Hardwaresteuerungsmodules aus \autoref{s:steuermodul} eingerichtet. Hierbei werden bei den Eingangsports die internen Pull-Up-Widerstände aktiviert. Beim Start des Threads wird dann zusätzlich ein Eventhandler für die Eingangspins eingerichtet, der entsprechende Funktionen zum Starten oder Stoppen der Aufzeichnung sowie zum Herunterfahren aufrufen. Desweiteren wird ein Timer aktiviert, der dafür sorgt, dass die LED-Anzeigen einmal sekündlich aktualisiert werden.
 
 \subsection{VdPoint}
-Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf.
+Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Möglichkeit, die Messdaten in lokale kartesische Koordinaten mit dem Laserscanner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ-Dateien genutzt.
+\todo{ergänzung?}
 
 \subsection{VdDataset}
-Die Klasse \code{VdDataset} nimmt eine Menge von Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Klasse \code{VdFile} können diese dann als Datei gespeichert werden.
+Die Klasse \code{VdDataset} nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementatierungen der Klasse \code{VdFile} können diese dann zum Beispiel als Datei gespeichert werden.
 
 \subsection{VdFile und Subklassen}
 Bei der Klasse \code{VdFile} handelt es sich um eine abstrakte Klasse. Sie übernimmt die Speicherung der umgewandelten Daten. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben.
+\todo{ergänzung?}
 
 \paragraph{VdASCIIFile / VdTxtFile / VdObjFile}
 Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile} und \code{VdObjFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} schreibt hierbei die Rohdaten als einfache Textdateien. \code{VdObjFile} formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei. Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen.
@@ -693,12 +694,11 @@ Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Fu
 Die Klasse \code{VdSQLite} ermöglicht das Speichern der Rohdaten in einer SQLite-Datenbank-Datei. Das Format bietet sich zum einfachen Übertragen und Auswerten von Daten an. 
 \todo{Fortsetzung}
 
-
 \subsection{VdBuffer}
+Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohdaten vom Laserscanner. Über die Klasse \code{VdInterface} wird eine Socketverbindung zum UDP-Port des Laserscanners hergestellt. Anschließend werden die Daten vom Socket in einer Variable gespeichert und regelmäßig in kurzen Intervallen als bin-Datei auf dem Speicher des Raspberry Pi abgelegt. Hierzu wird beim ersten Datenempfang ein Verzeichnis für die Messung angelegt. Nach dem Schreiben der Datei wird ihr Pfad in die Warteschleife für \code{VdTransformer} eingetragen.
 
 \subsection{VdTransformer}
-
-\subsection{VdConfig}
+\code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Komponenten des Computersystemes auszunutzen, werden durch \code{VdAutoStart} eine Instanz des Prozesses weniger gestartet, wie Prozessorkerne vorhanden sind - also auf dem Raspberry Pi als Vierkern-System 3 Prozesse der Klasse \code{VdTransformer} Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine bin-Datei ausgewählt, eingelesen und an die Klasse \code{VdDataset} übermittelt. Nachdem diese die Daten zu einer Liste von \code{VdPoint} umgewandelt hat, werden diese Daten an die Klasse \code{VdFile} übergeben. Diese schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
 
 \section{Beispiel-Quelltext-Zitat}
