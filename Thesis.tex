@@ -197,9 +197,15 @@ Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Messeinheit, die 
 \todo{Bild malen}
 
 \subsection{Oberflächeneffekte}
-Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse verlaufenden, ebenen Oberflächen als identischer, abgeschwächter Impuls zurückgestrahlt. Der Laser trifft bei der Messung nicht, wie idealisiert angenommenen, punktförmig auf die Oberfläche, sondern stellt einen Kreis beziehungsweise bei schrägem Auftreffen eine Ellipse mit einer bestimmten Größe, dem sogenannten Footprint dar. Hierdurch ergeben sich je nach Oberfläche verschiedene Reflexionen: Bei zum Laserstrahl schrägen Oberflächen wie einem Dach wird das Signal geweitet, die Impulsdauer des reflektierten Strahles (Echo) wird verlängert, da er auf der Oberfläche zeitversetzt auftrifft. Ein anderes Phänomen sind mehrfache Echos. Dies tritt auf, wenn zwei unterschiedlich weite entfernte Oberflächen von einem Strahl getroffen werden -- zum Beispiel bei der Messung von Gebäudekanten oder Bäumen. \todo{Abbildung} zeigt die Echos in grafischer Form. \citep[S. 28]{beraldin}
+Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse verlaufenden, ebenen Oberflächen als identischer, abgeschwächter Impuls zurückgestrahlt. Der Laser trifft bei der Messung nicht, wie idealisiert angenommenen, punktförmig auf die Oberfläche, sondern stellt einen Kreis beziehungsweise bei schrägem Auftreffen eine Ellipse mit einer bestimmten Größe, dem sogenannten Footprint dar. Hierdurch ergeben sich je nach Oberfläche verschiedene Reflexionen: Bei zum Laserstrahl schrägen Oberflächen wie einem Dach wird das Signal geweitet, die Impulsdauer des reflektierten Strahles (Echo) wird verlängert, da er auf der Oberfläche zeitversetzt auftrifft. Ein anderes Phänomen sind mehrfache Echos. Dies tritt auf, wenn zwei unterschiedlich weite entfernte Oberflächen von einem Strahl getroffen werden -- zum Beispiel bei der Messung von Gebäudekanten oder Bäumen. \autoref{img:echo} zeigt die Echos in grafischer Form. \citep[S. 28]{beraldin}
 
-\todo{Abbildung}
+\begin{figure}
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/echo.pdf}
+ % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Reflektiertes Signal nach Oberfläche, nach \citet[S. 28]{beraldin}}
+ \label{img:echo}
+\end{figure}
 
 Laser\-scan\-nern mit Impulsmessverfahren ermöglichen typischerweise bis zu vier einzelne Echos aufzuzeichnen. Alternativ gibt es Scanner, die das komplette Signal mit einer Abtastrate von bis zu 0,5 Nanosekunden digitalisieren. Hier ist es dann möglich, spezielle Auswertung aufgrund der Wellenform im Postprocessing durchzuführen. \citep[S. 29]{beraldin}
 
@@ -817,13 +823,16 @@ Der Pfad zur dem Startskript wurde dann in der Autostart-Konfigurationsdatei \co
 
 \chapter{Systemüberprüfungen}
 \label{c:systemueberpruefung}
-Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen Systemkomponenten überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners ausgewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme.
+Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen Systemkomponenten überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners ausgewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme. Die Genauigkeit des GNSS und der in Zusammenhang mit der IMU zu berechnenden Trajektorie hatte bereits \citet{wilken} in seiner Bachelorthesis untersucht.
 
 \section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
 Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Raspberry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
+Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript \todo{skript} misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob bei einem Neustart der Messung sich die Zeitdifferenz ändert beziehungsweise überhaupt eine Zeitdifferenz dann entsteht.
 
 
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
+Um die Strecken und Winkelmessung des Laserscanners zu überprüfen, wurden an zwei Standpunkt an der Hafencity Universität jeweils Scans mit dem Velodyne VLP-16 durchgeführt. Das erste Messszenario fand etwa 20 Meter von einer weißen, rauen und ebenen Fassade (Verputztes Wärmedämmverbundsystem) statt. Hier wurden zum Vergleich mit einem terrestrischem Laserscanner Zöller+Fröhlich Imager 5010 der Messaufbau komplett von zwei Standpunkten aus gescannt. Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Widerholungsgenauigkeit in Strecke und Richtung des Laserscanners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenen Beton.
+
 
 
 \chapter{Ausblick}
