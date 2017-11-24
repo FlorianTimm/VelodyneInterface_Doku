@@ -434,8 +434,8 @@ Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Da
  \label{abb:steuerung}
 \end{figure}
 
-\autoref{abb:steuerung} zeigt den Schaltplan des entwickelten Steuermodules. Dieses bietet mit drei Leuchtdioden und 2 Tastern die Möglichkeit, im Skript später einfache Anzeigen und Eingaben zu realisieren. Hierfür wurde eine Erweiterung auf Basis des GPIO-Portes des Raspberry Pi aufgebaut. Die zwei Taster sind über die beiden GPIO-Pins 18 und 25 erreichbar. Ohne Betätigung werden die Eingänge über internen die Pull-Up-Widerstände (\todo{R?}) auf ein High-Level gezogen. Durch Drücken des Tasters wird die Spannung über die Widerstände \todo{Widerstände} auf ein Low-Level gezogen, welches durch das Pythonskript zur Laufzeit ausgelesen werden kann. Der Widerstand \todo{R?} dient zur Strombegrenzung und als Sicherheit, falls die GPIO-Pins falsch geschaltet werden.
-Die drei Leuchtdioden wurden mit jeweils einem 150Ohm Vorwiderstand direkt zwischen einem GPIO-Pin und Ground eingebaut. Durch Ansteuerung der GPIO-Pins lassen sich diese An- und Abschalten. Außer zum Schutz und Betrieb der LEDs verhindern die Vorwiderstände auch eine zu hohe Stromaufnahme aus den GPIO-Pins. Die genaue Belastbarkeit der Pins ist nicht dokumentiert, jedoch wird meist von einem Wert um 10mA bei 3,3 Volt gesprochen (zum Beispiel \citet{ekRaspPin}).
+\autoref{abb:steuerung} zeigt den Schaltplan des entwickelten Steuermodules. Dieses bietet mit drei Leuchtdioden und 2 Tastern die Möglichkeit, im Skript später einfache Anzeigen und Eingaben zu realisieren. Hierfür wurde eine Erweiterung auf Basis des GPIO-Portes des Raspberry Pi aufgebaut. Die zwei Taster sind über die beiden GPIO-Pins 18 und 25 erreichbar. Ohne Betätigung werden die Eingänge über die Pull-Up-Widerstände (\todo{R?}) auf ein High-Level gezogen. Durch Drücken des Tasters wird die Spannung über die Widerstände \todo{Widerstände} auf ein Low-Level gezogen, welches durch das Pythonskript zur Laufzeit ausgelesen werden kann. Der Widerstand \todo{R?} dient zur Strombegrenzung und als Sicherheit, falls die GPIO-Pins falsch geschaltet werden. In der weiteren Optimierung der Schaltung wurden die externen Pull-Up-Widerstände durch die interne, schaltbaren Pull-Up-Widerstände ersetzt. Dieses erwies sich vor allem bei der Nutzung ohne angestecktes Steuerungsmodul als vorteilhaft, da so auch ohne Modul diese immer geschaltet sein können. Ansonsten könnten im Betrieb ohne Steuerungsmodul auftretende Spannungsschwankungen fehlerhafterweise zu einer Erkennung als Tastendruck führen.
+Die drei Leuchtdioden wurden mit jeweils einem 150 Ohm Vorwiderstand direkt zwischen einem GPIO-Pin und Ground eingebaut. Durch Ansteuerung der GPIO-Pins lassen sich diese An- und Abschalten. Außer zum Schutz und Betrieb der LEDs verhindern die Vorwiderstände auch eine zu hohe Stromaufnahme aus den GPIO-Pins. Die genaue Belastbarkeit der Pins ist nicht dokumentiert, jedoch wird meist von einem Wert um 10mA bei 3,3 Volt gesprochen (zum Beispiel \citet{ekRaspPin}). Alternativ, bei Nutzung leistungsstärkerer LEDs könnten diese auch unter Nutzung eines Transistors geschaltet werden. Diese lassen mit einem geringen Steuerungsstrom höhere Ströme schalten.
 
 \begin{equation}
 \begin{aligned}
@@ -684,15 +684,13 @@ Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als 
 Die Klasse \code{VdDataset} nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementatierungen der Klasse \code{VdFile} können diese dann zum Beispiel als Datei gespeichert werden.
 
 \subsection{VdFile und Subklassen}
-Bei der Klasse \code{VdFile} handelt es sich um eine abstrakte Klasse. Sie übernimmt die Speicherung der umgewandelten Daten. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben.
-\todo{ergänzung?}
+Bei der Klasse \code{VdFile} handelt es sich um eine abstrakte Klasse. Die Klasse stellt ein Interface da, das die Speicherung der umgewandelten Daten übernimmt. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben:
 
-\paragraph{VdASCIIFile / VdTxtFile / VdObjFile}
-Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile} und \code{VdObjFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} schreibt hierbei die Rohdaten als einfache Textdateien. \code{VdObjFile} formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei. Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen.
+\paragraph{VdASCIIFile (VdTxtFile / VdObjFile / VdXYZFile)}
+Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile} und \code{VdObjFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} schreibt hierbei die Rohdaten als einfache Textdateien. \code{VdObjFile} formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei. Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen. Im Zusammenhang mit der Vergleichsmessung aus \autoref{c:systemueberpruefung} wurde zusätzlich noch eine Klasse zur Implementierung von XYZ-Dateien erstellt. Hier werden die schon für die OBJ-Dateien aufbereiteten Daten in anderer Formatierung genutzt.
 
 \paragraph{VdSQLite}
-Die Klasse \code{VdSQLite} ermöglicht das Speichern der Rohdaten in einer SQLite-Datenbank-Datei. Das Format bietet sich zum einfachen Übertragen und Auswerten von Daten an. 
-\todo{Fortsetzung}
+Die Klasse \code{VdSQLite} ermöglicht das Speichern der Rohdaten in einer SQLite-Datenbank-Datei. Das Format bietet sich zum einfachen Übertragen und Auswerten der Daten an. Alle Daten werden in einer Datenbank-Datei gesichert. Dies erleichtert das Einladen der Daten in weitere Skripte, zum Beispiel zum Durchführen von Berechnungen.
 
 \subsection{VdBuffer}
 Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohdaten vom Laserscanner. Über die Klasse \code{VdInterface} wird eine Socketverbindung zum UDP-Port des Laserscanners hergestellt. Anschließend werden die Daten vom Socket in einer Variable gespeichert und regelmäßig in kurzen Intervallen als bin-Datei auf dem Speicher des Raspberry Pi abgelegt. Hierzu wird beim ersten Datenempfang ein Verzeichnis für die Messung angelegt. Nach dem Schreiben der Datei wird ihr Pfad in die Warteschleife für \code{VdTransformer} eingetragen.
@@ -700,6 +698,9 @@ Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohda
 \subsection{VdTransformer}
 \code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Komponenten des Computersystemes auszunutzen, werden durch \code{VdAutoStart} eine Instanz des Prozesses weniger gestartet, wie Prozessorkerne vorhanden sind - also auf dem Raspberry Pi als Vierkern-System 3 Prozesse der Klasse \code{VdTransformer} Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine bin-Datei ausgewählt, eingelesen und an die Klasse \code{VdDataset} übermittelt. Nachdem diese die Daten zu einer Liste von \code{VdPoint} umgewandelt hat, werden diese Daten an die Klasse \code{VdFile} übergeben. Diese schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
+\section{Steuerung des Skriptes}
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier werden 
+\todo{weiter}
 
 \section{Beispiel-Quelltext-Zitat}
 
@@ -749,22 +750,20 @@ Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfigur
 \label{tab:ipAdressen}
 \end{table}
 
-Die Konfiguration der IP-Adressen für den Raspberry erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. \cite{accesspoint}
+Die Konfiguration der IP-Adressen für den Raspberry Pi erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. \cite{accesspoint}
 
-\todo{Original hinzufügen}
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/network/interfaces}}, label={interfaces}]
-# localhost
+#localhost
 auto lo
 iface lo inet loopback
 
-# Ethernet
+#Ethernet
 auto eth0
 iface eth0 inet static
 	address 192.168.1.110
 	netmask 255.255.255.0
 	gateway 192.168.1.110
 
-# WLAN
 allow-hotplug wlan0
 iface wlan0 inet static
 	address 10.10.10.10
@@ -833,7 +832,23 @@ Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GN
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
 Um die Strecken und Winkelmessung des Laserscanners zu überprüfen, wurden an zwei Standpunkt an der Hafencity Universität jeweils Scans mit dem Velodyne VLP-16 durchgeführt. Das erste Messszenario fand etwa 20 Meter von einer weißen, rauen und ebenen Fassade (Verputztes Wärmedämmverbundsystem) statt. Hier wurden zum Vergleich mit einem terrestrischem Laserscanner Zöller+Fröhlich Imager 5010 der Messaufbau komplett von zwei Standpunkten aus gescannt. Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Widerholungsgenauigkeit in Strecke und Richtung des Laserscanners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenen Beton.
 
+\paragraph{Auswertung der Daten von Velodyne VLP-16}
+Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skript aufgezeichnet und umgewandelt. Da hierbei auffiel, das einige Programme besser mit XYZ-Dateien umgehen können, wurde das Klassenmodell um dieses Dateiformat erweitert.
 
+\begin{figure}
+ \centering
+ \includegraphics[width=0.45\textwidth]{./img/fassade.jpg}
+ \includegraphics[width=0.45\textwidth]{./img/tiefgarage.jpg}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Vergleichsmessungen mit dem Velodyne VLP-16, Zoller+Fröhlich Imager 5010 und dem Trimble S7}
+ \label{img:messbilder}
+\end{figure}
+
+\paragraph{Fehler im Skript} Bei der Auswertung der Messung der Tiefgarage (\autoref{img:messbilder}, rechts) fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte sich von Drehung zu Drehung des VLP-16 in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet. Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von 2 von 5 Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten auch durch speziell entwickelte Skripts nicht auswertbar zu korrigieren waren.
+
+\subsection{Vergleichsmessung mittels Fassadenfront}
+\paragraph{Nachbearbeitung der Messdaten}
+Die Punktwolken der zwei Standpunkte wurden in der Software Z+F LaserControl des Herstellers des Laserscanners über an der Gebäude angebrachten Targets zusammengeführt. Anschließend wurden die Punktwolken gefiltert und in die Software Geomagic Wrap importiert. Hier wurde der Standpunkt des Velodyne VLP-16 bestimmt, in dem ein Zylinder gemäß der Größe aus dem Datenblatt \citep{vlpSheet} in die dem VLP-16 zuzuordnenden Punkte der Punktwolke automatisch eingepasst wurde.  Hieraus konnte dann durch Bestimmung der Mittelachse und der Daten des Fokuspunktes der Nullpunkt der Punktwolken des VLP-16 bestimmt werden. Die Einpassung der Rotation um die Z-Achse wurde durch zwei Fassadenecken durchgeführt, der Abgleich der Kippachsen wurde über jeweils in die Punktwolken eingepasste Bodenebenen durchgeführt.
 
 \chapter{Ausblick}
 \label{c:ausblick}
