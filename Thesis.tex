@@ -706,7 +706,7 @@ Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{con
 
 Die Daten werden eingelesen (siehe Zeile 18, \autoref{pySource})
 
-\lstinputlisting[language=Python, firstnumber=15, caption={Quelltext-Test}, label=pySource, firstline=15, lastline=20]{../Quelltext/velodyneInterface/vdFile.py}
+\lstinputlisting[language=Python, firstnumber=15, caption={Quelltext-Test}, label=pySource, firstline=15, lastline=20]{../Quelltext/Python/vdFile.py}
 
 
 \chapter{Konfiguration des Raspberry Pi}
@@ -844,7 +844,16 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
  \label{img:messbilder}
 \end{figure}
 
-\paragraph{Fehler im Skript} Bei der Auswertung der Messung der Tiefgarage (\autoref{img:messbilder}, rechts) fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte sich von Drehung zu Drehung des VLP-16 in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet. Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von 2 von 5 Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten auch durch speziell entwickelte Skripts nicht auswertbar zu korrigieren waren.
+\paragraph{Fehler im Skript} Bei der Auswertung der Messung der Tiefgarage (\autoref{img:messbilder}, rechts) fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte sich von Drehung zu Drehung des VLP-16 in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von 2 von 5 Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten auch durch speziell entwickelte Skripts nicht auswertbar zu korrigieren waren.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.45\textwidth]{./img/punktwolke_f.png}
+ \includegraphics[width=0.45\textwidth]{./img/punktwolke_k.png}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Punktwolke des Velodyne VLP-16 vor (links) und nach (rechts) der Korrektur der Horizontalrichtung am Beispiel eines Pfeilers in der Tiefgarage}
+ \label{img:fehlerWolke}
+\end{figure}
 
 \subsection{Vergleichsmessung mittels Fassadenfront}
 \paragraph{Nachbearbeitung der Messdaten}
@@ -870,51 +879,134 @@ Die Punktwolken der zwei Standpunkte wurden in der Software Z+F LaserControl des
 \label{a:skripte}
 \section{vdAutoStart.py}
 \label{a:vdAutoStart.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdAutoStart.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdAutoStart.py}
 
 \section{vdBuffer.py}
 \label{a:vdBuffer.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdBuffer.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdBuffer.py}
 
 \section{vdTransformer.py}
 \label{a:vdTransformer.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdTransformer.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdTransformer.py}
 
 \section{vdInterface.py}
 \label{a:vdInterface.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdInterface.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdInterface.py}
 
 \section{vdGNSSTime.py}
 \label{a:vdGNSSTime.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdGNSSTime.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdGNSSTime.py}
 
 \section{vdHardware.py}
 \label{a:vdHardware.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdHardware.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdHardware.py}
 
 \section{vdFile.py}
 \label{a:vdFile.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdFile.py}
+
+\section{vdASCIIFile.py}
+\label{a:vdASCIIFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdASCIIFile.py}
+
+\section{vdTxtFile.py}
+\label{a:vdTxtFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdTxtFile.py}
+
+\section{vdObjFile.py}
+\label{a:vdObjFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdObjFile.py}
+
+\section{vdXYZFile.py}
+\label{a:vdXYZFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdXYZFile.py}
+
+\section{vdSQLite.py}
+\label{a:vdSQLite.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdSQLite.py}
 
 \section{vdDataset.py}
 \label{a:vdDataset.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdDataset.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdDataset.py}
 
 \section{vdPoint.py}
 \label{a:vdPoint.py}
-\lstinputlisting[language=Python]{../Quelltext/velodyneInterface/vdPoint.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdPoint.py}
 
 \section{config.ini}
 \label{a:config.ini}
-\lstinputlisting[]{../Quelltext/velodyneInterface/config.ini}
+\lstinputlisting[]{../Quelltext/Python/config.ini}
 
 \section{convTxt2Obj.py}
 \label{a:convToObj.py}
-\lstinputlisting[language=Python]{../Quelltext/convTxt2Obj.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/convTxt2Obj.py}
 
 \section{convBin2Obj.py}
 \label{a:convBin2Obj.py}
-\lstinputlisting[language=Python]{../Quelltext/convBin2Obj.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/convBin2Obj.py}
+
+\chapter{C++-Quelltexte}
+\label{a:cpp}
+
+\section{main.cpp}
+\label{a:main.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/main.cpp}
+
+\section{VdFile.h}
+\label{a:VdFile.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdFile.h}
+
+\section{VdFile.cpp}
+\label{a:VdFile.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdFile.cpp}
+
+\section{VdASCIIFile.h}
+\label{a:VdASCIIFile.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdASCIIFile.h}
+
+\section{VdASCIIFile.cpp}
+\label{a:VdASCIIFile.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdASCIIFile.cpp}
+
+\section{VdObjFile.h}
+\label{a:VdObjFile.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdObjFile.h}
+
+\section{VdObjFile.cpp}
+\label{a:VdObjFile.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdObjFile.cpp}
+
+\section{VdTxtFile.h}
+\label{a:VdTxtFile.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdTxtFile.h}
+
+\section{VdTxtFile.cpp}
+\label{a:VdTxtFile.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdTxtFile.cpp}
+
+\section{VdDataset.h}
+\label{a:VdDataset.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.h}
+
+\section{VdDataset.cpp}
+\label{a:VdDataset.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.cpp}
+
+\section{VdPoint.h}
+\label{a:VdPoint.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.h}
+
+\section{VdPoint.cpp}
+\label{a:VdPoint.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.cpp}
+
+\section{VdXYZ.h}
+\label{a:VdXYZ.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.h}
+
+\section{VdXYZ.cpp}
+\label{a:VdXYZ.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.cpp}
 
 \chapter{Beispieldateien}
 
