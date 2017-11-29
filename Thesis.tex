@@ -645,12 +645,12 @@ Der Verarbeitung musste ein weiterer Buffer vorgeschaltet werden. Da aber das Ab
 
 Die Arbeit wird nun auf mehrere Prozesse verteilt:
 \begin{itemize}
- \item Start des Skriptes und Gesamtsteuerung in Prozess mit mittlerer Priorität (Klasse \code{VdAutoStart}, mit Threads für Weboberfläche (Methode \code{startWeb() in Klasse \code{VdAutoStart}} und Hardwaresteuerung (Klasse \code{VdHardware})
+ \item Start des Skriptes und Gesamtsteuerung in Prozess mit mittlerer Priorität (Klasse \code{VdAutoStart}, mit Threads für die Weboberfläche (Methode \code{startWeb()} in der Klasse \code{VdAutoStart}) und Hardwaresteuerung (Klasse \code{VdHardware})
  \item Sammeln der Daten mit höchster Priorität (Klasse \code{VdBuffer})
  \item Umformen der Daten durch mehrere Prozesse je nach Prozessorkernanzahl mit erhöhter Priorität (Klasse \code{VdTransformer})
 \end{itemize}
 
-Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sofern 7.500 Datensätze zwischengespeichert wurden -- je nach Einstellung des Laser\-scan\-ners in etwa fünf oder zehn Sekunden -- werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binären Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt. Damit die Umformer-Prozesse beim Schreiben nicht auf einander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls nun zum Beispiel die Stromversorgung unterbrochen wird, sind nur die Daten der maximal letzten 10 Sekunden verloren. Daten, die älter sind, sind entweder als binäre Daten oder als Textdatei gespeichert. Durch neues Starten des Umformerprozesses können die restlichen, noch nicht gewandelten Daten umgeformt werden.
+Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sobald eine in der Konfiguration festgelegte Anzahl von Datensätzen zwischengespeichert wurde, werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binären Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt (abschaltbar). Damit die Umformer-Prozesse beim Schreiben nicht auf einander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls nun zum Beispiel die Stromversorgung unterbrochen wird, sind nun nur die Daten der letzten Sekunden verloren. Daten, die älter sind, sind entweder auch trotz Spannungsverlust als binäre Daten oder als Textdatei gespeichert. Durch ein Skript ist es möglich, den Umformerprozesses alleine zu starten und die restlichen, noch nicht gewandelten Daten umzuformen.
 
 Durch dieses Prinzip stört eine stockende Datenumformung nicht die Aufzeichnung der Daten vom Scanner. Sofern der Raspberry Pi nicht die Geschwindigkeit der Umformung halten kann, werden einfach mehr binäre Dateien zwischengespeichert, die gegebenenfalls im Postprocessing umgewandelt werden können.
 
@@ -699,15 +699,12 @@ Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohda
 \code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Komponenten des Computersystemes auszunutzen, werden durch \code{VdAutoStart} eine Instanz des Prozesses weniger gestartet, wie Prozessorkerne vorhanden sind - also auf dem Raspberry Pi als Vierkern-System 3 Prozesse der Klasse \code{VdTransformer} Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine bin-Datei ausgewählt, eingelesen und an die Klasse \code{VdDataset} übermittelt. Nachdem diese die Daten zu einer Liste von \code{VdPoint} umgewandelt hat, werden diese Daten an die Klasse \code{VdFile} übergeben. Diese schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
 \section{Steuerung des Skriptes}
-Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier werden 
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laserscanners angepasst werden.
+\todo{weiter, zB auch Bedienung}
+
+\section{Weitere Geschwindigkeitsoptimierung}
+Tests ergaben, dass die Speicherung und Umwandlung nun alle Daten vom Scanner erfassen kann. Jedoch dauerte die Umwandlung der Daten im Dual-Return-Modus etwa die zehnfache Zeit der Messdauer auf einem Office-Notebook (2x 2,4 GHz, 8GB RAM)
 \todo{weiter}
-
-\section{Beispiel-Quelltext-Zitat}
-
-Die Daten werden eingelesen (siehe Zeile 18, \autoref{pySource})
-
-\lstinputlisting[language=Python, firstnumber=15, caption={Quelltext-Test}, label=pySource, firstline=15, lastline=20]{../Quelltext/Python/vdFile.py}
-
 
 \chapter{Konfiguration des Raspberry Pi}
 \label{c:konfig}
@@ -991,6 +988,14 @@ Die Punktwolken der zwei Standpunkte wurden in der Software Z+F LaserControl des
 \section{VdXYZFile.cpp}
 \label{a:VdXYZFile.cpp}
 \lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZFile.cpp}
+
+\section{VdSQLite.h}
+\label{a:VdSQLite.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdSQLite.h}
+
+\section{VdSQLite.cpp}
+\label{a:VdSQLite.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdSQLite.cpp}
 
 \section{VdDataset.h}
 \label{a:VdDataset.h}
