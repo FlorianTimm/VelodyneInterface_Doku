@@ -229,7 +229,7 @@ Die Genauigkeit von inertialen Messeinheiten wird in ihre Messgenauigkeit und in
  \label{img:mems}
 \end{figure}
 
-Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, mechanische Systeme, wie sie bereits hier beschrieben wurden, und mikroelektromechanische Systeme, sogenannte MEMS (microelectromechanical systems). Bei den zweitgenannten handelt es sich um stark miniaturisierte Bauteile (beispielsweise \autoref{img:mems}) , welche zum Beispiel in aktuellen Smartphones eingesetzt werden. Sie werden für Zwecke eingesetzt, in denen keine hohen Genauigkeitsanforerungen gestellt werden und der Preis gering gehalten werden soll. Auch zur Stabilisierung der Fluglage von Multikoptern oder Gimbals werden diese Sensoren eingesetzt. Für geodätische Anwendungsfälle werden jedoch meist noch mechanische Systeme genutzt, da deren Genauigkeit und ihre zeitliche Abweichung geringer sind.
+Hauptsächlich unterschieden werden die inertialen Messeinheiten in klassische, mechanische Systeme, wie sie bereits hier beschrieben wurden, und mikroelektromechanische Systeme, sogenannte MEMS (microelectromechanical systems). Bei den zweitgenannten handelt es sich um stark miniaturisierte Bauteile (beispielsweise \autoref{img:mems}) , welche zum Beispiel in aktuellen Smartphones eingesetzt werden. Sie werden für Zwecke eingesetzt, in denen keine hohen Genauigkeitsanforerungen gestellt werden und der Preis gering gehalten werden soll. Auch zur Stabilisierung der Fluglage von Multikoptern oder Gimbals werden diese Sensoren eingesetzt. Für geodätische Anwendungsfälle werden jedoch meist noch mechanische Systeme genutzt, da deren Genauigkeit und ihre zeitliche Abweichung geringer sind. Höherpreisige MEMS-Sensoren erreichen bereits gute Genauigkeiten.
 
 \todo{Quelle}
 
@@ -278,7 +278,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von \(2,3\mu s\) hinte
 \subsection{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
 \label{s:iMar}
 Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Richtungsmessungen pro Stunde liegt unter 0,5 Grad. \citep{imar}
-\todo{mehr Daten}
+\todo{Messgenauigkeit}
 
 \begin{figure}
  \centering
@@ -324,7 +324,7 @@ Der Vorteil des Raspberry Pi zur Datenverarbeitung sind vor allem seine verschie
  \item verschiedene Video- und Audioausgänge
  \end{itemize}
 
-Außerdem vorteilhaft für die Nutzung am Multikopter ist seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5 Watt \citep{raspSheet}, welche aber im Betrieb ohne Peripherie nicht erreicht wird.
+Außerdem vorteilhaft für die Nutzung am Multikopter ist seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5 Watt \citep{raspSheet}. Im Betrieb ohne Peripherie wird dieser Stromverbrauch bei weitem nicht erreicht, hier liegt der Stromverbrauch bei etwa \todo{Messung}.
 
 \begin{figure}
  \centering
@@ -350,7 +350,7 @@ In dieser Arbeit soll der Multikopter den Laser\-scan\-ner, die IMU, das Gimbal,
 \subsection{Gimbal Freefly MöVI M5}
 Um die Messgeräte während des Fluges des Multikopter zu stabilisieren und zu verhindern, dass sich jede Neigung der Flugsteuerung an den Laser\-scan\-ner überträgt, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:IMU}), werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ist es durch viele Gimbals möglich, die Messtechnik unabhängig vom Multikopter auszurichten - dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
 
-Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. \todo{mehr...}
+Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. Sie wird eigentlich zur Stabilisierung von Aufnahmen mit digitalen Spiegelreflexkameras entwickelt. Sie hat eine Tragkraft von 2,3 Kilogramm. Außer den erwähnten Beschleunigungsmesser verwendet diese auch GNSS um das driften der integrierten IMU zu vermindern. \citep{movim5}
 
 
 \section{Auswahl des Datenverarbeitungssystems}
@@ -361,7 +361,7 @@ Vorteile eines Arduinos wären vorallem der geringere Stromverbrauch und die Ech
 
 
 \section{Stromversorgung}
-Die Stromversorgung des Raspberry-Pi an der Drohne soll mittels Lithium-Ionen-Zellen erfolgen. Der Raspberry-Pi erfordert hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann hierbei zu Systeminstabilitäten führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
+Die Stromversorgung des Raspberry Pi an dem Multikopter soll mittels Lithium-Ionen-Zellen erfolgen. Der Raspberry Pi erfordert hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann hierbei zu Systeminstabilitäten führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
 
 \autoref{tab:strom} listet die verschiedenen Module und die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile - auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
 
@@ -434,7 +434,7 @@ Der Betrieb des Raspberry Pi erfolgt im Betrieb ohne Tastatur und Bildschirm. Da
  \label{abb:steuerung}
 \end{figure}
 
-\autoref{abb:steuerung} zeigt den Schaltplan des entwickelten Steuermodules. Dieses bietet mit drei Leuchtdioden und 2 Tastern die Möglichkeit, im Skript später einfache Anzeigen und Eingaben zu realisieren. Hierfür wurde eine Erweiterung auf Basis des GPIO-Portes des Raspberry Pi aufgebaut. Die zwei Taster sind über die beiden GPIO-Pins 18 und 25 erreichbar. Ohne Betätigung werden die Eingänge über die Pull-Up-Widerstände (\todo{R?}) auf ein High-Level gezogen. Durch Drücken des Tasters wird die Spannung über die Widerstände \todo{Widerstände} auf ein Low-Level gezogen, welches durch das Pythonskript zur Laufzeit ausgelesen werden kann. Der Widerstand \todo{R?} dient zur Strombegrenzung und als Sicherheit, falls die GPIO-Pins falsch geschaltet werden. In der weiteren Optimierung der Schaltung wurden die externen Pull-Up-Widerstände durch die interne, schaltbaren Pull-Up-Widerstände ersetzt. Dieses erwies sich vor allem bei der Nutzung ohne angestecktes Steuerungsmodul als vorteilhaft, da so auch ohne Modul diese immer geschaltet sein können. Ansonsten könnten im Betrieb ohne Steuerungsmodul auftretende Spannungsschwankungen fehlerhafterweise zu einer Erkennung als Tastendruck führen.
+\autoref{abb:steuerung} zeigt den Schaltplan des entwickelten Steuermodules. Dieses bietet mit drei Leuchtdioden und 2 Tastern die Möglichkeit, im Skript später einfache Anzeigen und Eingaben zu realisieren. Hierfür wurde eine Erweiterung auf Basis des GPIO-Portes des Raspberry Pi aufgebaut. Die zwei Taster sind über die beiden GPIO-Pins 18 und 25 erreichbar. Ohne Betätigung werden die Eingänge über die Pull-Up-Widerstände R4 und R6 auf ein High-Level gezogen. Durch Drücken des Tasters wird die Spannung über die Widerstände R5 und R7 auf ein Low-Level gezogen, welches durch das Pythonskript zur Laufzeit ausgelesen werden kann. Die Widerstände R5 und R7 dienen außerdem zur Strombegrenzung und als Sicherheit, falls die GPIO-Pins falsch geschaltet werden. In der weiteren Optimierung der Schaltung wurden die externen Pull-Up-Widerstände durch die interne, schaltbaren Pull-Up-Widerstände ersetzt. Dieses erwies sich vor allem bei der Nutzung ohne angestecktes Steuerungsmodul als vorteilhaft, da so auch ohne dieses Modul diese immer geschaltet sein können. Ansonsten könnten im Betrieb ohne Steuerungsmodul auftretende Spannungsschwankungen fehlerhafterweise zu einer Erkennung als Tastendruck führen.
 Die drei Leuchtdioden wurden mit jeweils einem 150 Ohm Vorwiderstand direkt zwischen einem GPIO-Pin und Ground eingebaut. Durch Ansteuerung der GPIO-Pins lassen sich diese An- und Abschalten. Außer zum Schutz und Betrieb der LEDs verhindern die Vorwiderstände auch eine zu hohe Stromaufnahme aus den GPIO-Pins. Die genaue Belastbarkeit der Pins ist nicht dokumentiert, jedoch wird meist von einem Wert um 10mA bei 3,3 Volt gesprochen (zum Beispiel \citet{ekRaspPin}). Alternativ, bei Nutzung leistungsstärkerer LEDs könnten diese auch unter Nutzung eines Transistors geschaltet werden. Diese lassen mit einem geringen Steuerungsstrom höhere Ströme schalten.
 
 \begin{equation}
@@ -466,7 +466,7 @@ Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewäh
  \label{abb:platine}
 \end{figure}
 
-Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden. Außerdem wurde die Auswahl der GPIO-Pins des Raspberry Pi platzsparender optimiert und nur die auch an dem ersten Typ des Raspberry Pi vorhandenen PINs genutzt. Hierdurch ist die Schaltung abwärtskompatibel zu allen Versionen des Raspberry Pi. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angeschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laser\-scan\-ner die Daten vom GNSS-Modul empfangen kann.
+Beim Routing wurden noch einige Teile der Schaltung optimiert und versucht, einige Bauteile einzusparen, in dem zum Beispiel die Stromversorgung vom Raspberry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet wurden anstatt hierfür einen zusätzlichen Spannungswandler zu verwenden. Die Platinengröße wurde so gewählt, dass die Platine direkt auf den Raspberry Pi 2 oder 3 aufgesteckt werden kann. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass hier zwei Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Raspberry Pi angeschlossen, so dass der Raspberry Pi nun auch ohne den Umweg über den Laser\-scan\-ner die Daten vom GNSS-Modul empfangen kann. Es wurde Platz für weitere LEDs und Taster freigelassen.
 
 \begin{figure}
  \centering
@@ -654,11 +654,15 @@ Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. S
 
 Durch dieses Prinzip stört eine stockende Datenumformung nicht die Aufzeichnung der Daten vom Scanner. Sofern der Raspberry Pi nicht die Geschwindigkeit der Umformung halten kann, werden einfach mehr binäre Dateien zwischengespeichert, die gegebenenfalls im Postprocessing umgewandelt werden können.
 
+\section{Auslagerung der Transformation in C++}
+Da auch bei Nutzung der kompletten Prozessorleistung des Raspberry Pi es nicht möglich war, die Daten zeitgleich zu transformieren und lange Nachbearbeitungszeiten auftraten, wurden weitere Ansätze geprüft. Am erfolgsversprechendsten war die Nutzung von C++ für diesen Teil. Die Programmiersprachen C und C++ sind bekannt dafür, dass sie sehr schnelle Ausführungszeiten bieten. Die Klassen, welche für die Transformation zuständig waren, wurden daher in C++ nachgebaut. Die Geschwindigkeit für die Umformung eines Testdatensatzes erfolgte in etwa der zehnfachen Geschwindigkeit. Diese Steigerung reicht aus, um bei Nutzung der vier Kerne des Raspberry Pi die Daten zeitgleich umzuformen. Der C++-Code wurde als eigenständiges Kommandozeilenprogramm erstellt. Somit ist es unabhängig vom Python-Code und kann auch selbständig verwendet werden, zum Beispiel zum späteren Umformen von Daten.
+Die Pythonklasse \code{VdTransformer} wurde umschaltbar durch die Konfigurationsdatei um die Aufrufe des zusätzlichen Programmes erweitert. So kann je nach verwendeter Umgebung umgeschaltet werden zwischen der Umformung mittels Python (plattformunabhängig) und für verschiedene Plattformen kompilierter C++-Umformungen (ARM 32bit, Linux 64bit).
+
 \section{Klassen}
 \label{s:klassen}
 Es folgt die Beschreibung der einzelnen Klassen. Auf die Konstruktor-Methoden \code{\_\_init\_\_()} wird nicht eingegangen, da hier meist nur Variablen deklariert werden.
 
-\subsection{VdAutoStart}
+\subsection{VdAutoStart (Python)}
 Die Klasse \code{VdAutoStart} (siehe Anhang~\ref{a:vdAutoStart.py}) steuert den automatischen Start des Skriptes beim Hochfahren des Raspberry Pi. Sie ist verantwortlich für den korrekten Start der einzelnen Skriptteile in der richten Reihenfolge. Außerdem sind in der zugehörigen Datei auch alle Programmteile abgelegt, die nicht zu einer Klasse gehören, wie zum Beispiel der Startaufruf.
 \todo{erweitern}
 
@@ -666,27 +670,27 @@ Die Klasse \code{VdAutoStart} (siehe Anhang~\ref{a:vdAutoStart.py}) steuert den 
 Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet.
 Die Weboberfläche ist entsprechend ihrem geplanten Einsatzzweck optimiert für die mobile Anzeige auf Smartphones, lässt sich aber auch vom Laptop bedienen. Die Oberfläche selbst nutzt nur HTML und CSS - ist also nicht zusätzlichen Skriptsprachen auf dem verwendeten Gerät abhängig. 
 
-\subsection{VdInterface}
+\subsection{VdInterface (Python)}
 Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner. Sie stellt die UDP-Socket-Verbindungen zum Datenstream des Scanners her.
 \todo{zu kurz}
 
 
-\subsection{VdHardware}
+\subsection{VdHardware (Python)}
 Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Raspberry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. Hierdurch werden die Abläufe des Hauptskriptes nicht durch die Abfrageschleifen der Hardwaresteuerung unterbrochen.
 
 Bei der Initialisierung der Klasse werden die GPIO-Ports des Raspberry Pi entsprechend des Hardwaresteuerungsmodules aus \autoref{s:steuermodul} eingerichtet. Hierbei werden bei den Eingangsports die internen Pull-Up-Widerstände aktiviert. Beim Start des Threads wird dann zusätzlich ein Eventhandler für die Eingangspins eingerichtet, der entsprechende Funktionen zum Starten oder Stoppen der Aufzeichnung sowie zum Herunterfahren aufrufen. Desweiteren wird ein Timer aktiviert, der dafür sorgt, dass die LED-Anzeigen einmal sekündlich aktualisiert werden.
 
-\subsection{VdPoint}
+\subsection{VdPoint (Python / C++)}
 Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Möglichkeit, die Messdaten in lokale kartesische Koordinaten mit dem Laserscanner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ-Dateien genutzt.
 \todo{ergänzung?}
 
-\subsection{VdDataset}
+\subsection{VdDataset (Python / C++)}
 Die Klasse \code{VdDataset} nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementatierungen der Klasse \code{VdFile} können diese dann zum Beispiel als Datei gespeichert werden.
 
-\subsection{VdFile und Subklassen}
+\subsection{VdFile und Subklassen (Python / C++)}
 Bei der Klasse \code{VdFile} handelt es sich um eine abstrakte Klasse. Die Klasse stellt ein Interface da, das die Speicherung der umgewandelten Daten übernimmt. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben:
 
-\paragraph{VdASCIIFile (VdTxtFile / VdObjFile / VdXYZFile)}
+\paragraph{VdASCIIFile sowie VdTxtFile, VdObjFile und VdXYZFile}
 Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile} und \code{VdObjFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} schreibt hierbei die Rohdaten als einfache Textdateien. \code{VdObjFile} formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei. Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen. Im Zusammenhang mit der Vergleichsmessung aus \autoref{c:systemueberpruefung} wurde zusätzlich noch eine Klasse zur Implementierung von XYZ-Dateien erstellt. Hier werden die schon für die OBJ-Dateien aufbereiteten Daten in anderer Formatierung genutzt.
 
 \paragraph{VdSQLite}
@@ -699,12 +703,7 @@ Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohda
 \code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Komponenten des Computersystemes auszunutzen, werden durch \code{VdAutoStart} eine Instanz des Prozesses weniger gestartet, wie Prozessorkerne vorhanden sind - also auf dem Raspberry Pi als Vierkern-System 3 Prozesse der Klasse \code{VdTransformer} Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine bin-Datei ausgewählt, eingelesen und an die Klasse \code{VdDataset} übermittelt. Nachdem diese die Daten zu einer Liste von \code{VdPoint} umgewandelt hat, werden diese Daten an die Klasse \code{VdFile} übergeben. Diese schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
 \section{Steuerung des Skriptes}
-Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laserscanners angepasst werden.
-\todo{weiter, zB auch Bedienung}
-
-\section{Weitere Geschwindigkeitsoptimierung}
-Tests ergaben, dass die Speicherung und Umwandlung nun alle Daten vom Scanner erfassen kann. Jedoch dauerte die Umwandlung der Daten im Dual-Return-Modus etwa die zehnfache Zeit der Messdauer auf einem Office-Notebook (2x 2,4 GHz, 8GB RAM)
-\todo{weiter}
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laserscanners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laserscanner.
 
 \chapter{Konfiguration des Raspberry Pi}
 \label{c:konfig}
@@ -747,7 +746,7 @@ Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfigur
 \label{tab:ipAdressen}
 \end{table}
 
-Die Konfiguration der IP-Adressen für den Raspberry Pi erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. \cite{accesspoint}
+Die Konfiguration der IP-Adressen für den Raspberry Pi erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. Um zukünftige Updates einfach zu ermöglichen, müssen die statischen IP-Einstellungen (Zeile 8-11) im Normalfall abgeschaltet werden und die DHCP Einstellungen (Zeile 13) aktiviert werden. \cite{accesspoint}
 
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/network/interfaces}}, label={interfaces}]
 #localhost
@@ -756,10 +755,13 @@ iface lo inet loopback
 
 #Ethernet
 auto eth0
+## for Velodyne
 iface eth0 inet static
 	address 192.168.1.110
 	netmask 255.255.255.0
 	gateway 192.168.1.110
+## for Internet etc. (DHCP)
+# iface eth0 inet dhcp
 
 allow-hotplug wlan0
 iface wlan0 inet static
@@ -806,7 +808,7 @@ wpa_passphrase=raspberry
 \end{lstlisting}
 
 \section{Autostart des Skriptes}
-Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystems. 
+Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystems. Durch die Nutzung des Befehls \code{su} wird der Befehl als Nutzer \code{pi}, also ohne Administratorrechte gestartet. Durch Weglassen von \code{su pi -c} kann dieser auch als Administrator gestartet werden. Dies hat jedoch sicherheitstechnische Nachteile, dafür können dann Prioritäten der Befehle gesetzt werden.
 
 \begin{lstlisting}[caption={Startskript startVLP.sh}, label={startskript}]
 su pi -c "python3 VdAutoStart.py"
@@ -814,6 +816,9 @@ exit 0
 \end{lstlisting}
 
 Der Pfad zur dem Startskript wurde dann in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
+
+\section{Einrichtung als Proxy}
+Zusätzlich ist es sinnvoll, den Raspberry Pi auch als Proxy einzurichten. So lässt sich dann über die WLAN-Schnittstelle des Raspberry Pi auf die Konfigurationswebseite  des Laserscanners zugreifen, um Einstellungen des Scanners mobil zu ändern.
 
 \todo{zu Ende schreiben}
 
@@ -827,7 +832,7 @@ Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GN
 
 
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
-Um die Strecken und Winkelmessung des Laserscanners zu überprüfen, wurden an zwei Standpunkt an der Hafencity Universität jeweils Scans mit dem Velodyne VLP-16 durchgeführt. Das erste Messszenario fand etwa 20 Meter von einer weißen, rauen und ebenen Fassade (Verputztes Wärmedämmverbundsystem) statt. Hier wurden zum Vergleich mit einem terrestrischem Laserscanner Zöller+Fröhlich Imager 5010 der Messaufbau komplett von zwei Standpunkten aus gescannt. Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Widerholungsgenauigkeit in Strecke und Richtung des Laserscanners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenen Beton.
+Um die Strecken und Winkelmessung des Laserscanners zu überprüfen, wurden an zwei Standpunkt an der Hafencity Universität jeweils Scans mit dem Velodyne VLP-16 durchgeführt. Das erste Messszenario fand etwa 20 Meter von einer weißen, rauen und ebenen Fassade (Verputztes Wärmedämmverbundsystem) statt. Hier wurden zum Vergleich mit einem terrestrischem Laserscanner Zoller+Fröhlich Imager 5010 der Messaufbau komplett von zwei Standpunkten aus gescannt. Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Widerholungsgenauigkeit in Strecke und Richtung des Laserscanners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenen Beton.
 
 \paragraph{Auswertung der Daten von Velodyne VLP-16}
 Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skript aufgezeichnet und umgewandelt. Da hierbei auffiel, das einige Programme besser mit XYZ-Dateien umgehen können, wurde das Klassenmodell um dieses Dateiformat erweitert.
@@ -852,12 +857,46 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
  \label{img:fehlerWolke}
 \end{figure}
 
-\subsection{Vergleichsmessung mittels Fassadenfront}
+\subsection{Vergleichsmessung an einer Fassadenfront / im geodätischen Labor}
+Die erste Messung zur Überprüfung der Entfernungsmessung fand vor einer weißen Fassade der HafenCity Universität statt. Durch einen Fehler im Auswerteskript, der erst bei großen Strecken auffiel, waren die Messdaten jedoch leider nicht zu verwenden. Es wurde daher eine ähnliche Messung im geodätischen Labor nachgeholt (siehe \autoref{img:geoLabor}).
+Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine blieb hierbei immer an der gleichen Stelle, etwa \todo{Entferung} Meter vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernung aufgestellt (zwischen \todo{Entfernung} Meter). Die Messszenarios wurden jeweils mit dem Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weiße Oberflächen liegt die Streckenmessgenauigkeit des Imager 5010 unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3 Zentimetern hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/geoLabor.jpg}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Messung im geodätischen Labor}
+ \label{img:geoLabor}
+\end{figure}
+
 \paragraph{Nachbearbeitung der Messdaten}
-Die Punktwolken der zwei Standpunkte wurden in der Software Z+F LaserControl des Herstellers des Laserscanners über an der Gebäude angebrachten Targets zusammengeführt. Anschließend wurden die Punktwolken gefiltert und in die Software Geomagic Wrap importiert. Hier wurde der Standpunkt des Velodyne VLP-16 bestimmt, in dem ein Zylinder gemäß der Größe aus dem Datenblatt \citep{vlpSheet} in die dem VLP-16 zuzuordnenden Punkte der Punktwolke automatisch eingepasst wurde.  Hieraus konnte dann durch Bestimmung der Mittelachse und der Daten des Fokuspunktes der Nullpunkt der Punktwolken des VLP-16 bestimmt werden. Die Einpassung der Rotation um die Z-Achse wurde durch zwei Fassadenecken durchgeführt, der Abgleich der Kippachsen wurde über jeweils in die Punktwolken eingepasste Bodenebenen durchgeführt.
+Die Punktwolken des Imager 5010 wurden in der Software Z+F LaserControl des Herstellers über angebrachten Targets zusammengeführt. Anschließend wurden die Punktwolken gefiltert und in die Software Geomagic Wrap importiert. Hier wurde der Standpunkt des Velodyne VLP-16 bestimmt, in dem ein Zylinder gemäß der Größe aus dem Datenblatt \citep{vlpSheet} in die dem VLP-16 zuzuordnenden Punkte der Punktwolke automatisch eingepasst wurde.  Hieraus konnte dann durch Bestimmung der Mittelachse und der Daten des Fokuspunktes der Nullpunkt der Punktwolken des VLP-16 bestimmt werden.
+In den Laserpunktwolken der beiden Scanner wurden in Geomagic Wrap die Wände, Decke, Fußboden und die Stellwände modelliert. Hierfür wurden die entsprechenden Punkte ausgewählt und mittels Best-Fit-Anpassung Ebenen in den Punkten ausgeglichen. Über die Wände und Decken wurden die Punktwolken nochmals genauer zu einander ausgerichtet.
+
+\paragraph{Präzision der Streckenmessung}
+Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Wie vom Hersteller des Velodyne angegeben, betrug die Standardabweichung dieser Punkte zur durch Ausgleichung bestimmten Ebene bei maximal 3 Zentimetern.
+
+\paragraph{Richtigkeit der Streckenmessung}
+Um zu Überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden die Abstände zwischen den Flächen aus beiden Messverfahren jeweils einer Stellwand in CAD bestimmt.
+\todo{weiter...}
+
+
+\subsection{Vergleichsmessung in der Tiefgarage}
+Hauptsächlich zur Überprüfung der Genauigkeit der Winkelmessung, aber auch zur Überprüfung der Streckenmessung auf maximaler Entfernung wurde eine weitere Messung in der Tiefgarage durchgeführt. Durch die vielen klaren, rechtwinkligen Kanten, sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von \todo{Genauigkeit} und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm verwendet \citep{trimbles7}.
+
+\paragraph{Auswertung}
+Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde wiederum durch Ausgleichung der Fußbodenebene durchgeführt. Auch aus den Laserpunktwolken des Velodyne Vlp-16 wurden die Ecken modelliert. Hierfür würden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
+
+\todo{weiter...}
 
 \chapter{Ausblick}
 \label{c:ausblick}
+
+\paragraph{Weiterverarbeitung der Daten}
+
+\paragraph{Anwendbarkeit des Messsystemes}
+
+\paragraph{Erweiterungsmöglichkeiten}
 
 
 %% Literatur
