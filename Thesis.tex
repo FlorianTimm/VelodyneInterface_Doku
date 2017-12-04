@@ -835,7 +835,7 @@ Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und 
 
 \section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
 Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Raspberry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
-Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript \todo{skript} misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob bei einem Neustart der Messung sich die Zeitdifferenz ändert beziehungsweise überhaupt eine Zeitdifferenz dann entsteht.
+Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript (siehe Anhang~\ref{a:ppsVergleich.ino}) misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob bei einem Neustart der Messung sich die Zeitdifferenz ändert beziehungsweise überhaupt eine Zeitdifferenz dann entsteht.
 
 
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
@@ -1072,6 +1072,11 @@ In der Programmierung des Raspberry Pi sind natürlich noch Verbesserungen und O
 \section{VdXYZ.cpp}
 \label{a:VdXYZ.cpp}
 \lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.cpp}
+
+\chapter{Arduino-Quelltext}
+\section{ppsVergleich.ino}
+\label{a:ppsVergleich.ino}
+\lstinputlisting[language=C++]{../Quelltext/arduino/ppsVergleich.ino}
 
 \chapter{Beispieldateien}
 
