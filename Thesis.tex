@@ -722,6 +722,13 @@ Die Änderungen der Konfigurationsdateien erfolgten mit dem vorinstallierten Edi
 \section{Installation von Raspbian}
 Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden.
 
+\todo{sudo rpi-update}
+\todo{sudo apt update}
+\todo{sudo apt upgrade}
+\todo{sudo apt-get install python3-pip}
+\todo{pip install flask serial}
+
+
 % HafenCity
 
 \section{Befehle mit Root-Rechten}
