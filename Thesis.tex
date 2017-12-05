@@ -726,14 +726,16 @@ Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaket
 \todo{sudo apt update}
 \todo{sudo apt upgrade}
 \todo{sudo apt-get install python3-pip}
-\todo{pip install flask pyserial}
-
+\todo{pip3 install flask}
+\todo{pip3 install pyserial}
+\todo{pip3 install RPi.GPIO}
+\todo{Lokalisation}
 
 % HafenCity
 
 \section{Befehle mit Root-Rechten}
 \label{s:root}
-Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Administrator ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{visudo} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep{sudoers}
+Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Administrator ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{sudo visudo -f /etc/sudoers} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep{sudoers}
 
 \begin{lstlisting}[caption={Änderung der \code{/etc/sudoers}}, label={Lsudoers}]
 # Cmnd alias specification
@@ -742,6 +744,8 @@ Cmnd_Alias VLP = /sbin/shutdown, /sbin/timedatectl
 # User privilege specification
 pi	ALL=(ALL) NOPASSWD: VLP
 \end{lstlisting}
+
+\todo{chmod +x startVLP.sh}
 
 \section{IP-Adressen-Konfiguration}
 Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
@@ -760,7 +764,7 @@ Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfigur
 \label{tab:ipAdressen}
 \end{table}
 
-Die Konfiguration der IP-Adressen für den Raspberry Pi erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. Um zukünftige Updates einfach zu ermöglichen, müssen die statischen IP-Einstellungen (Zeile 8-11) im Normalfall abgeschaltet werden und die DHCP Einstellungen (Zeile 13) aktiviert werden. \cite{accesspoint}
+Die Konfiguration der IP-Adressen für den Raspberry Pi erfolgt in der Konfigurationsdatei \code{/etc/network/interfaces} (siehe \autoref{interfaces}. Um zukünftige Updates einfach zu ermöglichen, müssen die statischen IP-Einstellungen (Zeile 8-11) im Normalfall abgeschaltet werden und die DHCP Einstellungen (Zeile 13) aktiviert werden. \citep{accesspoint}
 
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/network/interfaces}}, label={interfaces}]
 #localhost
@@ -786,7 +790,7 @@ iface wlan0 inet static
 
 Zur Konfiguration der dynamischen IP-Adressen der Clients im WLAN wird ein DHCP-Server eingerichtet. Ein solcher Server weißt neuen Geräten -- beziehungsweise welchen, die länger nicht im Netzwerk waren -- automatisch eine neue, unverwendete IP-Adresse zu. Hierdurch benötigen die Clients keine spezielle Konfiguration und ihre IP-Einstellungen können auf dem üblichen Standardeinstellungen verbleiben (automatische IP-Adresse beziehen). Als DHCP-Server wird hier das Paket \code{dnsmasq} verwendet. Außer dem DHCP-Server bietet dieses Paket auch einen DNS-Server, der es erlaubt, den Geräten auch einen Hostname zuzuweisen. So wäre der Zugriff zum Beispiel über den Hostname raspberry.ip anstatt durch Eingabe der IP-Adresse möglich.
 
-Die Konfiguration des DHCP-Servers ist vergleichsweise einfach und benötigt nur das verwendete Netzwerk-Interface, hier wlan0, den zu nutzenden IP-Bereich, die Netzmaske und die Zeit, nach der eine IP-Adresse an ein anderes Gerät vergeben werden darf, die sogenannte Lease-Time (siehe \autoref{dnsmasq}). \cite{accesspoint}
+Die Konfiguration des DHCP-Servers ist vergleichsweise einfach und benötigt nur das verwendete Netzwerk-Interface, hier wlan0, den zu nutzenden IP-Bereich, die Netzmaske und die Zeit, nach der eine IP-Adresse an ein anderes Gerät vergeben werden darf, die sogenannte Lease-Time (siehe \autoref{dnsmasq}). \citep{accesspoint}
 
   
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/dnsmasq.conf}}, label={dnsmasq}]
@@ -795,7 +799,7 @@ interface=wlan0
 \end{lstlisting}
 
 \section{Konfiguration als WLAN-Access-Point}
-Um einen Zugriff auf die Python-Weboberfläche des Skriptes und die Konfiguration des Laser\-scan\-ners zu ermöglichen, soll der Raspberry Pi selbst als WLAN-Access-Point fungieren. Hierzu wurde das Paket \code{hostapd} verwendet. Zur Konfiguration werden die Einstellungen in die Datei \code{/etc/hostapd/hostapd.conf} geschrieben. \cite{accesspoint}
+Um einen Zugriff auf die Python-Weboberfläche des Skriptes und die Konfiguration des Laser\-scan\-ners zu ermöglichen, soll der Raspberry Pi selbst als WLAN-Access-Point fungieren. Hierzu wurde das Paket \code{hostapd} verwendet. Zur Konfiguration werden die Einstellungen in die Datei \code{/etc/hostapd/hostapd.conf} geschrieben. \citep{accesspoint}
 
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/hostapd/hostapd.conf}}, label={hostapd}]
 # WLAN-Router-Betrieb
@@ -820,6 +824,9 @@ wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP
 wpa_passphrase=raspberry
 \end{lstlisting}
+
+\todo{sudo nano /etc/dchcpcd.conf}
+\todo{sudo nano /etc/default/hostapd}
 
 \section{Autostart des Skriptes}
 Damit das Skript vor der Messung mittels SSH-Zugang gestartet werden muss, wurde das Skript in den Autostart des Raspberry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystems. Durch die Nutzung des Befehls \code{su} wird der Befehl als Nutzer \code{pi}, also ohne Administratorrechte gestartet. Durch Weglassen von \code{su pi -c} kann dieser auch als Administrator gestartet werden. Dies hat jedoch sicherheitstechnische Nachteile, dafür können dann Prioritäten der Befehle gesetzt werden.
