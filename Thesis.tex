@@ -55,6 +55,8 @@
  }
 
 % Zitierstil
+%\usepackage[style=authoryear,citestyle=authoryear,natbib=true]{biblatex}
+%\bibliography{Thesis.bib}
 \usepackage[round]{natbib}
 \bibliographystyle{hcu}
 
@@ -138,11 +140,13 @@ Also part of the work is the creation of a control of the recording of the laser
 \section{Problemstellung}
 Daten aus Airborne Laserscanning, dem Abtasten von Oberflächen mit einem Laser\-scan\-ner aus der Luft, lassen sich für viele verschiedene Zwecke benutzen. Oft werden sie zur Erfassung von digitalen Geländemodellen verwendet, aber auch für die Erstellung von Stadtmodellen oder Vegetationsanalysen sind die Daten nutzbar. Aktuell werden als Trägersysteme des Laser\-scan\-ners Helikopter oder Flugzeuge verwendet, die mit entsprechender Sensorik ausgerüstet sind. Diese Messmethode lohnt sich allerdings nicht für die Vermessung kleinerer Gebiete und ist auch aufgrund der Größe und die Gefahren des Fluggerätes nicht für die Aufnahme feiner Strukturen wie Fassaden geeignet, bei denen zwischen Häuserschluchten geflogen werden müsste. Außerdem sind die Betriebs- und Anschaffungskosten sehr hoch, so dass sich eine solche Messung oft nur für sehr große Gebiete lohnt. Alternativ bietet sich die terrestrische Messung mittels Tachymeter oder auch per Laser\-scan\-ner um kleinere Gebiete abzubilden an -- hier benötigt die Aufnahme jedoch viel Zeit und Personal. Hinzukommt, dass die Genauigkeit für viele Anwendungsfälle der 3D-Modelle zu hoch ist. Beide Möglichkeiten, die Messung aus der Luft oder vom Boden, sind sehr kostenintensiv. Ein Lösungsansatz hierfür wäre es, anstatt eines Helikopters als Trägersystem, einen Multikopter zu nutzen. Jedoch ist die Tragfähigkeit für die meisten Laserscanning-Systeme nicht ausreichend. Daher basieren 3D-Erfassungssysteme, die Multikopter nutzen, heutzutage meist auf photogrammetrischen Prinzipien, welche Luftbilder zur Erfassung nutzen. Hierzu muss jedoch ausreichend Beleuchtung vorhanden sein, welches wiederum die Einsetzbarkeit des Systems in Städten beschränkt, in denen nur nachts für ausreichende Sicherheitszonen zum Betrieb von Multikoptern gesorgt werden kann. \citep{carlos}
 
-\section{Zielsetzung}
+\section{Projekt \& Zielsetzung}
 Gesamtziel ist es, ein Laserscanning-System zu entwickeln, dass von einem Multikopter getragen werden kann. Hierbei soll vorallem auf ein geringes Gewicht geachtet, aber auch die Kosten niedrig gehalten werden. Im Speziellen soll hier als erster Schritt die Datenverarbeitung des Laser\-scan\-ners in einem solchen System realisiert werden. Hierfür soll ein Ein-Platinen-Computer Typ Raspberry Pi 3 die Speicherung und Aufbereitung der von einem Laser\-scan\-ner Velodyne Puck VLP-16 aufgezeichneten Laserpunktdaten übernehmen. Hierfür müssen entsprechende Schnittstellen zum Verbinden der Geräte in Hard- und Software entwickelt werden. \citep{carlos}
 
+\todo{Ergänzen}
+
 \section{Struktur}
-Im \autoref{c:grundlagen} sollen die Grundlagen des luftgestützten Laserscannings erläutert werden. Außerdem wird die benötigte Hardware zur Durchführung eines solchen Laserscannings besprochen. Im Folgenden wird näher auf die Realisierung des Projektes eingegangen: Welche Hardware wurde verwendet und wie wurde Sie angeschlossen (\autoref{c:realisierung}), wie sollen die Daten verarbeitet werden (\autoref{c:datenverarbeitung}) und wie wird die Verarbeitung schließlich durchgeführt (\autoref{c:skript}) und das System konfiguriert (\autoref{c:konfig}). Einzelne Komponenten werden in \autoref{c:systemueberpruefung} auf ihre Genauigkeit und Zuverlässigkeit geprüft. Zum Abschluss soll in \autoref{c:ausblick} noch ein Einblick in die Zukunft des Systems geworfen werden.
+Im \autoref{c:grundlagen} sollen die Grundlagen des luftgestützten Laserscannings erläutert werden. Außerdem wird die benötigte Hardware zur Durchführung eines solchen Laserscannings besprochen. Im Folgenden wird näher auf die Realisierung des Projektes eingegangen: Welche Hardware wurde verwendet und wie wurde Sie angeschlossen (\autoref{c:realisierung}), wie sollen die Daten verarbeitet werden (\autoref{c:datenverarbeitung}), wie wird die Verarbeitung schließlich durchgeführt (\autoref{c:skript}) und das System konfiguriert (\autoref{c:konfig}). Einzelne Komponenten werden in \autoref{c:systemueberpruefung} auf ihre Genauigkeit und Zuverlässigkeit geprüft. Zum Abschluss soll in \autoref{c:ausblick} noch ein Einblick in die Zukunft des Systems geworfen werden.
 
 \chapter{Grundlagen des Airborne Laserscannings}
 \label{c:grundlagen}
@@ -491,7 +495,6 @@ Ein großer Nachteil von Python ist die Ausführungsgeschwindigkeit. Daher wurde
 Bei C++ handelt es sich um eine objektorientierte Erweiterung der Programmiersprache C. C wurde 1972 von Dennis Ritchie entwickelt. Anfang der 1980er Jahre erweiterte Bjarne Stroustrup C zu C++. C++ hat zwar eine höhere Ausführungsgeschwindigkeit, dafür ist C++ jedoch nicht so leicht zu erlernen. \citep[S. 4f]{cpp}
 
 
-
 \section{Datenlieferung vom Laser\-scan\-ner}
 \label{ss:Datenlieferung}
 Der Laser\-scan\-ner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären binären Datenformat. Diese Daten sind nicht direkt lesbar sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Skriptes durchgeführt werden.
@@ -598,6 +601,7 @@ z &= s_S \cdot \sin(h) \\
 \end{equation}
 
 \section{Anforderungen an das Skript}
+\label{s:anforderungen}
 Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skript aufweisen muss:
 \begin{itemize}
  \item Rohdaten vom Scanner abrufen
@@ -617,12 +621,13 @@ Der Ablauf der einzelnen Schritte ist oft abhängig vom Fortschritt anderer Schr
 
 \chapter{Entwicklung des Skriptes}
 \label{c:skript}
-\nocite{oopPython}
-\nocite{uml}
-\nocite{flask}
+
+Die Entwicklung des Skriptes bzw. des Programmes erfolgte iterativ-inkrementell. Bei diesem Vorgehensmodell, welches stark mit der agilen Entwicklung verknüpft ist, wird anfangs nur eine grobes Anforderungsprofil (siehe \autoref{s:anforderungen}) festgelegt. Es werden regelmäßig Prototypen erstellt und geprüft. Bei dieser Prüfung werden neue Anforderungen gesammelt beziehungsweise bestehende konkretisiert. So ist am Anfang der Entwicklung noch nicht klar, wie das Produkt am Ende aussehen wird und welchen Funktionsumfang dieses hat. Vorteil dieser Entwicklung ist es, dass schnell funktionsfähige Prototypen ermöglicht werden und auch durch den Auftraggeber, in diesem Fall die Betreuer, ständig Einfluss auf die Funktion und die Bedienung der Software möglich ist. \citep[S. 33f]{uml}
+
+Zur Unterstützung der Programmierung wurden vorallem die Lehrbücher \textit{Einstieg in Python} \citep{python}, \textit{Python 3 Object-oriented Programming} \citep{python3oop}, \textit{Learning Flask Framework} \citep{flask} und \textit{C/C++ für Studium und Beruf} \citep{cpp} verwendet.
 
 \section{Klassenentwurf}
-Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hilfe des Ablaufplanes aus \autoref{img:ablaufplan} die benötigten Klassen entworfen. Die endgültigen Klassen sind der \autoref{img:uml} zu entnehmen. Auf die genauen Funktionen der einzelnen Klassen wird im \autoref{s:klassen} eingegangen.
+Da das Skript objektorientiert programmiert werden soll, wurde zunächst mit Hilfe der anfangs bekannten Anforderungen und dem Ablaufplanes aus \autoref{img:ablaufplan} die benötigten, grundlegenden Klassen entworfen. Durch die Erweiterungen und die übliche Refaktorisierung -- der ständigen Optimierung des Quellcodes in seiner Lesbarkeit und Geschwindigkeit \citep[S. 255]{uml} -- erweiterte sich dieses Modell zu dem endgültigen Klassen der \autoref{img:uml}. Auf die genauen Funktionen der einzelnen Klassen wird im \autoref{s:klassen} eingegangen.
 
 \begin{figure}
  \centering
@@ -667,7 +672,6 @@ Die Pythonklasse \code{VdTransformer} wurde umschaltbar durch die Konfigurations
 
 \section{Klassen}
 \label{s:klassen}
-Es folgt die Beschreibung der einzelnen Klassen. Auf die Konstruktor-Methoden \code{\_\_init\_\_()} wird nicht eingegangen, da hier meist nur Variablen deklariert werden.
 
 \subsection{VdAutoStart (Python)}
 Die Klasse \code{VdAutoStart} (siehe Anhang~\ref{a:vdAutoStart.py}) steuert den automatischen Start des Skriptes beim Hochfahren des Raspberry Pi. Sie ist verantwortlich für den korrekten Start der einzelnen Skriptteile in der richten Reihenfolge. Außerdem sind in der zugehörigen Datei auch alle Programmteile abgelegt, die nicht zu einer Klasse gehören, wie zum Beispiel der Startaufruf.
@@ -719,23 +723,16 @@ Als Grundlage wurde auf die MicroSD-Karte, die dem Raspberry Pi als Festplatte d
 
 Die Änderungen der Konfigurationsdateien erfolgten mit dem vorinstallierten Editor \code{nano} unter Nutzung von Administratorrechten. Ein solcher Aufruf erfolgt zum Beispiel mit dem Befehl \code{sudo nano /pfad/zur/konfiguration.txt}. Nachfolgend müssen die betroffenen Programme oder sogar das komplette Betriebssystem neu gestartet werden. Der Neustart eines Services erfolgt zum Beispiel mit dem Aufruf \code{sudo service programmname restart}, der Neustart des Betriebssystems mit \code{sudo shutdown -r now}. Es empfiehlt sich, von allen zu ändernden Konfigurationsdateien Sicherungskopien anzulegen. Dies erfolgt zum Beispiel mit \code{sudo cp original.txt original.old.txt} (Kopieren) oder \code{sudo mv original.txt original.old.txt} (Verschieben, zum Beispiel zum Anlegen einer komplett neuen Datei). Auf diese Linux-Grundlagen wird im Folgenden nicht mehr eingegangen.
 
-\section{Installation von Raspbian}
-Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden.
+\todo{Script in den Anhang packen?}
 
-\todo{sudo rpi-update}
-\todo{sudo apt update}
-\todo{sudo apt upgrade}
-\todo{sudo apt-get install python3-pip}
-\todo{pip3 install flask}
-\todo{pip3 install pyserial}
-\todo{pip3 install RPi.GPIO}
-\todo{Lokalisation}
+\section{Installation von Raspbian}
+Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden. Mit den Befehlen \code{sudo rpi-update}, \code{sudo apt update}, \code{sudo apt upgrade} und \code{sudo apt upgrade} wird die Firmware und das Betriebssystem auf den neusten Stand gebracht. Mit \code{sudo apt-get install python3-pip} wird der Paketmanager von Python 3 installiert. Er ermöglicht das einfache Installieren von zusätzlichen Modulen. Die benötigten Pakete werden mit \code{pip3 install flask pyserial RPi.GPIO} installiert. Falls der Raspberry Pi auch mit der Tastatur gesteuert werden können soll, bietet es sich an, die Lokalisation einzurichten im Konfigurationsmenü unter \code{sudo raspi-config}.
 
 % HafenCity
 
 \section{Befehle mit Root-Rechten}
 \label{s:root}
-Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Administrator ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{sudo visudo -f /etc/sudoers} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep{sudoers}
+Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Raspberry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Administrator ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch Eintragung in die Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{sudo visudo -f /etc/sudoers} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep[S. 33]{Frisch2003}
 
 \begin{lstlisting}[caption={Änderung der \code{/etc/sudoers}}, label={Lsudoers}]
 # Cmnd alias specification
@@ -744,8 +741,6 @@ Cmnd_Alias VLP = /sbin/shutdown, /sbin/timedatectl
 # User privilege specification
 pi	ALL=(ALL) NOPASSWD: VLP
 \end{lstlisting}
-
-\todo{chmod +x startVLP.sh}
 
 \section{IP-Adressen-Konfiguration}
 Per Ethernet soll der Raspberry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Raspberry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
@@ -836,7 +831,7 @@ su pi -c "python3 VdAutoStart.py"
 exit 0
 \end{lstlisting}
 
-Der Pfad zur dem Startskript wurde dann in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
+Das Startskript wird mit \code{chmod +x startVLP.sh} ausführbar gemacht und der Pfad zum Skript in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
 
 \section{Einrichtung als Proxy}
 Zusätzlich ist es sinnvoll, den Raspberry Pi auch als Proxy einzurichten. So lässt sich dann über die WLAN-Schnittstelle des Raspberry Pi auf die Konfigurationswebseite  des Laserscanners zugreifen, um Einstellungen des Scanners mobil zu ändern.
@@ -898,7 +893,7 @@ In den Laserpunktwolken der beiden Scanner wurden in Geomagic Wrap die Wände, D
 Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Wie vom Hersteller des Velodyne angegeben, betrug die Standardabweichung dieser Punkte zur durch Ausgleichung bestimmten Ebene bei maximal 3 Zentimetern.
 
 \paragraph{Richtigkeit der Streckenmessung}
-Um zu Überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden die Abstände zwischen den Flächen aus beiden Messverfahren jeweils einer Stellwand in CAD bestimmt.
+Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden die Abstände zwischen den Flächen aus beiden Messverfahren jeweils einer Stellwand in CAD bestimmt.
 \todo{weiter...}
 
 
@@ -929,6 +924,7 @@ In der Programmierung des Raspberry Pi sind natürlich noch Verbesserungen und O
 %% Literatur
 \renewcommand\UrlFont\itshape
 \bibliography{Thesis}
+%\printbibliography
 
 \listoffigures
 \listoftables
@@ -1090,7 +1086,7 @@ In der Programmierung des Raspberry Pi sind natürlich noch Verbesserungen und O
 \chapter{Arduino-Quelltext}
 \section{ppsVergleich.ino}
 \label{a:ppsVergleich.ino}
-\lstinputlisting[language=C++]{../Quelltext/arduino/ppsVergleich.ino}
+\lstinputlisting[language=C++]{../Quelltext/arduino/ppsVergleich/ppsVergleich.ino}
 
 \chapter{Beispieldateien}
 
