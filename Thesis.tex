@@ -875,7 +875,7 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
 
 \subsection{Vergleichsmessung an einer Fassadenfront / im geodätischen Labor}
 Die erste Messung zur Überprüfung der Entfernungsmessung fand vor einer weißen Fassade der HafenCity Universität statt. Durch einen Fehler im Auswerteskript, der erst bei großen Strecken auffiel, waren die Messdaten jedoch leider nicht zu verwenden. Es wurde daher eine ähnliche Messung im geodätischen Labor nachgeholt (siehe \autoref{img:geoLabor}).
-Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine blieb hierbei immer an der gleichen Stelle, etwa \todo{Entferung} Meter vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernung aufgestellt (zwischen \todo{Entfernung} Meter). Die Messszenarios wurden jeweils mit dem Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weiße Oberflächen liegt die Streckenmessgenauigkeit des Imager 5010 unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3 Zentimetern hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
+Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine blieb hierbei immer an der gleichen Stelle, etwa 5 Meter vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernungen aufgestellt (zwischen 6 und 26 Meter). Die Messszenarios wurden jeweils mit dem Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weiße Oberflächen liegt die Streckenmessgenauigkeit des Imager 5010 unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3 Zentimetern hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
 
 \begin{figure}
  \centering
@@ -884,6 +884,21 @@ Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurd
  \caption{Messung im geodätischen Labor}
  \label{img:geoLabor}
 \end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{l|r|r|r|}
+\cline{2-4}
+& \multicolumn{1}{l|}{Entfernung in m} & \multicolumn{2}{l|}{Abweichung in cm}     \\ \hline
+\multicolumn{1}{|l|}{feststehende Tafeln} & -5,2     & -0,3        & 2,2      \\ \hline
+\multicolumn{1}{|l|}{Velodyne VLP16}      & 0,0      & \multicolumn{2}{c|}{0,5} \\ \hline
+\multicolumn{1}{|l|}{Tafel 1}             & 6,4      & -1,7        & 2,6      \\ \hline
+\multicolumn{1}{|l|}{Tafel 2}             & 11,4     & -0,9        & 1,6      \\ \hline
+\multicolumn{1}{|l|}{Tafel 3}             & 25,3     & -0,4        & 1,3      \\ \hline
+\end{tabular}
+\caption{Abweichungen der Ebenenen bei der Messung im geodätischen Labor}
+\label{tab:labor}
+\end{table}
 
 \paragraph{Nachbearbeitung der Messdaten}
 Die Punktwolken des Imager 5010 wurden in der Software Z+F LaserControl des Herstellers über angebrachten Targets zusammengeführt. Anschließend wurden die Punktwolken gefiltert und in die Software Geomagic Wrap importiert. Hier wurde der Standpunkt des Velodyne VLP-16 bestimmt, in dem ein Zylinder gemäß der Größe aus dem Datenblatt \citep{vlpSheet} in die dem VLP-16 zuzuordnenden Punkte der Punktwolke automatisch eingepasst wurde.  Hieraus konnte dann durch Bestimmung der Mittelachse und der Daten des Fokuspunktes der Nullpunkt der Punktwolken des VLP-16 bestimmt werden.
