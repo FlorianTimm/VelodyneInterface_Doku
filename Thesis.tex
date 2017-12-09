@@ -198,8 +198,6 @@ Zusätzlich zu den Spiegelmechanismen verfügen die terrestrischen Laser\-scan\-
 
 Zusätzlich haben natürlich alle Ablenk- und Drehsysteme eine Messeinheit, die den Stand des Spiegels misst. Hierdurch lässt sich dann die Abstrahlrichtung des Lasers berechnen, beziehungsweise beim Faserlaser bestimmen, welches Faserbündel genutzt wurde. Die Richtung wird dann wiederum zur Berechnung von Koordinaten benötigt.
 
-\todo{Bild malen}
-
 \subsection{Oberflächeneffekte}
 Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse verlaufenden, ebenen Oberflächen als identischer, abgeschwächter Impuls zurückgestrahlt. Der Laser trifft bei der Messung nicht, wie idealisiert angenommenen, punktförmig auf die Oberfläche, sondern stellt einen Kreis beziehungsweise bei schrägem Auftreffen eine Ellipse mit einer bestimmten Größe, dem sogenannten Footprint dar. Hierdurch ergeben sich je nach Oberfläche verschiedene Reflexionen: Bei zum Laserstrahl schrägen Oberflächen wie einem Dach wird das Signal geweitet, die Impulsdauer des reflektierten Strahles (Echo) wird verlängert, da er auf der Oberfläche zeitversetzt auftrifft. Ein anderes Phänomen sind mehrfache Echos. Dies tritt auf, wenn zwei unterschiedlich weite entfernte Oberflächen von einem Strahl getroffen werden -- zum Beispiel bei der Messung von Gebäudekanten oder Bäumen. \autoref{img:echo} zeigt die Echos in grafischer Form. \citep[S. 28]{beraldin}
 
@@ -328,7 +326,7 @@ Der Vorteil des Raspberry Pi zur Datenverarbeitung sind vor allem seine verschie
  \item verschiedene Video- und Audioausgänge
  \end{itemize}
 
-Außerdem vorteilhaft für die Nutzung am Multikopter ist seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5 Watt \citep{raspSheet}. Im Betrieb ohne Peripherie wird dieser Stromverbrauch bei weitem nicht erreicht, hier liegt der Stromverbrauch bei etwa \todo{Messung}.
+Außerdem vorteilhaft für die Nutzung am Multikopter ist seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5 Watt \citep{raspSheet}. Im Betrieb ohne Peripherie wird dieser Stromverbrauch bei weitem nicht erreicht, hier liegt der Stromverbrauch bei etwa 5 Watt. \todo{Messung}
 
 \begin{figure}
  \centering
@@ -692,8 +690,7 @@ Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Raspberry Pi. 
 Bei der Initialisierung der Klasse werden die GPIO-Ports des Raspberry Pi entsprechend des Hardwaresteuerungsmodules aus \autoref{s:steuermodul} eingerichtet. Hierbei werden bei den Eingangsports die internen Pull-Up-Widerstände aktiviert. Beim Start des Threads wird dann zusätzlich ein Eventhandler für die Eingangspins eingerichtet, der entsprechende Funktionen zum Starten oder Stoppen der Aufzeichnung sowie zum Herunterfahren aufrufen. Desweiteren wird ein Timer aktiviert, der dafür sorgt, dass die LED-Anzeigen einmal sekündlich aktualisiert werden.
 
 \subsection{VdPoint (Python / C++)}
-Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Möglichkeit, die Messdaten in lokale kartesische Koordinaten mit dem Laserscanner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ-Dateien genutzt.
-\todo{ergänzung?}
+Die \code{VdPoint}-Klasse stellt einen Messpunkt der Velodyne dar. Er nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Möglichkeit, die Messdaten in lokale kartesische Koordinaten mit dem Laserscanner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ- und XYZ-Dateien genutzt.
 
 \subsection{VdDataset (Python / C++)}
 Die Klasse \code{VdDataset} nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laserscanner. Die Daten werden dann als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementatierungen der Klasse \code{VdFile} können diese dann zum Beispiel als Datei gespeichert werden.
@@ -726,7 +723,7 @@ Die Änderungen der Konfigurationsdateien erfolgten mit dem vorinstallierten Edi
 \todo{Script in den Anhang packen?}
 
 \section{Installation von Raspbian}
-Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden. Mit den Befehlen \code{sudo rpi-update}, \code{sudo apt update}, \code{sudo apt upgrade} und \code{sudo apt upgrade} wird die Firmware und das Betriebssystem auf den neusten Stand gebracht. Mit \code{sudo apt-get install python3-pip} wird der Paketmanager von Python 3 installiert. Er ermöglicht das einfache Installieren von zusätzlichen Modulen. Die benötigten Pakete werden mit \code{pip3 install flask pyserial RPi.GPIO} installiert. Falls der Raspberry Pi auch mit der Tastatur gesteuert werden können soll, bietet es sich an, die Lokalisation einzurichten im Konfigurationsmenü unter \code{sudo raspi-config}.
+Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Raspberry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Raspberry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Einloggen zum Beispiel unter Linux mit dem Befehl \code{ssh pi@raspberrypi} und dem Passwort \code{raspberry}, kann mittels \code{passwd} das Passwort verändert werden. Mit den Befehlen \code{sudo rpi-update}, \code{sudo apt update}, \code{sudo apt upgrade} und \code{sudo apt upgrade} wird die Firmware und das Betriebssystem auf den neusten Stand gebracht. Mit \code{sudo apt-get install python3-pip} wird der Paketmanager von Python 3 installiert. Er ermöglicht das einfache Installieren von zusätzlichen Modulen. Die benötigten Pakete werden mit \code{pip3 install flask pyserial RPi.GPIO} installiert. Falls der Raspberry Pi auch mit der Tastatur gesteuert werden können soll, bietet es sich an, die Lokalisation einzurichten im Konfigurationsmenü unter \code{sudo raspi-config}. Außerdem muss mit diesem Tool das Warten auf die Netzwerkverbindung beim Start und die Nutzung der seriellen Schnittstelle als Ausgabe der Shell deaktiviert werden.
 
 % HafenCity
 
@@ -858,11 +855,17 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
  \includegraphics[width=0.45\textwidth]{./img/fassade.jpg}
  \includegraphics[width=0.45\textwidth]{./img/tiefgarage.jpg}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
- \caption{Vergleichsmessungen mit dem Velodyne VLP-16, Zoller+Fröhlich Imager 5010 und dem Trimble S7}
+ \caption{Messungen mit dem Velodyne VLP-16, Zoller+Fröhlich Imager 5010 und dem Trimble S7}
  \label{img:messbilder}
 \end{figure}
 
-\paragraph{Fehler im Skript} Bei der Auswertung der Messung der Tiefgarage (\autoref{img:messbilder}, rechts) fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte sich von Drehung zu Drehung des VLP-16 in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von 2 von 5 Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten auch durch speziell entwickelte Skripts nicht auswertbar zu korrigieren waren.
+\subsection{Versuchsmessung in der Tiefgarage}
+Hauptsächlich zur Überprüfung der Umformung der Daten, abdie Einrichtung er auch zur Überprüfung der Streckenmessung und Winkelmessungen wurde eine Messung in der Tiefgarage (\autoref{img:messbilder}, rechts) durchgeführt. Durch die vielen klaren, rechtwinkligen Kanten, sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von 3 Sekunden und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm verwendet \citep{trimbles7}.
+
+\paragraph{Auswertung}
+Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde wiederum durch Ausgleichung der Fußbodenebene durchgeführt. Auch aus den Laserpunktwolken des Velodyne Vlp-16 wurden die Ecken modelliert. Hierfür würden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
+
+\paragraph{Fehler im Skript} Bei der Auswertung der Messung  fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte sich von Drehung zu Drehung des VLP-16 in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von zwei der fünf Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten nicht auswertbar waren.
 
 \begin{figure}
  \centering
@@ -875,7 +878,7 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
 
 \subsection{Vergleichsmessung an einer Fassadenfront / im geodätischen Labor}
 Die erste Messung zur Überprüfung der Entfernungsmessung fand vor einer weißen Fassade der HafenCity Universität statt. Durch einen Fehler im Auswerteskript, der erst bei großen Strecken auffiel, waren die Messdaten jedoch leider nicht zu verwenden. Es wurde daher eine ähnliche Messung im geodätischen Labor nachgeholt (siehe \autoref{img:geoLabor}).
-Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine blieb hierbei immer an der gleichen Stelle, etwa 5 Meter vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernungen aufgestellt (zwischen 6 und 26 Meter). Die Messszenarios wurden jeweils mit dem Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weiße Oberflächen liegt die Streckenmessgenauigkeit des Imager 5010 unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3 Zentimetern hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
+Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine blieb hierbei immer an der gleichen Stelle, etwa 5 Meter vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernungen aufgestellt (zwischen 6 und 26 Meter). Die Messszenarios wurden jeweils mit dem terrestrischen Laserscanner Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weiße Oberflächen liegt die Streckenmessgenauigkeit des Vergleichsscanners unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3 Zentimetern hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
 
 \begin{figure}
  \centering
@@ -887,14 +890,17 @@ Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurd
 
 \begin{table}
 \centering
-\begin{tabular}{l|r|r|r|}
+\begin{tabular}{|l|r|r|r|r|}
 \cline{2-4}
-& \multicolumn{1}{l|}{Entfernung in m} & \multicolumn{2}{l|}{Abweichung in cm}     \\ \hline
-\multicolumn{1}{|l|}{feststehende Tafeln} & -5,2     & -0,3        & 2,2      \\ \hline
-\multicolumn{1}{|l|}{Velodyne VLP16}      & 0,0      & \multicolumn{2}{c|}{0,5} \\ \hline
-\multicolumn{1}{|l|}{Tafel 1}             & 6,4      & -1,7        & 2,6      \\ \hline
-\multicolumn{1}{|l|}{Tafel 2}             & 11,4     & -0,9        & 1,6      \\ \hline
-\multicolumn{1}{|l|}{Tafel 3}             & 25,3     & -0,4        & 1,3      \\ \hline
+\hline
+\multirow{ 2}{*}{}	& \multirow{ 2}{*}{Entfernung in m} &	\multicolumn{2}{c|}{Standardabweichung}	&  \multirow{ 2}{*}{Durchschnittliche Abweichung zum Imager}\\
+			& 		& Ausgleichung	& zum Imager & \\ \hline
+Boden			&		& 1,03	&	& 	\\ \hline
+Decke			& 	    	& 2,37	&	& 	\\ \hline
+feststehende Tafeln	& -5,2		& 1,33	& 2,02	& 1,06	\\ \hline
+Tafel 1			& 6,4      	& 1,16	& 1,74	& -0,3	\\ \hline
+Tafel 2			& 11,4     	& 0,72	& 0,92	& -0,34	\\ \hline
+Tafel 3			& 25,3     	& 1,01	& 1,53	& -0,11	\\ \hline
 \end{tabular}
 \caption{Abweichungen der Ebenenen bei der Messung im geodätischen Labor}
 \label{tab:labor}
@@ -902,23 +908,14 @@ Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurd
 
 \paragraph{Nachbearbeitung der Messdaten}
 Die Punktwolken des Imager 5010 wurden in der Software Z+F LaserControl des Herstellers über angebrachten Targets zusammengeführt. Anschließend wurden die Punktwolken gefiltert und in die Software Geomagic Wrap importiert. Hier wurde der Standpunkt des Velodyne VLP-16 bestimmt, in dem ein Zylinder gemäß der Größe aus dem Datenblatt \citep{vlpSheet} in die dem VLP-16 zuzuordnenden Punkte der Punktwolke automatisch eingepasst wurde.  Hieraus konnte dann durch Bestimmung der Mittelachse und der Daten des Fokuspunktes der Nullpunkt der Punktwolken des VLP-16 bestimmt werden.
-In den Laserpunktwolken der beiden Scanner wurden in Geomagic Wrap die Wände, Decke, Fußboden und die Stellwände modelliert. Hierfür wurden die entsprechenden Punkte ausgewählt und mittels Best-Fit-Anpassung Ebenen in den Punkten ausgeglichen. Über die Wände und Decken wurden die Punktwolken nochmals genauer zu einander ausgerichtet.
+In den Laserpunktwolken der beiden Scanner wurden in Geomagic Wrap die Wände, die Decke und der Fußboden und die Stellwände modelliert. Hierfür wurden die entsprechenden Punkte ausgewählt und mittels Best-Fit-Anpassung Ebenen in den Punkten ausgeglichen. Über die Wände und Decken wurden die Punktwolken nochmals genauer zu einander ausgerichtet.
 
 \paragraph{Präzision der Streckenmessung}
-Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Wie vom Hersteller des Velodyne angegeben, betrug die Standardabweichung dieser Punkte zur durch Ausgleichung bestimmten Ebene bei maximal 3 Zentimetern.
+Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Die von Velodyne angegebene Standardabweichung liegt bei 3 cm \citep{vlpSheet}. Die maximale bestimmte Standardabweichung in der Ausgleichung der Ebenen lag bei etwa 2,4 cm bei der Ausgleichung der Decke. Die Standarardabweichung der Stellwände (siehe Spalte 3, \autoref{tab:labor}) lag bei maximal 1,3 cm. Die Angaben wurden bei der Widerholungsmessung also eingehalten.
 
 \paragraph{Richtigkeit der Streckenmessung}
-Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden die Abstände zwischen den Flächen aus beiden Messverfahren jeweils einer Stellwand in CAD bestimmt.
-\todo{weiter...}
-
-
-\subsection{Vergleichsmessung in der Tiefgarage}
-Hauptsächlich zur Überprüfung der Genauigkeit der Winkelmessung, aber auch zur Überprüfung der Streckenmessung auf maximaler Entfernung wurde eine weitere Messung in der Tiefgarage durchgeführt. Durch die vielen klaren, rechtwinkligen Kanten, sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von \todo{Genauigkeit} und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm verwendet \citep{trimbles7}.
-
-\paragraph{Auswertung}
-Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde wiederum durch Ausgleichung der Fußbodenebene durchgeführt. Auch aus den Laserpunktwolken des Velodyne Vlp-16 wurden die Ecken modelliert. Hierfür würden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
-
-\todo{weiter...}
+Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden mit Geomagic Wrap die Abweichung der Punkte des Velodyne zu den Ebenen bestimmt. Hier lag die Standardabweichung nur minimal über den Werten der Ausgleichung der Messwerte selbst (siehe Spalte 4, \autoref{tab:labor}). Die durchschnittliche Abweichung (Spalte 5) zeigt, das die etwas höhere Standardabweichung auch an der Einpassung der Daten liegen kann, denn die durchschnittliche Abweichung zeigt eine Korrelation mit der Entfernung. 
+Auch hier zeigt sich, dass der Velodyne in Kombination mit dem Skript seine angegebene Genauigkeit einhält.
 
 \chapter{Ausblick}
 \label{c:ausblick}
@@ -930,7 +927,7 @@ Die Umformung und Speicherung der Daten war nur ein erster Schritt zur Entwicklu
 Da das fertige Messsystem keine Abhängigkeiten vom Multikopter hat, kann es nicht nur fliegend, sondern auch terrestrisch verwendet werden. Einzige Bedingung der Nutzung ist die freie Sicht zum Himmel für den GNSS-Empfang. So wäre auch eine Montage des Systems, gegebenenfalls auch unter Nutzung des Gimbal, an andere, bodengebundene Fahrzeuge denkbar. So ließen sich zum Beispiel zur Digitalisierung von Straßenzügen für 3D-Stadtmodelle zuerst die Straßen und Wege mit Autos, Fahrrädern oder Bollerwagen bodengebunden aufnehmen und mit dem gleichen Messsystem anschließend mit dem Multikopter eine Messung von oben durchführen. So wäre mit einem Messesystem die nahtlose Erfassung von Gebäudehüllen möglich.
 
 \paragraph{Erweiterungs- und Optimierungsmöglichkeiten}
-In der Programmierung des Raspberry Pi sind natürlich noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfigration des Raspberry Pis die Einrichtung als Proxyserver für den Laserscanner, um auch hier Einstellungen mobil durchführen zu können. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
+In der Programmierung des Raspberry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Raspberry Pis als Proxyserver für den Laserscanner, um auch hier Einstellungen mobil durchführen zu können. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
 
 \todo{Erweitern}
 
