@@ -80,7 +80,7 @@ ENTRY
     title
     type
     url
-    urldate
+    lastchecked
     volume
     year
   }
@@ -394,10 +394,10 @@ FUNCTION {format.url}
   if$
 }
 
-FUNCTION {format.urldate}
-{ urldate empty$
+FUNCTION {format.lastchecked}
+{ lastchecked empty$
    { "" }
-   {new.block  "(Aufruf: " urldate * ")" * }
+   {new.block  "(letzter Aufruf: " lastchecked * ")" * }
   if$
 }
 
@@ -831,7 +831,7 @@ FUNCTION {format.journal.pages}
     { swap$ duplicate$ empty$
         { pop$ pop$ format.pages }
         {
-          ":" *
+          ": " *
           swap$
           n.dashify
           pages multi.page.check
@@ -1013,9 +1013,10 @@ FUNCTION {article}
       format.pages output
     }
   if$
+  format.publisher.address output
   format.issn output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1049,7 +1050,7 @@ FUNCTION {book}
   if$
   format.isbn output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1065,7 +1066,7 @@ FUNCTION {booklet}
   address "address" bibinfo.check output
   format.isbn output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1106,7 +1107,7 @@ FUNCTION {inbook}
     'skip$
   if$
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1133,7 +1134,7 @@ FUNCTION {incollection}
     }
   if$
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1164,7 +1165,7 @@ FUNCTION {inproceedings}
     }
   if$
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1181,7 +1182,7 @@ FUNCTION {manual}
   address "address" bibinfo.check output
   format.edition output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1199,7 +1200,7 @@ FUNCTION {mastersthesis}
   school "school" bibinfo.warn output
   address "address" bibinfo.check output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1213,8 +1214,9 @@ FUNCTION {misc}
   format.title output
   new.sentence
   howpublished "howpublished" bibinfo.check output
+  format.publisher.address output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1231,7 +1233,7 @@ FUNCTION {phdthesis}
   school "school" bibinfo.warn output
   address "address" bibinfo.check output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1254,7 +1256,7 @@ FUNCTION {proceedings}
   format.isbn output
   format.issn output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1272,7 +1274,7 @@ FUNCTION {techreport}
   institution "institution" bibinfo.warn output
   address "address" bibinfo.check output
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note output
   fin.entry
 }
@@ -1285,7 +1287,7 @@ FUNCTION {unpublished}
   date.block
   format.title "title" output.check
   format.url output
-  format.urldate output
+  format.lastchecked output
   format.note "note" output.check
   fin.entry
 }

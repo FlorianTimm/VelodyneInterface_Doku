@@ -1,10 +1,10 @@
 %https://verbosus.com/bibtex-style-examples.html?lang=de
 
 
-@InCollection{carlos,
+@Article{carlos,
 AUTHOR = {Acevedo Pardo, Carlos and Farjas Abad\'{\i}a, Mercedes and Sternberg, Harald},
 TITLE = {Design and development of a low-cost modular Aerial Mobile Mapping System},
-JOURNAL = {ISPRS - International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences},
+journal = {ISPRS - International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences},
 VOLUME = {XL-1/W4},
 YEAR = {2015},
 PAGES = {195--199},
@@ -18,60 +18,50 @@ optDOI = {10.5194/isprsarchives-XL-1-W4-195-2015},
 @Manual{vlpSheet,
  title = {VLP-16 Data Sheet},
  author = {{Velodyne Lidar Inc.}},
- adress = {San Jose, CA, Vereinigte Staaten von Amerika},
+ organization = {{Velodyne Lidar Inc.}},
+ address = {San Jose, Kalifornien, Vereinigte Staaten von Amerika},
  year = {2017},
  
  OPTurl = {http://velodynelidar.com/docs/datasheet/63-9229_Rev-F_Puck%20_Spec%20Sheet_Web.pdf},
-OPTurldate = {14. Okt. 2017},
-OPTlastchecked = {14. Okt. 2017}
 }
 
 @Manual{vlpManual,
  title = {VLP-16 User's Manual and Programming Guide},
  author = {{Velodyne Lidar Inc.}},
- adress = {San Jose, CA, Vereinigte Staaten von Amerika},
+ address = {San Jose, Kalifornien, Vereinigte Staaten von Amerika},
  year = {2016},
  
  OPTurl = {http://velodynelidar.com/docs/manuals/63-9243%20Rev%20B%20User%20Manual%20and%20Programming%20Guide,VLP-16.pdf},
  OPTmonth = {Mär.},
- OPTurldate = {14. Okt. 2017},
- OPTlastchecked = {14. Okt. 2017}
 }
 
 @Manual{vlpInterface,
  title = {HDL-32E \& VLP-16 Interface Box},
  author = {{Velodyne Lidar Inc.}},
- adress = {San Jose, CA, Vereinigte Staaten von Amerika},
+ address = {San Jose, Kalifornien, Vereinigte Staaten von Amerika},
  year = {2017},
  url = {http://velodynelidar.com/docs/notes/63-9259%20REV%20C%20MANUAL,INTERFACE%20BOX,HDL-32E,VLP-16,VLP-32_Web-S.pdf},
- urldate = {22. Okt. 2017},
- 
- OPTlastchecked = {22. Okt. 2017}
+ lastchecked = {10. Dez. 2017},
 }
 
 @Manual{vlpCAD,
  title = {VLP-16 Envelope Drawing (2D)},
  author = {{Velodyne Lidar Inc.}},
- adress = {San Jose, CA, Vereinigte Staaten von Amerika},
+ address = {San Jose, Kalifornien, Vereinigte Staaten von Amerika},
  year = {2014},
  url = {http://velodynelidar.com/docs/drawings/86-0101%20REV%20B1%20ENVELOPE,VLP-16.pdf},
  urldate = {25. Okt. 2017},
- 
- OPTmonth = {Dez.},
- OPTlastchecked = {25. Okt. 2017}
 }
 
 
 @Manual{raspSheet,
  title = {{Raspberry Pi 3 Model B Datasheet}},
- author = {{RS Components Limited}},
+ author = {{RS Components Ltd.}},
  address = {{Corby, Vereinigtes Königreich}},
  year = {2015},
  url = {http://docs-europe.electrocomponents.com/webdocs/14ba/0900766b814ba5fd.pdf},
- urldate = {21. Okt. 2017},
- 
- OPTlastchecked = {21. Okt. 2017}
- }
+ lastchecked = {10. Dez. 2017},
+}
  
 @Misc{ekRaspPin,
  author = {Patrick Schnabel},
@@ -80,9 +70,7 @@ OPTlastchecked = {14. Okt. 2017}
  title = {{Raspberry Pi: Belegung GPIO (Banana Pi und WiringPi)}},
  year = {2017},
  url = {https://www.elektronik-kompendium.de/sites/raspberry-pi/1907101.htm},
- urldate = {21. Okt. 2017},
- 
- OPTlastchecked = {21. Okt. 2017}
+ lastchecked = {10. Dez. 2017},
 }
 
 @book{python,
@@ -102,58 +90,53 @@ OPTlastchecked = {14. Okt. 2017}
  author = {Daniel Bachfeld},
  title = {Quadrokopter-Know-how},
  journal = {c't Hacks},
- publisher = {Heise},
+ publisher = {Heise Medien},
  address = {Hannover},
  year = {2013},
- number = {03/2013},
+ volume = {03/2013},
  pages = {42 - 53},
  month = {März}
 }
 
 @Misc{Quadro,
  author = {{Heise Online}},
- title = {Quadrocopter - Drohnen \& Multikopter},
- publisher = {Heise},
+ title = {Themenseite Quadrocopter - Drohnen \& Multikopter},
+ publisher = {Heise Medien},
  address = {Hannover},
  year = {2017},
  url = {https://www.heise.de/thema/Quadrocopter},
- urldate = {27. Okt. 2017},
- lastchecked = {30. Okt. 2017}
+ lastchecked = {10. Dez. 2017},
 }
 
 @Article{heise5Rasp,
  author = {Andrijan Möcker},
- publisher = {Heise},
+ publisher = {Heise Medien},
  address = {Hannover},
  title = {{5 Jahre Raspberry Pi: Wie ein Platinchen die Welt eroberte}},
  year = {2017},
  month = {Feb.},
  day = {28.},
  url = {https://heise.de/-3636046},
- urldate = {21. Okt. 2017},
- lastchecked = {21. Okt. 2017}
+ lastchecked = {10. Dez. 2017},
 }
 
-@Misc{accesspoint,
+@incollection{accesspoint,
  author = {{Raspberry Pi Foundation}},
  address = {Cambridge, Vereinigtes Königreich},
- title = {AccessPoint},
+ title = {{Setting up a Raspberry Pi as an access point in a standalone network}},
+ booktitle = {{Raspberry Pi Documentation}},
  year = {2017},
  url = {https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md},
- urldate = {25. Okt. 2017},
- 
- OPTmonth = {Sep.},
- OPTday = {15.},
- OPTlastchecked = {27. Okt. 2017}
+ lastchecked = {10. Dez. 2017},
 }
 
 @Misc{movim5,
- author = {{Freefly}},
+ author = {{Freefly Systems}},
  title = {{MöVI M5}},
  year = {2017},
  url = {http://freeflysystems.com/movi-m5},
- urldate = {02. Dez. 2017},
- lastchecked = {02. Dez. 2017}
+ lastchecked = {10. Dez. 2017},
+ address = {Woodinville, Washington, Vereinigte Staaten}
 }
 
 
@@ -164,62 +147,62 @@ OPTlastchecked = {14. Okt. 2017}
  booktitle = {Airborne and terrestrial laser scanning},
  pages = {1 - 42},
  publisher = {Whittles Publishing},
- isbn = {978-1-4398-2798-7},
  year = {2010},
  editor = {George Vosselman AND Hans-Gerd Maas},
- address = {Dunbeath, Vereinigtes Königreich}
+ address = {Dunbeath, Vereinigtes Königreich},
+ OPTisbn = {978-1-4398-2798-7}
 }
 
 @BOOK{python3oop,
-	AUTHOR = {Phillips, Dusty},
-	YEAR = {2015},
-	TITLE = {Python 3 Object-oriented Programming},
-	EDITION = {2},
-	ISBN = {978-1-784-39595-7},
-	PUBLISHER = {Packt Publishing Ltd.},
-	ADDRESS = {Birmingham, Vereinigtes Königreich},
+ AUTHOR = {Phillips, Dusty},
+ YEAR = {2015},
+ TITLE = {Python 3 Object-oriented Programming},
+ EDITION = {2},
+ PUBLISHER = {Packt Publishing Ltd.},
+ ADDRESS = {Birmingham, Vereinigtes Königreich},
+ 
+ OPTisbn = {978-1-784-39595-7},
 }
 
 @BOOK{oopPython,
-	AUTHOR = {Lott, Steven F.},
-	YEAR = {2014},
-	TITLE = {Mastering Object-oriented Python},
-	ISBN = {978-1-783-28098-8},
-	PUBLISHER = {Packt Publishing Ltd.},
-	ADDRESS = {Birmingham, Vereinigtes Königreich},
+ AUTHOR = {Lott, Steven F.},
+ YEAR = {2014},
+ TITLE = {Mastering Object-oriented Python},
+ optISBN = {978-1-783-28098-8},
+ PUBLISHER = {Packt Publishing Ltd.},
+ ADDRESS = {Birmingham, Vereinigtes Königreich},
 }
 
-@Misc{imar,
+@manual{imar,
  author = {{iMAR Navigation GmbH}},
- title = {iNAT-M200-FLAT},
+ title = {Datenblatt iNAT-M200-FLAT},
  year = {2015},
- note = {(Datenblatt)}
+ address = {St. Ingbert}
 }
 
 @BOOK{cpp,
-	AUTHOR = {Küveler, Gerd AND Schwoch, Dietrich},
-	YEAR = {2017},
-	TITLE = {C/C++ für Studium und Beruf - Eine Einführung mit vielen Beispielen, Aufgaben und Lösungen},
-	EDITION = {},
-	ISBN = {978-3-658-18581-7},
-	PUBLISHER = {Springer-Verlag},
-	ADDRESS = {Berlin},
+ AUTHOR = {Küveler, Gerd AND Schwoch, Dietrich},
+ YEAR = {2017},
+ TITLE = {C/C++ für Studium und Beruf - Eine Einführung mit vielen Beispielen, Aufgaben und Lösungen},
+ OPTedition = {1},
+ OptISBN = {978-3-658-18581-7},
+ PUBLISHER = {Springer-Verlag},
+ ADDRESS = {Berlin},
 }
 
-@Misc{trimbles7,
+@manual{trimbles7,
  author = {{Trimble Inc.}},
  title = {Datasheet Trimble S7 Total Station},
  year = {2017},
+ address = {Sunnyvale, Kalifornien, Vereinigte Staaten}
 }
 
-@Misc{imager5010,
+@manual{imager5010,
  author = {{Zoller + Fröhlich GmbH}},
  title = {Z+F IMAGER 5010 Datenblatt},
  year = {2017},
  url = {http://www.zf-laser.com/fileadmin/editor/Datenblaetter/Z_F_IMAGER_5010_Datenblatt_D.pdf},
- urldate = {02. Dez. 2017},
- lastchecked = {02. Dez. 2017}
- 
+ lastchecked = {10. Dez. 2017},
 }
 
 @InCollection{ALS,
@@ -228,20 +211,22 @@ OPTlastchecked = {14. Okt. 2017}
  booktitle = {Manual of airborne topographic lidar},
  pages = {7 - 97},
  publisher = {{American Society for Photogrammetry and Remote Sensing}},
+ address = {Bethesda, Maryland, Vereinigte Staaten},
  year = {2012},
  editor = {Renslow, Michael S.},
- isbn = {1-570-83097-5},
+ 
+ OPTisbn = {1-570-83097-5},
 }
 
 
 @BOOK{Witte2006,
-	AUTHOR = {Witte, Bertold AND Schmidt, Hubert},
-	YEAR = {2006},
-	TITLE = {{Vermessungskunde und Grundlagen der Statistik für das Bauwesen}},
-	EDITION = {{6.}},
-	ISBN = {978-3-879-07435-8},
-	PUBLISHER = {{Herbert Wichmann Verlag}},
-	ADDRESS = {{Heidelberg}},
+ AUTHOR = {Witte, Bertold AND Schmidt, Hubert},
+ YEAR = {2006},
+ TITLE = {{Vermessungskunde und Grundlagen der Statistik für das Bauwesen}},
+ EDITION = {{6.}},
+ optISBN = {978-3-879-07435-8},
+ PUBLISHER = {{Herbert Wichmann Verlag}},
+ ADDRESS = {{Heidelberg}},
 }
 
 @InCollection{uav,
@@ -249,17 +234,16 @@ OPTlastchecked = {14. Okt. 2017}
  title = {Warum UAVs und warum jetzt?},
  booktitle = {UAV 2016 – Vermessung mit unbemannten Flugsystemen},
  pages = {9-30},
- editor = {{DVW - Gesellschaft für Geodäsie, Geoinformation und Landmanagement e.V.}},
- publisher = {{Wißner-Verlag}},
+ publisher = {{DVW - Gesellschaft für Geodäsie, Geoinformation und Landmanagement e.V.}},
  address = {Augsburg},
  year = {2016},
  editor = {Ehring, Ehling AND Klingbeil, Lasse},
  volume = {82/2016},
- isbn = {978-3-95786-067-5},
+ OPTisbn = {978-3-95786-067-5},
 }
 
 
-@PhdThesis{Willemsen,
+@PhdThesis{willemsen,
  author = {Willemsen, Thomas},
  title = {Fusionsalgorithmus zur autonomen Positionsschätzung im Gebäude, basierend auf MEMS-Inertialsensoren im Smartphone},
  school = {HafenCity Universität - Geomatik},
@@ -278,8 +262,6 @@ OPTlastchecked = {14. Okt. 2017}
  OPTmonth = {Feb.},
  Optday = {02.},
  OPTurl = {http://edoc.sub.uni-hamburg.de/hcu/volltexte/campus/2016/259/},
- OPTurldate = {30. Okt. 2017},
- OPTlastchecked = {30. Okt. 2017}
 }
 
 @mastersthesis{wilken,
@@ -292,29 +274,29 @@ OPTlastchecked = {14. Okt. 2017}
 }
 
 @BOOK{uml,
-	AUTHOR = {Kleuker, Stephan},
-	YEAR = {2013},
-	TITLE = {Grundkurs Software-Engineering mit UML - Der pragmatische Weg zu erfolgreichen Softwareprojekten},
-	ISBN = {978-3-658-00642-6},
-	PUBLISHER = {Springer-Verlag},
-	ADDRESS = {Berlin},
+ AUTHOR = {Kleuker, Stephan},
+ YEAR = {2013},
+ TITLE = {Grundkurs Software-Engineering mit UML - Der pragmatische Weg zu erfolgreichen Softwareprojekten},
+ optISBN = {978-3-658-00642-6},
+ PUBLISHER = {Springer-Verlag},
+ ADDRESS = {Berlin},
 }
 
 @BOOK{flask,
-	AUTHOR = {Copperwaite, Matt},
-	YEAR = {2015},
-	TITLE = {Learning Flask Framework},
-	ISBN = {978-1-783-98336-0},
-	PUBLISHER = {Packt Publishing Ltd.},
-	ADDRESS = {Birmingham, Vereinigtes Königreich},
+ AUTHOR = {Copperwaite, Matt},
+ YEAR = {2015},
+ TITLE = {Learning Flask Framework},
+ optISBN = {978-1-783-98336-0},
+ PUBLISHER = {Packt Publishing Ltd.},
+ ADDRESS = {Birmingham, Vereinigtes Königreich},
 }
 
 @BOOK{Frisch2003,
-	AUTHOR = {Frisch, Aeleen},
-	YEAR = {2003},
-	TITLE = {Unix System-Administration - },
-	EDITION = {2},
-	ISBN = {978-3-897-21347-0},
-	PUBLISHER = {O'Reilly Germany},
-	ADDRESS = {Köln},
+ AUTHOR = {Frisch, Aeleen},
+ YEAR = {2003},
+ TITLE = {{Unix System-Administration}},
+ EDITION = {2},
+ optISBN = {978-3-897-21347-0},
+ PUBLISHER = {O'Reilly Germany},
+ ADDRESS = {Köln},
 }
