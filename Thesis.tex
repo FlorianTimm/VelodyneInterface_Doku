@@ -182,7 +182,7 @@ Bei den meisten Laser\-scan\-nern ist nur eine Laserentfernungsmesseinheit verba
 Der Laserstrahl wird auf einen schwingenden, flachen Spiegel gerichtet. Durch die Schwingung wird der Laserstrahl in einer Ebene nach links und rechts abgelenkt. Durch die Bewegung des Fluggerätes wird der Laser in Richtung der Schwingachse bewegt. Es entsteht eine Zick-Zack-Linie auf der Oberfläche als Messmuster.
 
 \paragraph{Rotierender Polygon-Spiegel}
-Bei dem drehenden Polygon-Spiegel dreht sich ein Prisma mit einem gleichseitigen Polygon in der Achse der Flugbewegung. Seine  Seiten sind verspiegelt und der Laser auf diese gerichtet. Von oben gesehen wird der Strahl somit immer nur in eine Richtung abgelenkt und\todo{umbau} springt dann wieder zurück auf die andere Seite. Es entsteht ein Streifenmuster.
+Bei diesem Typ dreht sich ein Prisma mit einem gleichseitigen Polygon als Grundläche in der Achse der Flugbewegung. Seine  Seiten sind verspiegelt und der Laser auf diese gerichtet. Von oben gesehen wird der Strahl somit immer nur in eine Richtung abgelenkt und springt beim Überstreifen der Kante  wieder zurück auf die andere Seite. Es entsteht ein Streifenmuster.
 
 \paragraph{Palmer-Scanner}
 Bei dem Palmer-Scanner rotiert ein Flachspiegel um eine Achse, die fast senkrecht zur Spiegeloberfläche steht. Da der Spiegel nicht genau senkrecht auf dieser Achse montiert ist, beschreibt der auf den Spiegel gerichtete Laser einen Kreis. Durch einen im 45 Grad Winkel zur Achse stehenden Spiegel und einem sich in der Drehachse befindlichen Scanner können die Strahlen auch rechtwinklig abgelenkt werden und somit eine Ebene scannen. Dies wird häufig bei terrestrischen Laser\-scan\-nern im Zusammenhang mit einer zweiten Drehachse angewandt.
@@ -384,7 +384,7 @@ Der Laser\-scan\-ner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle des 
 
 \section{Verbindung des GNSS-Modules an den Laser\-scan\-ner}
 \label{s:GNSSAnschluss}
-Für die Versorgung des Laser\-scan\-ners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO-6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}\todo{neues Bild}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dessen Signal nutzen zu können.
+Für die Versorgung des Laser\-scan\-ners mit einem GNSS-Signal zur Synchronisierung wurde ein zusätzliches GNSS-Modul vom Typ uBlox NEO-6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dessen Signal nutzen zu können.
 
 \begin{figure}[!ht]
  \centering
@@ -403,7 +403,6 @@ Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per ser
  \caption{Messung des Signals am uBlox NEO-6M (grün: Ausgangssignal; rot: Signal nach Nutzung eines Pegelwandler; 1000 Punkte entsprechen 5 Volt)}
  \label{abb:oszi}
 \end{figure}
-\todo{neues Bild}
 
 Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um ein Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laser\-scan\-ner versorgt das GNSS-Modul mit 5 Volt Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Es wurde ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
 
@@ -610,7 +609,7 @@ Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skri
 Der Ablauf ist oft abhängig vom Fortschritt anderer Schritte und Voraussetzungen. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Rasp\-berry Pi keinen eigenen Zeitgeber. Um die Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig - diese liefert das GNSS-Modul, welches am Laser\-scan\-ner angeschlossen ist, sofern ein GNSS-Fix besteht. Es muss also, vor dem Erzeugen der Dateien, auf ein gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der \autoref{img:ablaufplan} zu entnehmen. 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=1\textwidth]{./img/Ablaufplan.png}
+ \includegraphics[width=1\textwidth]{./img/ablaufplan.pdf}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
  \caption{Vereinfachter Ablaufplan des Skriptes}
  \label{img:ablaufplan}
@@ -625,6 +624,7 @@ Zur Unterstützung der Programmierung wurden vorallem die Lehrbücher \textit{Ei
 
 \section{Klassenentwurf}
 Da das Skript objektorientiert programmiert werden soll, wurden zunächst mit Hilfe der anfangs bekannten Anforderungen und dem Ablaufplanes aus \autoref{img:ablaufplan} die benötigten, grundlegenden Klassen entworfen. Durch die Erweiterungen und die übliche Refaktorisierung -- der ständigen Optimierung des Quellcodes in seiner Lesbarkeit und Geschwindigkeit \citep[S. 255]{uml} -- erweiterte sich dieses Modell zu dem endgültigen Klassen der \autoref{img:uml}. Auf die genauen Funktionen der einzelnen Klassen wird im \autoref{s:klassen} eingegangen.
+
 
 \begin{figure}[!ht]
  \centering
@@ -645,6 +645,9 @@ Zunächst war es geplant, die Daten direkt in das in \autoref{s:datenmodell} vor
 
 \paragraph{Hardware-Steuerung}
 Ein Tastendruck auf dem Steuerungsmodul (siehe \autoref{s:steuermodul}) sollte den Rasp\-berry Pi zum Beispiel herunterfahren. Auch dieses Skript wurde getestet. Ein Problem hierbei war es, dass das Skript Administratorrechte (\code{root}) benötigte, um den Rechner herunterfahren zu können. Hierfür wurde jedoch eine Lösung gefunden, indem dem Nutzer \code{pi} die entsprechenden Rechte zum Herunterfahren gegeben wurden (siehe \autoref{s:root}). Eher zufällig zeigte sich aber noch ein anderes Problem: Sofern das Skript automatisch mit dem Start des Rasp\-berry Pi gestartet wurde und das Steuermodul nicht angeschlossen war, fuhr der Rasp\-berry Pi automatisch nach wenigen Sekunden Betrieb herunter. Da mit dem fehlenden Modul auch die Pull-Up-Widerstände fehlten, war der GPIO-Pin auf einem nicht definierten Zustand. Es kam dazu, dass er zufällig auf einem HIGH-Niveau war, welches als Drücken des Tasters interpretiert wurde. Nach Überschreiten der konfigurierten Haltezeit des Ausschalters von zwei Sekunden, wurde der Herunterfahrprozess gestartet. Um dieses Problem zu unterdrücken, wurde dem Skript zuerst eine vorherige Abfrage hinzugefügt, die bei dem Start überprüft, ob die beiden Taster sich auf einem High-Niveau befinden, dass durch die beiden angeschlossenen Pull-Up-Widerstände erreicht wird. Falls dieses nicht der Fall ist, beendet sich die Hardwaresteuerung selbst\-stän\-dig. Im weiteren Verlauf der Entwicklung wurden die internen Pull-Up-Widerstände des Rasp\-berry Pi verwendet. Somit wurde diese Abfrage überflüssig.
+
+\paragraph{Steuerung}
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners.
 
 \section{Multikern-Verarbeitung der Daten}
 \label{s:multikern}
@@ -674,8 +677,8 @@ Die Pythonklasse \code{VdTransformer} wurde so erweitert, dass sie das zusätzli
 Die Klasse \code{VdAutoStart} (siehe Anhang~\ref{a:vdAutoStart.py}) steuert den automatischen Start des Skriptes bei dem Hochfahren des Rasp\-berry Pi. Sie ist verantwortlich für den korrekten Start der einzelnen Skriptteile in der richtigen Reihenfolge. Außerdem sind in der zugehörigen Datei auch alle Programmteile abgelegt die nicht zu einer Klasse gehören wie zum Beispiel der Startaufruf und das Webinterface.
 
 \paragraph{Flask-Webinterface app}
-Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet.
-Die Weboberfläche ist entsprechend ihrem geplanten Einsatzzweck optimiert für die mobile Anzeige auf Smartphones, lässt sich aber auch vom Laptop bedienen. Die Oberfläche selbst nutzt nur HTML und CSS - ist also nicht zusätzlichen Skriptsprachen auf dem verwendeten Gerät abhängig. 
+Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die Weboberfläche wird durch die main-Methode in einem zusätzlichen Thread gestartet. Die Weboberfläche ist entsprechend ihrem geplanten Einsatzzweck optimiert für die mobile Anzeige auf Smartphones, lässt sich aber auch vom Laptop bedienen. Die Oberfläche selbst nutzt nur HTML und CSS - ist also nicht zusätzlichen Skriptsprachen auf dem verwendeten Gerät abhängig. 
+Sie ermöglicht den Start und den Stop der Datenaufnahme, das Übertragen der aufgezeichneten Daten und das Herunterfahren des Raspberry Pi.
 
 \subsection{VdInterface (Python)}
 Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner. Sie stellt die UDP-Socket-Verbindungen zu dem GNSS- und zu dem Laserscan-Datenstream des Scanners her.
@@ -707,18 +710,12 @@ Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohda
 \subsection{VdTransformer}
 \code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Leistung des jeweiligen Computersystems auszunutzen, wird durch \code{VdAutoStart} die Anzahl der Instanzen des Prozesses je nach Anzahl der Kerne des Prozessors gesteuert -- auf dem Rasp\-berry Pi als Vierkern-System beispielsweise drei Prozesse. Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine binäre Datei ausgewählt, eingelesen und an ein Objekt der Klasse \code{VdDataset} übermittelt. Nachdem dieses die Daten zu einer Liste von \code{VdPoint}-Objekten umgewandelt hat, werden diese Daten an ein Objekt der Klasse \code{VdFile} übergeben. Dieses schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
-\section{Steuerung des Skriptes}
-Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners.
-\todo{erweitern oder löschen}
-
 \chapter{Konfiguration des Rasp\-berry Pi}
 \label{c:konfig}
 
 Als Grundlage wurde auf die MicroSD-Karte, die dem Rasp\-berry Pi als Festplatte dient, das Betriebssystem Raspbian aufgespielt. Hierbei handelt es sich um ein Derivat von Debian GNU/Linux, das speziell auf die Hardware des Rasp\-berry Pi angepasst ist. Die aktuelle Version (Stand 10.12.2017) nennt sich Raspian Stretch. Für die Verwendung als Verarbeitungsgerät ohne angeschlossenen Display reicht die Variante ohne grafische Benutzeroberfläche aus (Raspbian Stretch Lite). Die Konfiguration des Rasp\-berry Pi erfolgt vollständig über Konfigurationsdateien. In dieser Arbeit erfolgte die Konfiguration per Fernzugriff über SSH, einem Standard für das Fernsteuern der Konsole über das Netzwerk. Eine Konfiguration hätte aber auch mittels einem angeschlossenen Display und einer USB-Tastatur erfolgen können.
 
 Die Änderungen der Konfigurationsdateien erfolgten mit dem vorinstallierten Editor \code{nano} unter Nutzung von Administratorrechten. Ein solcher Aufruf erfolgt zum Beispiel mit dem Befehl \code{sudo nano /pfad/zur/konfiguration.txt}. Nachfolgend müssen die betroffenen Programme oder sogar das komplette Betriebssystem neu gestartet werden. Der Neustart eines Services erfolgt zum Beispiel mit dem Aufruf \code{sudo service programmname restart}, der Neustart des Betriebssystems mit \code{sudo shutdown -r now}. Es empfiehlt sich, von allen zu ändernden Konfigurationsdateien Sicherungskopien anzulegen. Dies erfolgt zum Beispiel mit \code{sudo cp original.txt original.old.txt} (Kopieren) oder \code{sudo mv original.txt original.old.txt} (Verschieben, zum Beispiel zum Anlegen einer komplett neuen Datei). Auf diese Linux-Grundlagen wird im Folgenden nicht mehr eingegangen.
-
-\todo{Script in den Anhang packen?}
 
 \section{Installation von Raspbian}
 Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaketes von der Website der Rasp\-berry Pi Foundation auf einer leeren MicroSD-Karte mit dem Tool \code{Etcher}. Auf der nach dem Entpacken erzeugten boot-Partition wird eine leere Datei mit dem Namen \code{ssh} angelegt. Hierdurch wird sofort nach dem Start der SSH-Zugang über das Netzwerk zum Rasp\-berry Pi ermöglicht, die IP-Adresse wird per DHCP, zum Beispiel von einem im Netzwerk vorhandenen Router, bezogen. Nach dem Login, unter Linux mit dem Befehl \code{ssh pi@raspberrypi}, kann mittels \code{passwd} das Passwort verändert werden. Mit den Befehlen \code{sudo rpi-update}, \code{sudo apt update}, \code{sudo apt upgrade} und \code{sudo apt upgrade} wird die Firmware und das Betriebssystem auf den neusten Stand gebracht. Mit \code{sudo apt-get install python3-pip} wird der Paketmanager von Python 3 installiert. Er ermöglicht das einfache Installieren von zusätzlichen Modulen. Die benötigten Pakete werden mit \code{pip3 install flask pyserial RPi.GPIO} installiert. Falls der Rasp\-berry Pi auch mit der Tastatur gesteuert werden können soll, bietet es sich an, die Lokalisation einzurichten im Konfigurationsmenü unter \code{sudo raspi-config}. Außerdem muss mit diesem Tool das Warten auf die Netzwerkverbindung bei dem Systemstart und die Nutzung der seriellen Schnittstelle als Ausgabe der Eingabekonsole deaktiviert werden.
@@ -729,9 +726,9 @@ Die Installation von Raspbian erfolgt durch das Entpacken des Installationspaket
 \label{s:root}
 Linux erlaubt das Ändern der Zeit und das Herunterfahren über die Kommandozeile nur dem Administrator (\code{root}). Da es jedoch nicht empfohlen ist, Skripte als \code{root} auszuführen, muss hier eine andere Lösung gefunden werden, um den Skripten die Möglichkeit zu geben, den Rasp\-berry Pi auf Tastendruck oder per Web-Steuerung herunterzufahren. Hierfür wurden dem normalen Nutzer (\code{pi}) die Rechte gegeben, einzelne Befehle  als Administrator ohne Passwortabfrage auszuführen. Diese Rechte können dem Nutzer durch das Eintragung in der Konfigurationsdatei \code{/etc/sudoers} gegeben werden. Da eine fehlerhafte Änderung der Datei den kompletten Administratorzugang zum System versperren kann, wird die Datei mit dem Befehl \code{sudo visudo -f /etc/sudoers} überarbeitet, der nach dem Editieren die Datei auf Fehler prüft. Die zusätzlichen Einträge in der Konfiguration sind dem \autoref{Lsudoers} zu entnehmen.\citep[S. 33]{Frisch2003}
 
-\begin{lstlisting}[caption={Änderung der \code{/etc/sudoers}}, label={Lsudoers}]
+\begin{lstlisting}[caption={Ergänzung der \code{/etc/sudoers}}, label={Lsudoers}]
 # Cmnd alias specification
-Cmnd_Alias VLP = /sbin/shutdown, /sbin/timedatectl
+Cmnd_Alias VLP = /sbin/shutdown, /sbin/date
 
 # User privilege specification
 pi	ALL=(ALL) NOPASSWD: VLP
@@ -739,8 +736,7 @@ pi	ALL=(ALL) NOPASSWD: VLP
 \todo{datei prüfen}
 
 \section{IP-Adressen-Konfiguration}
-\todo{sortieren}
-Per Ethernet soll der Rasp\-berry auf die IP-Adresse \code{192.168.1.111} konfiguriert werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Rasp\-berry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
+Die Ethernet-Schnittstelle des Rasp\-berry Pi soll die IP-Adresse \code{192.168.1.111} nutzen werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Rasp\-berry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
 
 \begin{table}[!ht]
 \centering
@@ -788,6 +784,7 @@ Die Konfiguration des DHCP-Servers ist vergleichsweise einfach und benötigt nur
 \begin{lstlisting}[caption={Konfiguration der \code{/etc/dnsmasq.conf}}, label={dnsmasq}]
 interface=wlan0
   dhcp-range=10.10.10.100,10.10.10.254,255.255.255.0,24h
+no-dhcp-interface=eth0
 \end{lstlisting}
 
 \section{Konfiguration als WLAN-Access-Point}
@@ -814,11 +811,11 @@ auth_algs=1
 wpa=2
 wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP
-wpa_passphrase=raspberry
+wpa_passphrase=hafencity
 \end{lstlisting}
 
-\todo{sudo nano /etc/dchcpcd.conf}
-\todo{sudo nano /etc/default/hostapd}
+Damit die Konfigurationsdatei auch genutzt wird, wird der Pfad in die Konfiguration von \code{hostapd} eingetragen (\code{/etc/default/hostapd}).
+
 
 \section{Autostart des Skriptes}
 Damit das Skript vor der Messung mittels SSH-Zugang gestartet wird, wurde das Skript in den Autostart des Rasp\-berry Pi eingetragen. Hierdurch erfolgt der Start des Skriptes unmittelbar nach dem Hochfahren des Betriebssystems. Durch die Nutzung des Befehls \code{su} wird der Befehl als Nutzer \code{pi}, also ohne Administratorrechte gestartet. Durch Weglassen von \code{su pi -c} kann dieser auch als Administrator gestartet werden. Dies hat jedoch sicherheitstechnische Nachteile, dafür können dann Prioritäten der Befehle gesetzt werden.
@@ -830,10 +827,35 @@ exit 0
 
 Das Startskript wird mit \code{chmod +x startVLP.sh} ausführbar gemacht und der Pfad zum Skript in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
 
-\section{Einrichtung als Proxy}
-Zusätzlich ist es sinnvoll, den Rasp\-berry Pi auch als Proxy einzurichten. So lässt sich dann über die WLAN-Schnittstelle des Rasp\-berry Pi auf die Konfigurationswebseite  des Laser\-scan\-ners zugreifen, um Einstellungen des Scanners mobil zu ändern.
+\section{Einrichtung als Router}
+Zusätzlich ist es sinnvoll, den Rasp\-berry Pi auch als Router einzurichten. So lässt sich über die WLAN-Schnittstelle des Rasp\-berry Pi auf die Konfigurationswebseite des Laser\-scan\-ners zugreifen, um Einstellungen des Scanners mobil zu ändern. Hierfür wird die Datei \code{/etc/network/interfaces} um die Zeilen aus \autoref{router} ergänzt. \citep{ekRaspRouter}
 
-\todo{zu Ende schreiben}
+%dhcp-option=option:dns-server,192.168.1.1
+
+\begin{lstlisting}[caption={Erweiterung der \code{/etc/network/interfaces} zur Nutzung als Router}, label={router}]
+# Firewall-Regel löschen
+up /sbin/iptables -F
+up /sbin/iptables -X
+up /sbin/iptables -t nat -F
+
+# Loopback zulassen
+up /sbin/iptables -A INPUT -i lo -j ACCEPT
+up /sbin/iptables -A OUTPUT -o lo -j ACCEPT
+
+# NAT und Masquerading aktivieren
+up /sbin/iptables -A FORWARD -o eth0 -i wlan0 -m conntrack --ctstate NEW -j ACCEPT
+up /sbin/iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+up /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# IP-Forwarding aktivieren
+up sysctl -w net.ipv4.ip_forward=1
+up sysctl -w net.ipv6.conf.all.forwarding=1
+
+# hostapd und dnsmasq neu starten
+up service hostapd restart
+up service dnsmasq restart
+\end{lstlisting}
+
 
 \chapter{Systemüberprüfungen}
 \label{c:systemueberpruefung}
@@ -842,7 +864,16 @@ Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und 
 \section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
 Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Rasp\-berry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
 Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript (siehe Anhang~\ref{a:ppsVergleich.ino}) misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob sich bei einem Neustart der Messung die Zeitdifferenz ändert beziehungsweise dann überhaupt eine Zeitdifferenz entsteht.
-\todo{Ergebnisse?}
+
+Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Ozilliskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein Low-Signal und nicht wie erwartet ein High-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). 
+
+\begin{figure}[!ht]
+ \centering
+ \includegraphics[width=0.7\textwidth]{./img/osziPPS.png}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Messung der PPS-Signale, in grün die Daten der IMU, in rot die des uBlox-Chips (1000 Punkte entsprechen 5 Volt)}
+ \label{img:osPPS}
+\end{figure}
 
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
 Um die Strecken und Winkelmessung des Laser\-scan\-ners und die Umwandlung der Daten zu überprüfen, wurden drei verschiedene Messungen an der Hafencity Universität mit dem Velodyne VLP-16 durchgeführt. 
@@ -867,7 +898,7 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
 Hauptsächlich zur Überprüfung der Umformung der Daten, aber auch zur Überprüfung der Streckenmessung und Winkelmessungen wurde eine Messung in der Tiefgarage (\autoref{img:messbilder}, rechts) durchgeführt. Durch die vielen rechtwinkligen Pfeiler sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von 3 Sekunden und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm aufgemessen \citep{trimbles7}.
 
 \paragraph{Auswertung}
-Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde wiederum durch Ausgleichung der Fußbodenebene durchgeführt. Auch aus den Laserpunktwolken des Velodyne VLP-16 wurden die Ecken modelliert. Hierfür wurden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
+Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde durch eine Ausgleichung der Fußbodenebene bestimmt. Auch aus den Laserpunktwolken des Velodyne VLP-16 wurden die Kanten der Pfeiler modelliert. Hierfür wurden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
 
 \paragraph{Fehler im Skript} Bei der Auswertung der Messung fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von zwei der fünf Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten nicht auswertbar waren.
 
@@ -878,6 +909,17 @@ Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
  \caption{Punktwolke des Velodyne VLP-16 vor (links) und nach (rechts) der Korrektur der Horizontalrichtung am Beispiel eines Pfeilers in der Tiefgarage}
  \label{img:fehlerWolke}
+\end{figure}
+
+\paragraph{Weitere Ergebnisse}
+An den Pfeilern, von denen zwei Seiten gut modellierbar waren (siehe \autoref{img:pfeiler}), wurden die Standardabweichungen verglichen, um zu prüfen, ob weitere Fehler in der Berechung der Horizontalrichtungen vorhanden waren. Die Standardabweichungen zu den Ebenen der Tachmetermessung waren auf beiden Seiten ähnlich, so dass von keinen weiteren Fehlern ausgegangen wurde.
+
+\begin{figure}[!ht]
+ \centering
+ \includegraphics[width=0.60\textwidth]{./img/pfeiler.jpg}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Abweichung der Messungen des VLP-16 zu zwei Ebenen der Tachymetermessung in Geomagic Wrap}
+ \label{img:pfeiler}
 \end{figure}
 
 \subsection{Vergleichsmessung an einer Fassadenfront / im geodätischen Labor}
@@ -927,11 +969,14 @@ Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-1
 \paragraph{Weiterverarbeitung der Daten}
 Die Umformung und Speicherung der Daten war nur ein erster Schritt zur Entwicklung des Air\-borne Laser\-scan\-ning Systems. Es ist so zwar möglich, die Daten vom Laser\-scan\-ner, der inertialen Messeinheit und des GNSS zu speichern, jedoch müssen diese Daten weiter prozessiert werden. Bisher wurde der Scanner nur stationär zur Messung eingesetzt. Um  ihn auch kinematisch nutzen zu können, müssen aus den Daten der IMU die Bewegungen rekonstruiert werden. Hiermit können dann die Messungen in ein übergeordnetes Bezugssystem überführt werden. Diese Verarbeitung wird in einer Folgearbeit behandelt werden.
 
+\paragraph{Weitere Genauigkeitsüberprüfungen}
+Die bisherigen Genauigkeitsüberprüfungen wurden hauptsächlich zur Überprüfung auf Fehler in der Berechung und Auswertung durchgeführt. Vorallem die Messgenauigkeit des Laserscanners ist noch deutlich detailierter zu untersuchen. Aber auch die Zeitdifferenzen zwischen den Systemen sollten vor einem produktiven Einsatz noch weiter analyisiert werden.
+
 \paragraph{Anwendbarkeit des Messsystems}
 Da das fertige Messsystem keine Abhängigkeiten vom Multikopter hat, kann es nicht nur fliegend, sondern auch terrestrisch verwendet werden. Einzige Bedingung der Nutzung ist die freie Sicht zum Himmel für den GNSS-Empfang. Auch eine Montage des Systems, gegebenenfalls auch unter Nutzung der Gimbal, an andere, bodengebundene Fahrzeuge wäre denkbar. Hiermit ließen sich beispielsweise Straßenzügen für 3D-Stadtmodelle digitalisieren. Zuerst würden die Straßen und Wege mit Autos, Fahrrädern oder einem Bollerwagen bodengebunden aufgenommen werden und anschließend mit dem gleichen Messsystem an einem Multikopter montiert von oben. So wäre mit einem Messesystem die nahtlose Erfassung der gesamten Gebäudehülle möglich.
 
 \paragraph{Erweiterungs- und Optimierungsmöglichkeiten}
-In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Rasp\-berry Pi als Proxyserver für den Laser\-scan\-ner, um auch hier Einstellungen mobil durchführen zu können. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
+In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Rasp\-berry Pi als Router für den Zugriff auf den Laser\-scan\-ner. Hiermit ist es dann möglich, Einstellungen mobil durchzuführen. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
 
 \todo{Erweitern}
 
@@ -951,7 +996,7 @@ In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierun
 \renewcommand\UrlFont\itshape
 \bibliography{Thesis}
 %\printbibliography
-
+no-dhcp-interface=eth0
 \listoffigures
 \listoftables
 %\lstlistoflistings
