@@ -117,9 +117,9 @@ Die vorliegende Arbeit ist Teil eines Projektes, das die Entwicklung eines Syste
 Auch Teil der Arbeit ist die Schaffung einer Steuerung der Aufnahme des Laser\-scan\-ners. Hierfür wurde ein Bedienmodul entwickelt, welches am Rasp\-berry Pi direkt angeschlossen werden kann, sowie eine Weboberfläche entwickelt, die die Steuerung während des Fluges ermöglichen soll.\\
 \vspace{2cm}\\
 \noindent\textbf{\large Abstract}\\
-The present work is part of a project which \todo{merkwürdig} aimed the development of a system that allows the modular interchangeable operation of various sensor systems on a multicopter. In particular, the data interface for the compact laser scanner Velodyne Lidar Puck VLP-16 to a single-board computer Rasp\-berry Pi will be developed and implemented. The scanner itself provides the data in a proprietary, binary format, which should be converted and stored into an easy-to-read ASCII file. In addition, the data should be provided with a unique timestamp in order to be able to link it later with other sensor systems. This data transformation should be carried out approximately on real time.
+This work is part of a project with the objective to develop a system that allows the modular interchangeable operation of various sensor systems on a multicopter. In particular, the data interface for the compact laser scanner Velodyne Lidar Puck VLP-16 to a single-board computer Rasp\-berry Pi will be developed and implemented. The scanner itself provides the data in a proprietary, binary format, which should be converted and stored into an easy-to-read ASCII file. In addition, the data should be provided with a unique timestamp in order to be able to link it later with other sensor systems. This data transformation should be carried out approximately on real time.
 
-Also part of the work is the construction for the control of the recording of the laser scanner. For this purpose, an operating module was developed, which can be connected directly to the Rasp\-berry Pi, as well as a web control surface integrated in the software, which should enable the control during the flight.
+Also a control of the recording of the laser scanner should be constructed in this work. For this purpose, an operating module was developed, which can be connected directly to the Rasp\-berry Pi, as well as a web interface was integrated in the software, which should enable the control during flight.
 
 
 % Mehrere gleichzeitig zitieren
@@ -733,7 +733,6 @@ Cmnd_Alias VLP = /sbin/shutdown, /sbin/date
 # User privilege specification
 pi	ALL=(ALL) NOPASSWD: VLP
 \end{lstlisting}
-\todo{datei prüfen}
 
 \section{IP-Adressen-Konfiguration}
 Die Ethernet-Schnittstelle des Rasp\-berry Pi soll die IP-Adresse \code{192.168.1.111} nutzen werden, da diese IP-Adresse im Laser\-scan\-ner als Host eingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Rasp\-berry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
@@ -865,11 +864,11 @@ Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und 
 Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Rasp\-berry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
 Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript (siehe Anhang~\ref{a:ppsVergleich.ino}) misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob sich bei einem Neustart der Messung die Zeitdifferenz ändert beziehungsweise dann überhaupt eine Zeitdifferenz entsteht.
 
-Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Ozilliskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein Low-Signal und nicht wie erwartet ein High-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). 
+Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Ozilliskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein Low-Signal und nicht wie erwartet ein High-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). Außerdem konnte hiermit dann auch festgestellt werden, dass das Signal der IMU nicht den Anforderungen des Velodyne VLP-16 entspricht: Hier wird ein Signal mit einer Impulsdauer von mindestens 10~ms gefordert. Dies wird scheinbar nicht eingehalten, da der Arduino, der mit einer Taktrate von 2,2ms misst, nicht alle Signale der IMU erkennen konnte (siehe erster Puls auf \autoref{img:osPPS}). Außerdem müsste auch hier das Signal elektrisch gedreht werden.
 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.7\textwidth]{./img/osziPPS.png}
+ \includegraphics[width=1\textwidth]{./img/osziPPS.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
  \caption{Messung der PPS-Signale, in grün die Daten der IMU, in rot die des uBlox-Chips (1000 Punkte entsprechen 5 Volt)}
  \label{img:osPPS}
@@ -882,7 +881,6 @@ Um die Strecken und Winkelmessung des Laser\-scan\-ners und die Umwandlung der D
 % Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der HafenCity Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Wiederholungsgenauigkeit in Strecke und Richtung des Laser\-scan\-ners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenenm Beton.
 
 \paragraph{Datenformate}
-\todo{Überschrift überdenken}
 Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skript aufgezeichnet und umgewandelt. Da hierbei auffiel, dass einige Programme besser mit XYZ-Dateien umgehen können, wurde das Klassenmodell um dieses Dateiformat erweitert.
 
 \begin{figure}[!ht]
@@ -978,13 +976,13 @@ Da das fertige Messsystem keine Abhängigkeiten vom Multikopter hat, kann es nic
 \paragraph{Erweiterungs- und Optimierungsmöglichkeiten}
 In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Rasp\-berry Pi als Router für den Zugriff auf den Laser\-scan\-ner. Hiermit ist es dann möglich, Einstellungen mobil durchzuführen. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
 
-\todo{Erweitern}
-
 \paragraph{Gehäuse}
+Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher exisiert nur ein mit einem 3D-Drucker erstellter Entwurf (siehe \autoref{abb:system}. Jedoch ist dieser noch zu instabil, um im Flug die Technik zu halten. Eine Möglichkeit wäre es, ein solches, gelochtes Gehäuse aus Aluminium zu bauen. Außerdem sollten vor einem Einsatz auch noch die Kabel entsprechend der benötigten Länge konfektioniert werden, um die Gefahr des Hängenbleibens zu vermindern.
+
 \begin{figure}[!ht]
  \centering
  \includegraphics[width=1\textwidth]{img/system.jpg}
- \caption{Protyp des Messsystemes, Betrieb noch ohne Akkumulatoren}
+ \caption{Prototyp des Messsystems (noch ohne Akkumulatoren)}
  \label{abb:system}
 \end{figure}
 
@@ -1067,13 +1065,17 @@ no-dhcp-interface=eth0
 \label{a:config.ini}
 \lstinputlisting[]{../Quelltext/Python/config.ini}
 
-\section{convTxt2Obj.py}
-\label{a:convToObj.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/convTxt2Obj.py}
+\section{convBin.py}
+\label{a:convBin.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/convBin.py}
 
-\section{convBin2Obj.py}
-\label{a:convBin2Obj.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/convBin2Obj.py}
+\section{convBinC++.py}
+\label{a:convBinCpp.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/convBinC++.py}
+
+\section{convTxt.py}
+\label{a:convTxt.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/convTxt.py}
 
 \chapter{C++-Quelltexte}
 \label{a:cpp}
