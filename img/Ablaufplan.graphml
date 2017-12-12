@@ -449,10 +449,10 @@ Transformation?<y:LabelModel>
         <node id="n7::n1">
           <data key="d6">
             <y:GenericNode configuration="com.yworks.flowchart.process">
-              <y:Geometry height="57.5" width="166.626953125" x="530.5378402171671" y="477.40482343499207"/>
+              <y:Geometry height="57.5" width="166.626953125" x="530.5378402171671" y="463.2404056982345"/>
               <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="50.5625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="146.626953125" x="10.0" y="3.46875">Konfigutration
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="50.5625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="138.78515625" x="13.9208984375" y="3.46875">Konfiguration
 einlesen<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
@@ -515,7 +515,7 @@ starten<y:LabelModel>
         <node id="n7::n5">
           <data key="d6">
             <y:GenericNode configuration="com.yworks.flowchart.predefinedProcess">
-              <y:Geometry height="57.73508828250402" width="164.673828125" x="579.3049300609171" y="555.022367576244"/>
+              <y:Geometry height="57.73508828250402" width="164.673828125" x="572.2653774926988" y="555.022367576244"/>
               <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="50.5625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="144.673828125" x="10.0" y="3.586294141251983">Web Interface
@@ -532,10 +532,10 @@ starten<y:LabelModel>
         <node id="n7::n6">
           <data key="d6">
             <y:GenericNode configuration="com.yworks.flowchart.decision">
-              <y:Geometry height="79.0" width="204.22217061997117" x="548.5446743676987" y="632.875"/>
+              <y:Geometry height="79.0" width="212.115234375" x="548.5446743676988" y="632.875"/>
               <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
               <y:BorderStyle color="#000000" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="27.28125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="141.138671875" x="31.541749372485583" y="25.859375">Raspberry Pi?<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="20" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="27.28125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="141.138671875" x="35.48828125" y="25.859375">Raspberry Pi?<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -834,7 +834,7 @@ Schnittstelle<y:LabelModel>
     <edge id="e0" source="n7::n5" target="n6::n0">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="56.76482962212947" sy="-28.867544141251983" tx="-111.3540743390397" ty="31.628137685036563">
+          <y:Path sx="63.804382190347724" sy="-28.842593167091195" tx="-111.3540743390397" ty="31.628137685036563">
             <y:Point x="718.4066737455465" y="266.59332625445353"/>
             <y:Point x="741.0495514200999" y="243.95044857990018"/>
           </y:Path>
@@ -867,7 +867,7 @@ Schnittstelle<y:LabelModel>
     <edge id="n7::e2" source="n7::n1" target="n7::n5">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="24.383544921875" sy="28.75" tx="-23.406982421875" ty="-28.867544141251983"/>
+          <y:Path sx="17.343992353656745" sy="28.743148034700198" tx="-23.406982421875" ty="-28.867544141251983"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
           <y:BendStyle smoothed="false"/>
@@ -877,7 +877,7 @@ Schnittstelle<y:LabelModel>
     <edge id="n7::e3" source="n7::n6" target="n7::n2">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="39.5" tx="-3.9465318775145306" ty="-46.859375"/>
+          <y:Path sx="0.0" sy="39.5" tx="0.0" ty="-5.835949211344996"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
           <y:BendStyle smoothed="false"/>
@@ -887,7 +887,7 @@ Schnittstelle<y:LabelModel>
     <edge id="n7::e4" source="n7::n5" target="n7::n6">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="28.867544141251983" tx="10.986084445732786" ty="-35.28125"/>
+          <y:Path sx="0.0" sy="28.867544141251983" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
           <y:BendStyle smoothed="false"/>
@@ -897,7 +897,7 @@ Schnittstelle<y:LabelModel>
     <edge id="n7::e5" source="n7::n6" target="n7::n7">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-102.11108530998558" sy="0.0" tx="73.86523437499994" ty="0.0"/>
+          <y:Path sx="-106.0576171875" sy="0.0" tx="73.86523437499994" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
           <y:BendStyle smoothed="false"/>
@@ -917,9 +917,9 @@ Schnittstelle<y:LabelModel>
     <edge id="e3" source="n11::n0" target="n7::n8">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="73.865234375" sy="13.249578027465674" tx="-97.19485650914703" ty="-29.379133226324257">
-            <y:Point x="733.4529804151061" y="266.45298041510614"/>
-            <y:Point x="756.289635139779" y="289.28963513977897"/>
+          <y:Path sx="73.865234375" sy="13.249578027465674" tx="-13.484491648925996" ty="-29.356856560438473">
+            <y:Point x="810.0" y="266.45298041510614"/>
+            <y:Point x="840.0" y="289.28963513977897"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
@@ -930,9 +930,9 @@ Schnittstelle<y:LabelModel>
     <edge id="e4" source="n6::n0" target="n7::n8">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="-104.5415743390397" sy="39.128981630105216" tx="110.19789457995444" ty="-7.285383226324257">
-            <y:Point x="986.548707475031" y="251.45129252496884"/>
-            <y:Point x="963.6823862288804" y="274.31761377111945"/>
+          <y:Path sx="-104.5415743390397" sy="39.128981630105216" tx="39.21217282706948" ty="-29.386963621110226">
+            <y:Point x="930.0" y="251.45129252496884"/>
+            <y:Point x="893.8976990327701" y="288.27455121034154"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
