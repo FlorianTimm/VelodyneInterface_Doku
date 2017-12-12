@@ -646,9 +646,6 @@ Zunächst war es geplant, die Daten direkt in das in \autoref{s:datenmodell} vor
 \paragraph{Hardware-Steuerung}
 Ein Tastendruck auf dem Steuerungsmodul (siehe \autoref{s:steuermodul}) sollte den Rasp\-berry Pi zum Beispiel herunterfahren. Auch dieses Skript wurde getestet. Ein Problem hierbei war es, dass das Skript Administratorrechte (\code{root}) benötigte, um den Rechner herunterfahren zu können. Hierfür wurde jedoch eine Lösung gefunden, indem dem Nutzer \code{pi} die entsprechenden Rechte zum Herunterfahren gegeben wurden (siehe \autoref{s:root}). Eher zufällig zeigte sich aber noch ein anderes Problem: Sofern das Skript automatisch mit dem Start des Rasp\-berry Pi gestartet wurde und das Steuermodul nicht angeschlossen war, fuhr der Rasp\-berry Pi automatisch nach wenigen Sekunden Betrieb herunter. Da mit dem fehlenden Modul auch die Pull-Up-Widerstände fehlten, war der GPIO-Pin auf einem nicht definierten Zustand. Es kam dazu, dass er zufällig auf einem HIGH-Niveau war, welches als Drücken des Tasters interpretiert wurde. Nach Überschreiten der konfigurierten Haltezeit des Ausschalters von zwei Sekunden, wurde der Herunterfahrprozess gestartet. Um dieses Problem zu unterdrücken, wurde dem Skript zuerst eine vorherige Abfrage hinzugefügt, die bei dem Start überprüft, ob die beiden Taster sich auf einem High-Niveau befinden, dass durch die beiden angeschlossenen Pull-Up-Widerstände erreicht wird. Falls dieses nicht der Fall ist, beendet sich die Hardwaresteuerung selbst\-stän\-dig. Im weiteren Verlauf der Entwicklung wurden die internen Pull-Up-Widerstände des Rasp\-berry Pi verwendet. Somit wurde diese Abfrage überflüssig.
 
-\paragraph{Steuerung}
-Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners.
-
 \section{Multikern-Verarbeitung der Daten}
 \label{s:multikern}
 Da bei der Evaluation der einzelnen Methoden herausgefunden wurde, dass die Verarbeitungsgeschwindigkeit des Rasp\-berry Pi für eine sofortige Transformation der Daten nach deren Eingang zu langsam ist, wurde ein Konzept erarbeitet, den hierdurch auftretenden Messdatenverlust zu unterdrücken.
@@ -710,7 +707,7 @@ Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohda
 \subsection{VdTransformer}
 \code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Leistung des jeweiligen Computersystems auszunutzen, wird durch \code{VdAutoStart} die Anzahl der Instanzen des Prozesses je nach Anzahl der Kerne des Prozessors gesteuert -- auf dem Rasp\-berry Pi als Vierkern-System beispielsweise drei Prozesse. Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine binäre Datei ausgewählt, eingelesen und an ein Objekt der Klasse \code{VdDataset} übermittelt. Nachdem dieses die Daten zu einer Liste von \code{VdPoint}-Objekten umgewandelt hat, werden diese Daten an ein Objekt der Klasse \code{VdFile} übergeben. Dieses schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die bin-Datei gelöscht (oder je nach Einstellungen verschoben).
 
-\chapter{Konfiguration des Rasp\-berry Pi}
+\chapter{Konfiguration und Steuerung des Rasp\-berry Pi}
 \label{c:konfig}
 
 Als Grundlage wurde auf die MicroSD-Karte, die dem Rasp\-berry Pi als Festplatte dient, das Betriebssystem Raspbian aufgespielt. Hierbei handelt es sich um ein Derivat von Debian GNU/Linux, das speziell auf die Hardware des Rasp\-berry Pi angepasst ist. Die aktuelle Version (Stand 10.12.2017) nennt sich Raspian Stretch. Für die Verwendung als Verarbeitungsgerät ohne angeschlossenen Display reicht die Variante ohne grafische Benutzeroberfläche aus (Raspbian Stretch Lite). Die Konfiguration des Rasp\-berry Pi erfolgt vollständig über Konfigurationsdateien. In dieser Arbeit erfolgte die Konfiguration per Fernzugriff über SSH, einem Standard für das Fernsteuern der Konsole über das Netzwerk. Eine Konfiguration hätte aber auch mittels einem angeschlossenen Display und einer USB-Tastatur erfolgen können.
@@ -824,7 +821,13 @@ su pi -c "python3 VdAutoStart.py"
 exit 0
 \end{lstlisting}
 
-Das Startskript wird mit \code{chmod +x startVLP.sh} ausführbar gemacht und der Pfad zum Skript in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen.
+Das Startskript wird mit \code{chmod +x startVLP.sh} ausführbar gemacht und der Pfad zum Skript in der Autostart-Konfigurationsdatei \code{/etc/rc.local} eingetragen. 
+
+%/etc/systemd/system/networking.service.d/reduce-timeout.conf
+
+%[Service]
+%TimeoutStartSec=1
+
 
 \section{Einrichtung als Router}
 Zusätzlich ist es sinnvoll, den Rasp\-berry Pi auch als Router einzurichten. So lässt sich über die WLAN-Schnittstelle des Rasp\-berry Pi auf die Konfigurationswebseite des Laser\-scan\-ners zugreifen, um Einstellungen des Scanners mobil zu ändern. Hierfür wird die Datei \code{/etc/network/interfaces} um die Zeilen aus \autoref{router} ergänzt. \citep{ekRaspRouter}
@@ -855,6 +858,15 @@ up service hostapd restart
 up service dnsmasq restart
 \end{lstlisting}
 
+\section{Bedienung des Gesamtssystems}
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners, sowie die Tasten am Steuermodul.
+Nach dem Start des Raspberry Pi, erkennbar an dem Ausgehen des Glimmens der obersten LED (Datenempfang), kann sich mit einem WLAN-fähigen Endgerät sich in das WLAN-Netzwerk \code{VLPinterface} mit dem Passphrase \code{hafencity} eingeloggt werden. Unter der Adresse \code{http://10.10.10.10:8080/} ist dann das Webinterface des Raspberry Pi zu erreichen. Das Interface ermöglicht es, genauso wie die Tasten auf dem Hardware-Steuerungsmodul, die Aufzeichnung zu starten und zu stoppen, sowie den Raspberry Pi herunterzufahren.
+Nach dem ein stabiles GNSS-Signal vom uBlox-Chip empfangen wird, erkennbar an der blinkenden LED am Chip und der Meldung auf der Website, dass ein GNSS-Zeitsignal empfangen wurde, kann der Laserscanner gestartet werden. Der Laserscanner synchronisiert nun seine Zeit mit dem GNSS-Modul. Die Messung kann gestartet werden (linke Taste). Ob Daten empfangen und gesichert werden, ist an den LEDs und im Webinterface sichbar. Die untere LED zeigt an, dass die Aufzeichnung läuft, die obere, dass Daten empfangen werden. Die mittlere zeigt an, ob Daten noch nicht transformiert wurden und in der Warteschleife sind.
+Nach dem Stoppen der Messung (mittlere Taste), erlischt die untere und die obere LED. Kurz nachdem die gegebenenfalls leuchtende, mittlere Warteschlangen-LED erlischt, kann der Raspberry Pi heruntergefahren werden (rechte Taste).
+Falls die Daten direkt übertragen werden sollen, kann über das Webinterface auf umgewandelte Dateien zugegriffen werden. Alternativ kann nach dem Herunterfahren die MicroSD-Karte herausgenommen werden und die Daten aus dem Verzeichnis \code{\_daten} kopiert werden.
+
+Die Änderung von Einstellungen der \code{config.ini} können über eine SSH-Verbindung oder durch Herausnehmen der MicroSD-Karte geändert werden.
+
 
 \chapter{Systemüberprüfungen}
 \label{c:systemueberpruefung}
@@ -865,6 +877,8 @@ Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Mes
 Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript (siehe Anhang~\ref{a:ppsVergleich.ino}) misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob sich bei einem Neustart der Messung die Zeitdifferenz ändert beziehungsweise dann überhaupt eine Zeitdifferenz entsteht.
 
 Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Ozilliskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein Low-Signal und nicht wie erwartet ein High-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). Außerdem konnte hiermit dann auch festgestellt werden, dass das Signal der IMU nicht den Anforderungen des Velodyne VLP-16 entspricht: Hier wird ein Signal mit einer Impulsdauer von mindestens 10~ms gefordert. Dies wird scheinbar nicht eingehalten, da der Arduino, der mit einer Taktrate von 2,2ms misst, nicht alle Signale der IMU erkennen konnte (siehe erster Puls auf \autoref{img:osPPS}). Außerdem müsste auch hier das Signal elektrisch gedreht werden.
+
+\todo{uBlox Datenblatt}
 
 \begin{figure}[!ht]
  \centering
@@ -877,10 +891,7 @@ Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde 
 \section{Messgenauigkeit des Laser\-scan\-ners im Vergleich}
 Um die Strecken und Winkelmessung des Laser\-scan\-ners und die Umwandlung der Daten zu überprüfen, wurden drei verschiedene Messungen an der Hafencity Universität mit dem Velodyne VLP-16 durchgeführt. 
 
-
-% Hierbei sollte vor allem die Streckenmessung überprüft werden. Das zweite Messszenario fand in der Tiefgarage der HafenCity Universität statt. Sie ist etwa 100 Meter lang und von vielen eckigen Säulen durchzogen. Hier bot es sich an, die Wiederholungsgenauigkeit in Strecke und Richtung des Laser\-scan\-ners zu überprüfen und zusätzlich boten die Säulen verschiedene Entfernungen und Auftreffwinkel. Die meisten Oberflächen bestanden hier aus weiß gestrichenenm Beton.
-
-\paragraph{Datenformate}
+\paragraph{Zusätzliches Datenformat}
 Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skript aufgezeichnet und umgewandelt. Da hierbei auffiel, dass einige Programme besser mit XYZ-Dateien umgehen können, wurde das Klassenmodell um dieses Dateiformat erweitert.
 
 \begin{figure}[!ht]
@@ -893,10 +904,11 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
 \end{figure}
 
 \subsection{Versuchsmessung in der Tiefgarage}
-Hauptsächlich zur Überprüfung der Umformung der Daten, aber auch zur Überprüfung der Streckenmessung und Winkelmessungen wurde eine Messung in der Tiefgarage (\autoref{img:messbilder}, rechts) durchgeführt. Durch die vielen rechtwinkligen Pfeiler sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von 3 Sekunden und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm aufgemessen \citep{trimbles7}.
+Hauptsächlich zur Überprüfung der Umformung der Daten, aber auch zur Überprüfung der Streckenmessung und Winkelmessungen wurde eine Messung in der Tiefgarage (\autoref{img:messbilder}, rechts) durchgeführt. Durch die vielen rechtwinkligen Pfeiler sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Die meisten Oberflächen bestanden hier aus weiß gestrichenenm Beton. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von 3 Sekunden und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm aufgemessen \citep{trimbles7}.
 
 \paragraph{Auswertung}
-Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Die Neigung wurde durch eine Ausgleichung der Fußbodenebene bestimmt. Auch aus den Laserpunktwolken des Velodyne VLP-16 wurden die Kanten der Pfeiler modelliert. Hierfür wurden jeweils Ebenen in die Punkte der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst.
+Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Hierfür wurden jeweils Ebenen in die Punkte beider Messungen der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst. Die Neigung wurde durch eine Ausgleichung der Fußbodenebene mit der XY-Ebene der Tachymeterebene bestimmt. 
+\todo{nochmal lesen}
 
 \paragraph{Fehler im Skript} Bei der Auswertung der Messung fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von zwei der fünf Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten nicht auswertbar waren.
 
@@ -910,7 +922,7 @@ Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage
 \end{figure}
 
 \paragraph{Weitere Ergebnisse}
-An den Pfeilern, von denen zwei Seiten gut modellierbar waren (siehe \autoref{img:pfeiler}), wurden die Standardabweichungen verglichen, um zu prüfen, ob weitere Fehler in der Berechung der Horizontalrichtungen vorhanden waren. Die Standardabweichungen zu den Ebenen der Tachmetermessung waren auf beiden Seiten ähnlich, so dass von keinen weiteren Fehlern ausgegangen wurde.
+An den Pfeilern, von denen zwei Seiten gut modellierbar waren (siehe zum Beispiel \autoref{img:pfeiler}), wurden die Standardabweichungen verglichen, um zu prüfen, ob weitere Fehler in der Berechung der Horizontalrichtungen vorhanden waren. Die Standardabweichungen und die durchschnittlichen Abweichungen zu den Ebenen der Tachmetermessung waren auf beiden Seiten ähnlich, so dass von keinen weiteren Fehlern ausgegangen wurde.
 
 \begin{figure}[!ht]
  \centering
@@ -956,10 +968,10 @@ Die Punktwolken des Imager 5010 wurden in der Software Z+F LaserControl über an
 In den Laserpunktwolken der beiden Scanner wurden in Geomagic Wrap die Wände, die Decke und der Fußboden und die Stellwände modelliert. Hierfür wurden die entsprechenden Punkte ausgewählt und mittels Best-Fit-Anpassung Ebenen durch diese ausgeglichen. Über die Wände, die Decke und den Boden wurden die Punktwolken nochmals genauer zu einander ausgerichtet.
 
 \paragraph{Präzision der Streckenmessung}
-Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Die von Velodyne angegebene Standardabweichung liegt bei 3 cm \citep{vlpSheet}. Die maximale bestimmte Standardabweichung in der Ausgleichung der Ebenen lag bei etwa 2,4 cm (Ausgleichung der Decke). Die Standardabweichung der Stellwände (siehe Spalte 3, \autoref{tab:labor}) lag bei maximal 1,3 cm. Die Angaben wurden bei der Wiederholungsmessung also eingehalten.
+Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der Ausgleichung in den Punkten anzuzeigen. Die maximale bestimmte Standardabweichung in der Ausgleichung der Ebenen lag bei etwa 2,4 cm (Ausgleichung der Decke). Die Standardabweichung der Stellwände (siehe Spalte 3, \autoref{tab:labor}) lag bei maximal 1,3 cm. Die Angaben wurden bei der Wiederholungsmessung also eingehalten.
 
 \paragraph{Richtigkeit der Streckenmessung}
-Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden mit Geomagic Wrap die Abweichung der Punkte des Velodyne zu den Ebenen bestimmt. Hier lag die Standardabweichung nur minimal über den Werten der Ausgleichung der Messwerte selbst (siehe Spalte 4, \autoref{tab:labor}). Die durchschnittliche Abweichung (Spalte 5) zeigt, das die etwas höhere Standardabweichung auch an der Einpassung der Daten liegen kann, denn die durchschnittliche Abweichung zeigt eine Korrelation mit der Entfernung. Auch hier zeigt sich, dass der Velodyne seine angegebene Genauigkeit einhält.
+Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden mit Geomagic Wrap die Abweichung der Punkte des Velodyne zu den Ebenen aus der Messung des Imager 5010 bestimmt. Hier lag die Standardabweichung nur minimal über den Werten der Ausgleichung der Messwerte selbst (siehe Spalte 4, \autoref{tab:labor}). Die durchschnittliche Abweichung (Spalte 5) zeigt, das die etwas höhere Standardabweichung auch an der Einpassung der Daten liegen kann, denn die durchschnittliche Abweichung zeigt eine Korrelation mit der Entfernung. Auch hier zeigt sich, dass der Velodyne seine angegebene Genauigkeit einhält.
 
 \chapter{Ausblick}
 \label{c:ausblick}
@@ -974,7 +986,7 @@ Die bisherigen Genauigkeitsüberprüfungen wurden hauptsächlich zur Überprüfu
 Da das fertige Messsystem keine Abhängigkeiten vom Multikopter hat, kann es nicht nur fliegend, sondern auch terrestrisch verwendet werden. Einzige Bedingung der Nutzung ist die freie Sicht zum Himmel für den GNSS-Empfang. Auch eine Montage des Systems, gegebenenfalls auch unter Nutzung der Gimbal, an andere, bodengebundene Fahrzeuge wäre denkbar. Hiermit ließen sich beispielsweise Straßenzügen für 3D-Stadtmodelle digitalisieren. Zuerst würden die Straßen und Wege mit Autos, Fahrrädern oder einem Bollerwagen bodengebunden aufgenommen werden und anschließend mit dem gleichen Messsystem an einem Multikopter montiert von oben. So wäre mit einem Messesystem die nahtlose Erfassung der gesamten Gebäudehülle möglich.
 
 \paragraph{Erweiterungs- und Optimierungsmöglichkeiten}
-In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Rasp\-berry Pi als Router für den Zugriff auf den Laser\-scan\-ner. Hiermit ist es dann möglich, Einstellungen mobil durchzuführen. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
+In der Programmierung des Rasp\-berry Pi sind noch Verbesserungen und Optimierungen möglich. Eine sinnvolle Erweiterung ist zum Beispiel in der Konfiguration des Rasp\-berry Pi als Router für den Zugriff auf den Laser\-scan\-ner. Hiermit ist es dann möglich, Einstellungen mobil durchzuführen. Auch ist das Übertragen der Messdaten noch verbesserungswürdig. Bisher muss hierfür entweder die SD-Karte aus dem Raspberry Pi entfernt werden, eine Verbindung zum Dateisystem über SSH genutzt werden oder aber die Daten über WLAN aus der Weboberfläche heruntergeladen werden. Programmiertechnisch könnten die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden.
 
 \paragraph{Gehäuse}
 Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher exisiert nur ein mit einem 3D-Drucker erstellter Entwurf (siehe \autoref{abb:system}. Jedoch ist dieser noch zu instabil, um im Flug die Technik zu halten. Eine Möglichkeit wäre es, ein solches, gelochtes Gehäuse aus Aluminium zu bauen. Außerdem sollten vor einem Einsatz auch noch die Kabel entsprechend der benötigten Länge konfektioniert werden, um die Gefahr des Hängenbleibens zu vermindern.
