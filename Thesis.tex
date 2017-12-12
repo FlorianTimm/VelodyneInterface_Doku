@@ -6,6 +6,7 @@
 \renewcommand{\arraystretch}{1.5}
 \usepackage{graphicx}
 \usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage[toc,page]{appendix}
 %\usepackage{pdfpages}  
 \usepackage[hyphens]{url}
@@ -1080,17 +1081,26 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \label{a:vdPoint.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdPoint.py}
 
+\lstdefinelanguage{Ini}
+{
+    %basicstyle=\ttfamily\small,
+    columns=fullflexible,
+    morecomment=[s][\color{Orchid}\bfseries]{[}{]},
+    morecomment=[l]{\#},
+    morecomment=[l]{;},
+    commentstyle=\color{gray}\ttfamily,
+    morekeywords={},
+    otherkeywords={=,:},
+    keywordstyle={\color{green}\bfseries}
+}
+
 \section{config.ini}
 \label{a:config.ini}
-\lstinputlisting[]{../Quelltext/Python/config.ini}
+\lstinputlisting[language=Ini]{../Quelltext/Python/config.ini}
 
 \section{convBin.py}
 \label{a:convBin.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/convBin.py}
-
-\section{convBinC++.py}
-\label{a:convBinCpp.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/convBinC++.py}
 
 \section{convTxt.py}
 \label{a:convTxt.py}
