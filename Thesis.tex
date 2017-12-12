@@ -121,12 +121,10 @@ Auch Teil der Arbeit ist die Schaffung einer Steuerung der Laser\-scan\-ner\-auf
 This work is part of a project with the objective to develop a system that allows the modular interchangeable operation of various sensor systems on a multicopter. In particular, the data interface for the compact laser scanner Velodyne Lidar Puck VLP-16 to a single-board computer Rasp\-berry Pi will be developed and implemented. The scanner itself provides the data in a proprietary, binary format, which should be converted and stored into an easy-to-read ASCII file. In addition, the data should be provided with a unique timestamp in order to be able to link it later with other sensor systems. This data transformation should be carried out approximately on real time.
 
 Also a control of the recording of the laser scanner should be constructed in this work. For this purpose, an operating module was developed, which can be connected directly to the Rasp\-berry Pi, as well as a web interface, which was integrated in the software. It should enable the control during flight.
-
-
 % Mehrere gleichzeitig zitieren
 \providecommand{\citeTwo}[4]{\citep[{\citealp[#1]{#2};}][#3]{#4}} 
 \providecommand{\citeThree}[6]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4};}][#5]{#6}} 
-\providecommand{\citeFour}[8]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4}; \citealp[#5]{#6};}][#7]{#8}}.
+\providecommand{\citeFour}[8]{\citep[{\citealp[#1]{#2}; \citealp[#3]{#4}; \citealp[#5]{#6};}][#7]{#8}}
 
 \newpage
 
@@ -208,7 +206,7 @@ Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse ve
  \label{img:echo}
 \end{figure}
 
-Laser\-scan\-ner mit Impulsmessverfahren ermöglichen typischerweise bis zu vier einzelne Echos aufzuzeichnen. Alternativ gibt es Scanner, die das komplette Signal mit einer Abtastrate von bis zu 0,5~Nanosekunden digitalisieren. Hier ist es dann möglich, spezielle Auswertungen aufgrund der Wellenform im Postprocessing durchzuführen. \citep[S. 29]{beraldin}
+Laser\-scan\-ner mit Impulsmessverfahren ermöglichen typischerweise eine Aufzeichnung von bis zu vier einzelnen Echos. Alternativ gibt es Scanner, die das komplette Signal mit einer Abtastrate von bis zu 0,5~Nanosekunden digitalisieren. Hier ist es dann möglich, spezielle Auswertungen aufgrund der Wellenform im Postprocessing durchzuführen. \citep[S. 29]{beraldin}
 
 \section{Positionsbestimmung mittels globalen Navigationssatellitensystemen}
 \label{s:GNSS}
@@ -301,7 +299,7 @@ Im Postprocessing kann aus den Daten der inertialen Messeinheit zusammen mit den
 
 \subsection{Rasp\-berry Pi 3 Typ B}
 \label{ss:Raspberry}
-Die Verarbeitung der Daten soll mit einem Rasp\-berry Pi~3 (siehe \autoref{img:rpi3}) erfolgen. Es handelt sich hierbei um einen von der Rasp\-berry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an dem Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Rasp\-berry Pi kam im Februar 2012 auf den Markt. Dieser verfügte über 256~MB Arbeitsspeicher und einen 700~MHz Ein-Kern-Prozessor. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor mit 1,2~GHz und 1~GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über elf Millionen Mal verkauft (Stand November 2016). \citep{heise5Rasp}
+Die Verarbeitung der Daten soll mit einem Rasp\-berry Pi~3 (siehe \autoref{img:rpi3}) erfolgen. Es handelt sich hierbei um einen von der Rasp\-berry Pi Foundation entwickelten Einplatinencomputer. Die Stiftung gründete sich 2006, um einen erschwinglichen Computer zu entwickeln, an dem Schüler direkt Hardware- und Elektronikprojekte entwickeln können. Die erste Version des Rasp\-berry Pi kam im Februar 2012 auf den Markt. Dieser verfügte über einen 700~MHz Ein-Kern-Prozessor und 256~MB Arbeitsspeicher. Das verwendete dritte Modell verfügt über einen Vier-Kern-Prozessor mit 1,2~GHz und 1~GB Arbeitsspeicher. Bisher wurden alle Versionen zusammen über elf Millionen Mal verkauft (Stand November 2016). \citep{heise5Rasp}
 
 Alle Modelle der Rasp\-berry Pi Serie basieren auf Ein-Chip-Systemen des Halbleiterherstellers Broadcom. In diesem Chip sind die wichtigsten Bauteile des Systems integriert wie zum Beispiel ein ARM-Prozessor, eine Grafikeinheit sowie verschiedene andere Komponenten. Die so gering gehaltene Anzahl an einzelnen Bauelementen bei dem Rasp\-berry Pi ermöglichen den geringen Preis -- ein Ziel der Rasp\-berry Pi Foundation. 
 
@@ -337,7 +335,7 @@ Alternativ zum Raspberry Pi kämen zur Datenverarbeitung an Bord des Multikopter
 
 
 \subsection{Multikopter Copterproject CineStar 6HL}
-Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Weit verbreitetet sind vor allem Quadrokopter mit vier oder Hexakopter mit sechs Rotoren. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind diese aber auch vermehrt in kleineren Ausführungen in Privatbesitz zum Beispiel für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu fünf Kilogramm aufweisen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall besitzen diese eine gerade Anzahl von Rotoren. Das auf das Traggestell wirkende Drehmoment hebt sich so auf. Hier liegt auch der Vorteil der Bauform gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares jeweils zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass dieser senkrecht starten kann und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Modellflugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
+Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Weit verbreitetet sind vor allem Quadrokopter mit vier oder Hexakopter mit sechs Rotoren. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind diese aber auch vermehrt in kleineren Ausführungen in Privatbesitz zum Beispiel für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu fünf Kilogramm aufweisen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall besitzen diese eine gerade Anzahl von Rotoren. Das auf das Traggestell wirkende Drehmoment hebt sich so auf. Hier liegt auch der Vorteil der Bauform gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares jeweils zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass dieser senkrecht starten und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Modellflugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
 
 \begin{figure}[!ht]
  \centering
@@ -352,12 +350,12 @@ Für dieses Projekt soll der Multikopter den Laser\-scan\-ner, die IMU, das Gimb
 \subsection{Gimbal Freefly MöVI M5}
 Um die Messgeräte während des Fluges des Multikopters zu stabilisieren und zu verhindern, dass sich jede Neigung durch die Flug\-steuerung an den Laser\-scan\-ner überträgt, wird ein sogenanntes Gimbal verwendet. Durch einen Regelkreis aus Motoren und einer inertialen Messeinheit (siehe auch \autoref{s:IMU}) werden Neigungen und Drehungen in Echtzeit ausgeglichen. Außerdem ermöglichen es die meisten Gimbals, die Messtechnik unabhängig vom Multikopter auszurichten -- dies ist zum Beispiel bei der Luftbildaufnahme wichtig.
 
-Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. Sie wurde zur Stabilisierung von Aufnahmen mit digitalen Spiegelreflexkameras entwickelt und hat eine Tragkraft von 2,3~Kilogramm. Außer dem erwähnten Beschleunigungsmesser verwendet diese auch GNSS um das Driften der integrierten IMU zu vermindern. \citep{movim5}
+Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. Dieses wurde zur Stabilisierung von Aufnahmen mit digitalen Spiegelreflexkameras entwickelt und hat eine Tragkraft von 2,3~Kilogramm. Außer dem erwähnten Beschleunigungsmesser verwendet diese auch GNSS um das Driften der integrierten IMU zu vermindern. \citep{movim5}
 
 \section{Stromversorgung}
 Die Stromversorgung der Mess- und Ver\-arbei\-tungs\-tech\-nik soll mittels Lithium-Ionen-Zellen erfolgen. Der Rasp\-berry Pi benötigt hierbei eine stabilisierte Spannungs- und Stromversorgung. Eine fehlerhafte Stromversorgung kann zu Systeminstabilitäten führen und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
 
-\autoref{tab:strom} listet die verschiedenen Module und die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile -- auch bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
+\autoref{tab:strom} listet die verschiedenen Module und die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile -- bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
 
 \begin{table}[!ht]
 \centering
@@ -396,17 +394,17 @@ Für die Versorgung des Laser\-scan\-ners mit einem GNSS-Signal zur Synchronisie
  \label{img:ublox}
 \end{figure}
 
-Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Da dieser Stecker jedoch unpraktisch war, wurde zusätzlich eine 3,5~mm Klinkenbuchse an der Schnittstellenbox des Laser\-scan\-ners montiert. Bei dem vom Laser\-scan\-ner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15~Volt übertragen wird. Der direkte Anschluss des uBlox-GNSS-Modules brachte dennoch zunächst keinen Erfolg. Oszilloskop-ähnliche Messungen mit einem Arduino Mega 2560 (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeten GNSS-Modules nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} geforderten entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laser\-scan\-ner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3~Volt \citep[S. 3]{vlpInterface} entspricht (HIGH), bei dem GNSS-Modul entsprach die höhere Spannung Logisch 0.
+Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Da dieser Stecker jedoch unpraktisch war, wurde zusätzlich eine 3,5~mm Klinkenbuchse an der Schnittstellenbox des Laser\-scan\-ners montiert. Bei dem vom Laser\-scan\-ner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15~V übertragen wird. Der direkte Anschluss des uBlox-GNSS-Modules brachte dennoch zunächst keinen Erfolg. Oszilloskop-ähnliche Messungen mit einem Arduino Mega 2560 (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeten GNSS-Modules nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} geforderten entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laser\-scan\-ner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3~V \citep[S. 3]{vlpInterface} entspricht (HIGH), bei dem GNSS-Modul entsprach die höhere Spannung Logisch 0.
 
 \begin{figure}[!ht]
  \centering
  \includegraphics[width=0.7\textwidth]{img/oszi.png}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{Messung des Signals am uBlox NEO-6M (grün: Ausgangssignal; rot: Signal nach Nutzung eines Pegelwandlers; 1000 Punkte entsprechen 5 Volt)}
+ \caption{Messung des Signals am uBlox NEO-6M (grün: Ausgangssignal; rot: Signal nach Nutzung eines Pegelwandlers; 1000 Punkte entsprechen 5~V)}
  \label{abb:oszi}
 \end{figure}
 
-Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um einen Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laser\-scan\-ner versorgt das GNSS-Modul mit 5 Volt Spannung, der GNSS-Chip benötigt jedoch eine Spannung von 3,3 Volt. Es wurde ein Spannungsregler verwendet, der die Spannung auf 3,3 Volt stabilisiert. Zur weiteren Stabilisierung wurden Kondensatoren eingesetzt. In Kombination mit dem Logikkonverter dient dieser auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
+Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um einen Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laser\-scan\-ner sieht eine Versorgung des GNSS-Modul mit 5~V vor, während das eingesetzte Modul nur eine Spannung von 3,3~V benötigt. Es wurde daher ein Spannungsregler verbaut, der die Spannung auf 3,3~V begrenzt. Zur weiteren Stabilisierung wurden Kondensatoren genutzt. Der Logikkonverter dient hier durch die Versorgung mit 5~V auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
 
 \begin{figure}[!ht]
  \centering
@@ -985,8 +983,14 @@ Beim Modellieren der Wände bestand die Möglichkeit, sich die Genauigkeit der A
 \paragraph{Richtigkeit der Streckenmessung}
 Um zu überprüfen, ob nicht nur die Wiederholungsgenauigkeit des Velodyne VLP-16 im angegeben Bereich liegt, wurden die Positionen der modellierten Stellwände aus den Datensätzen des Velodyne mit denen des Imager 5010 verglichen. Hierzu wurden mit Geomagic Wrap die Abweichung der Punkte des Velodyne zu den Ebenen aus der Messung des Imager 5010 bestimmt. Hier lag die Standardabweichung nur minimal über den Werten der Ausgleichung der Messwerte selbst (siehe Spalte 4, \autoref{tab:labor}). Die durchschnittliche Abweichung (Spalte 5) zeigt, dass die etwas höhere Standardabweichung auch in der Einpassung der Daten liegen kann, denn die durchschnittliche Abweichung zeigt eine Korrelation mit der Entfernung. Auch hier zeigt sich, dass der Velodyne seine angegebene Genauigkeit einhält.
 
-\chapter{Ausblick}
+\chapter{Fazit \& Ausblick}
 \label{c:ausblick}
+
+Die Arbeit hat gezeigt, dass es mit dem Rasp\-berry Pi möglich ist, die Daten vom Laserscanner Velodyne VLP-16 zu erfassen und weiterzuverarbeiten. Der Rasp\-berry Pi stößt hierbei jedoch teilweise an seine Leistungsgrenzen. Bis zu diesem Ergebnis war jedoch viel Einarbeitung in verschiedenste Themenbereiche notwendig. Die Aufgabe zeigte, wie schnell Themen der Geodäsie auch in die Bereiche der Elektrotechnik und der Informatik hineinreichen. Vor der gemeinsamen Nutzung der Systeme, mussten erst ihre Schnittstellen, vor allem die des Laserscanners, analysiert werden. Auch wenn die Dokumentation des Velodyne sehr ausführlich ist, waren nicht alle Schnittstellen klar verständlich beschrieben. Anschließend wurde auf dieser Basis eine entsprechende Schaltungen zum Anpassen der Signale entwickelt. Bei der Realisierung der Steuerung und Aufzeichnung musste hingegen in die Informatik eingestiegen werden. Es wurde sich in zwei Programmiersprachen und in die Netzwerkkonfiguration von Unix-Systemen eingearbeitet, um die Daten empfangen und verarbeiten zu können.
+
+Das fertige System hätte zukünftig viele mögliche Anwendungsfelder. Da es keine Abhängigkeiten vom Multikopter hat, kann es nicht nur fliegend, sondern auch terrestrisch verwendet werden. Einzige Bedingung der Nutzung ist die freie Sicht zum Himmel für den GNSS-Empfang. Auch eine Montage des Systems, gegebenenfalls auch unter Nutzung der Gimbal, an andere, bodengebundene Fahrzeuge wäre denkbar. Hiermit ließen sich beispielsweise Straßenzügen für 3D-Stadtmodelle digitalisieren. Zuerst würden die Straßen und Wege mit Autos, Fahrrädern oder einem Bollerwagen bodengebunden aufgenommen werden und anschließend mit dem gleichen Messsystem an einem Multikopter montiert von oben gescannt werden. So wäre mit einem Messesystem die nahtlose Erfassung von Gebäudehülle möglich.
+
+Zu einem fertigen, mobilien Laserscanningsystem fehlen jedoch noch einige Schritte. Vorallem die Berechnung der Trajektorie ist hierbei ein große Aufgabe. In den folgenden Absätzen wird auf die noch fehlenden Schritte eingegangen.
 
 \paragraph{Weiterverarbeitung der Daten}
 Die Umformung und Speicherung der Daten war nur ein erster Schritt zur Entwicklung des Air\-borne Laser\-scan\-ning Systems. Es ist so zwar möglich, die Daten vom Laser\-scan\-ner, der inertialen Messeinheit und des GNSS zu speichern, jedoch müssen diese Daten weiter prozessiert werden. Bisher wurde der Scanner nur stationär zur Messung eingesetzt. Um  ihn auch kinematisch nutzen zu können, müssen aus den Daten der IMU die Bewegungen rekonstruiert werden. Hiermit können dann die Messungen in ein übergeordnetes Bezugssystem überführt werden. Diese Verarbeitung wird in einer Folgearbeit behandelt werden.
@@ -994,10 +998,7 @@ Die Umformung und Speicherung der Daten war nur ein erster Schritt zur Entwicklu
 \paragraph{Weitere Genauigkeitsüberprüfungen}
 Die bisherigen Genauigkeitsüberprüfungen wurden hauptsächlich zur Überprüfung auf Fehler in der Berechnung und Auswertung durchgeführt. Vor allem die Messgenauigkeit des Laserscanners ist noch deutlich detaillierter zu untersuchen. Aber auch die Zeitdifferenzen zwischen den Systemen sollten vor einem produktiven Einsatz noch weiter analysiert werden.
 
-\paragraph{Anwendbarkeit des Messsystems}
-Da das fertige Messsystem keine Abhängigkeiten vom Multikopter hat, kann es nicht nur fliegend, sondern auch terrestrisch verwendet werden. Einzige Bedingung der Nutzung ist die freie Sicht zum Himmel für den GNSS-Empfang. Auch eine Montage des Systems, gegebenenfalls auch unter Nutzung der Gimbal, an andere, bodengebundene Fahrzeuge wäre denkbar. Hiermit ließen sich beispielsweise Straßenzügen für 3D-Stadtmodelle digitalisieren. Zuerst würden die Straßen und Wege mit Autos, Fahrrädern oder einem Bollerwagen bodengebunden aufgenommen werden und anschließend mit dem gleichen Messsystem an einem Multikopter montiert von oben gescannt werden. So wäre mit einem Messesystem die nahtlose Erfassung der gesamten Gebäudehülle möglich.
-
-\paragraph{Erweiterungs- und Optimierungsmöglichkeiten}
+\paragraph{Erweiterungs- und Optimierungsmöglichkeiten der Software}
 In der Programmierung des Rasp\-berry Pi sind noch Optimierungen möglich. So ist beispielsweise das Übertragen der Messdaten noch verbesserungswürdig. Bisher muss hierfür entweder die microSD-Karte aus dem Rasp\-berry Pi entfernt werden, eine Verbindung zum Dateisystem über SSH genutzt werden oder aber die Daten über WLAN aus der Weboberfläche heruntergeladen werden. Hier könnte zum Beispiel die Möglichkeit geschaffen werden, die Daten auf einen angesteckten USB-Stick übertragen zu lassen. Programmiertechnisch könnten auch die restlichen Skripte noch in ihrer Geschwindigkeit der Ausführung optimiert werden, beispielsweise in dem auch diese in C++ neugeschrieben werden.
 
 \paragraph{Gehäuse}
