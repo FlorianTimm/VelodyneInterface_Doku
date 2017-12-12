@@ -274,7 +274,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von 2,3~$\mu$s aus, ge
 
 \subsection{Inertiale Messeinheit und GNSS-Empfänger iMAR iNAT-M200-FLAT}
 \label{s:iMar}
-Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Die Abweichung der Drift pro Stunde liegt unter 0,5\(^\circ\). \citep{imar}
+Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550 Gramm. Er kann bis zu 500 Messungen pro Sekunde durchführen. Der Drift pro Stunde liegt unter 0,5\(^\circ\). \citep{imar}
 
 \begin{figure}[!ht]
  \centering
@@ -290,7 +290,7 @@ Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitenna
  \centering
  \includegraphics[width=0.8\textwidth]{./img/gnss.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{GNSS-Antenennen des (links und rechts) iMAR iNAT-M200-Flat an Prototypen des modularen Gehäuses (eigene Aufnahme)}
+ \caption{GNSS-Antenennen (links und rechts) des iMAR iNAT-M200-Flat an Prototypen des modularen Gehäuses (eigene Aufnahme)}
  \label{img:gnss}
 \end{figure}
 
@@ -408,7 +408,7 @@ Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hie
 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.8\textwidth]{img/schaltplanGnss.pdf}
+ \includegraphics[width=0.9\textwidth]{img/schaltplanGnss.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
  \caption{Entwurf der Schaltung zum Anschluss des GNSS-Modules an den Laser\-scan\-ner}
  \label{abb:schaltplan}
@@ -454,14 +454,14 @@ Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewäh
 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.8\textwidth]{img/platine.pdf}
+ \includegraphics[width=0.9\textwidth]{img/platine.pdf}
  \caption{Schematisches Layout der Lochstreifenplatine}
  \label{abb:platine}
 \end{figure}
 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.6\textwidth]{img/elektronik.jpg}
+ \includegraphics[width=0.7\textwidth]{img/elektronik.jpg}
  \caption{Fertige Lochstreifenplatine aufgesteckt auf den Raspberry Pi}
  \label{abb:elektronik}
 \end{figure}
@@ -470,7 +470,7 @@ Bei dem Routing wurden noch einige Teile der Schaltung optimiert und versucht ei
 
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.8\textwidth]{img/schaltplanGesamt.pdf}
+ \includegraphics[width=1\textwidth]{img/schaltplanGesamt.pdf}
  \caption{Endgültiger Schaltplan}
  \label{abb:gesamtschaltung}
 \end{figure}
@@ -860,25 +860,32 @@ up service dnsmasq restart
 
 \section{Bedienung des Gesamtssystems}
 Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skript durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners, sowie die Tasten am Steuermodul.
-Nach dem Start des Raspberry Pi, erkennbar an dem Ausgehen des Glimmens der obersten LED (Datenempfang), kann sich mit einem WLAN-fähigen Endgerät sich in das WLAN-Netzwerk \code{VLPinterface} mit dem Passphrase \code{hafencity} eingeloggt werden. Unter der Adresse \code{http://10.10.10.10:8080/} ist dann das Webinterface des Raspberry Pi zu erreichen. Das Interface ermöglicht es, genauso wie die Tasten auf dem Hardware-Steuerungsmodul, die Aufzeichnung zu starten und zu stoppen, sowie den Raspberry Pi herunterzufahren.
-Nach dem ein stabiles GNSS-Signal vom uBlox-Chip empfangen wird, erkennbar an der blinkenden LED am Chip und der Meldung auf der Website, dass ein GNSS-Zeitsignal empfangen wurde, kann der Laserscanner gestartet werden. Der Laserscanner synchronisiert nun seine Zeit mit dem GNSS-Modul. Die Messung kann gestartet werden (linke Taste). Ob Daten empfangen und gesichert werden, ist an den LEDs und im Webinterface sichbar. Die untere LED zeigt an, dass die Aufzeichnung läuft, die obere, dass Daten empfangen werden. Die mittlere zeigt an, ob Daten noch nicht transformiert wurden und in der Warteschleife sind.
+Nach dem Start des Raspberry Pi, erkennbar an dem Ausgehen des Glimmens der obersten LED (Datenempfang), kann sich mit einem WLAN-fähigen Endgerät sich in das WLAN-Netzwerk \code{VLPinterface} mit dem Passphrase \code{hafencity} eingeloggt werden. Unter der Adresse \code{http://10.10.10.10:8080/} (siehe \autoref{img:web}, links) ist dann das Webinterface des Raspberry Pi zu erreichen. Das Interface ermöglicht es, genauso wie die Tasten auf dem Hardware-Steuerungsmodul, die Aufzeichnung zu starten und zu stoppen, sowie den Raspberry Pi herunterzufahren.
+Nach dem ein stabiles GNSS-Signal vom uBlox-Chip empfangen wird, erkennbar an der blinkenden LED am Chip und der Meldung auf der Website, dass ein GNSS-Zeitsignal empfangen wurde, kann der Laserscanner gestartet werden. Der Laserscanner synchronisiert nun seine Zeit mit dem GNSS-Modul, dies über seine Weboberfläche kontrolliert werden (siehe \autoref{img:web}, rechts). Die Messung kann gestartet werden (linke Taste). Ob Daten empfangen und gesichert werden, ist an den LEDs und im Webinterface sichbar. Die untere LED zeigt an, dass die Aufzeichnung läuft, die obere, dass Daten empfangen werden. Die mittlere zeigt an, ob Daten noch nicht transformiert wurden und in der Warteschleife sind.
 Nach dem Stoppen der Messung (mittlere Taste), erlischt die untere und die obere LED. Kurz nachdem die gegebenenfalls leuchtende, mittlere Warteschlangen-LED erlischt, kann der Raspberry Pi heruntergefahren werden (rechte Taste).
-Falls die Daten direkt übertragen werden sollen, kann über das Webinterface auf umgewandelte Dateien zugegriffen werden. Alternativ kann nach dem Herunterfahren die MicroSD-Karte herausgenommen werden und die Daten aus dem Verzeichnis \code{\_daten} kopiert werden.
+Falls die Daten direkt übertragen werden sollen, kann über das Webinterface (siehe \autoref{img:web}, Mitte) auf umgewandelte Dateien zugegriffen werden. Alternativ kann nach dem Herunterfahren die MicroSD-Karte herausgenommen werden und die Daten aus dem Verzeichnis \code{\_daten} kopiert werden.
 
-Die Änderung von Einstellungen der \code{config.ini} können über eine SSH-Verbindung oder durch Herausnehmen der MicroSD-Karte geändert werden.
+Die Änderung von Einstellungen der \code{config.ini} (siehe Anhang~\ref{a:config.ini}) können über eine SSH-Verbindung oder durch Herausnehmen der MicroSD-Karte geändert werden.
 
+\begin{figure}[!ht]
+ \centering
+ \includegraphics[width=.24\textwidth]{./img/web1.png}
+ \includegraphics[width=.24\textwidth]{./img/web2.png}
+ \includegraphics[width=.48\textwidth]{./img/veloweb.png}
+ % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
+ \caption{Weboberfläche des Skriptes (beide links) und des Laserscanners (rechts)}
+ \label{img:web}
+\end{figure}
 
 \chapter{Systemüberprüfungen}
 \label{c:systemueberpruefung}
 Nachdem bei der Systemkonfiguration bisher auf die Angaben aus Handbüchern und Anleitungen vertraut wurde, sollte zusätzlich die Genauigkeit von einigen Systemkomponenten und der Programmierung überprüft werden. Hierfür wurde einmal die Messgenauigkeit des Scanners ausgewählt sowie die Genauigkeit der Zeitangaben der GNSS-Systeme. Die Genauigkeit des GNSS und der in Zusammenhang mit der IMU zu berechnenden Trajektorie hatte bereits \citet{wilken} in seiner Bachelorthesis untersucht.
 
 \section{Untersuchung der Gleichzeitigkeit von PPS-Signalen von verschiedenen GNSS-Empfängern}
-Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Rasp\-berry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Um dies zu überprüfen, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
+Für die Synchronisierung der Daten des Laser\-scan\-ners und der inertialen Messeinheit wurden zwei verschiedene GNSS-Empfänger verwendet. Der für den Einbau in Consumer-Geräte gedachte uBlox-Chip, der am Rasp\-berry Pi und am Laser\-scan\-ner verwendet wird, ist leichter, unabhängiger und einfacher zu realisieren als die Übernahme der Daten mittels Adapterkabeln von der inertialen Messeinheit. Voraussetzung hierfür ist jedoch, dass beide Signale wirklich gleichzeitig erzeugt werden. Laut Datenblatt \citep{ubloxneo} hat der Zeitimpuls der UBlox NEO-6M eine Standardabweichung von 30~ns, das Signal des IMU von unter 10~ns \citep{imar}. Diese Genauigkeit wäre deutlich besser, als benötigt. Um zu überprüfen, ob sich diese Angabe auch auf die einheitliche GNSS-Zeit bezieht, soll das PPS-Signal (Impulssignal im Sekundentakt) von beiden Messsystemen mit einem Arduino überprüft werden.
 Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GNSS-Empfänger angeschlossen. Ein Skript (siehe Anhang~\ref{a:ppsVergleich.ino}) misst dann die Zeit zwischen den beiden Signalen. Diese Messungen werden dann mehrfach hintereinander sowie nach einem Neustart der Systeme durchgeführt. Hiermit soll überprüft werden, ob sich bei einem Neustart der Messung die Zeitdifferenz ändert beziehungsweise dann überhaupt eine Zeitdifferenz entsteht.
 
 Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Ozilliskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein Low-Signal und nicht wie erwartet ein High-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). Außerdem konnte hiermit dann auch festgestellt werden, dass das Signal der IMU nicht den Anforderungen des Velodyne VLP-16 entspricht: Hier wird ein Signal mit einer Impulsdauer von mindestens 10~ms gefordert. Dies wird scheinbar nicht eingehalten, da der Arduino, der mit einer Taktrate von 2,2ms misst, nicht alle Signale der IMU erkennen konnte (siehe erster Puls auf \autoref{img:osPPS}). Außerdem müsste auch hier das Signal elektrisch gedreht werden.
-
-\todo{uBlox Datenblatt}
 
 \begin{figure}[!ht]
  \centering
@@ -907,8 +914,7 @@ Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skrip
 Hauptsächlich zur Überprüfung der Umformung der Daten, aber auch zur Überprüfung der Streckenmessung und Winkelmessungen wurde eine Messung in der Tiefgarage (\autoref{img:messbilder}, rechts) durchgeführt. Durch die vielen rechtwinkligen Pfeiler sind hier viele Möglichkeiten um Kanten zu detektieren gegeben. Die meisten Oberflächen bestanden hier aus weiß gestrichenenm Beton. Zum Vergleich wurde die Tiefgarage mit einem Trimble S7 mit einer Winkelgenauigkeit von 3 Sekunden und einer prismenlosen Streckengenauigkeit von 2 mm + 2 ppm aufgemessen \citep{trimbles7}.
 
 \paragraph{Auswertung}
-Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Hierfür wurden jeweils Ebenen in die Punkte beider Messungen der Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst. Die Neigung wurde durch eine Ausgleichung der Fußbodenebene mit der XY-Ebene der Tachymeterebene bestimmt. 
-\todo{nochmal lesen}
+Aus den Daten der Tachymetermessung wurden die Wände und Pfeiler der Tiefgarage modelliert. Durch Anpassung der Laserscandaten an diesen Grundriss wurde die Orientierung des Velodyne VLP-16 bestimmt. Hierfür wurden jeweils Ebenen in die gemessenen Punkte des Velodyne Pfeiler- und Wandoberflächen in Geomagic Wrap mittels Ausgleichung eingepasst. Die Neigung wurde durch eine Ausgleichung der Fußbodenebene mit der XY-Ebene des Tachymeter-Koordinatensystemes bestimmt. 
 
 \paragraph{Fehler im Skript} Bei der Auswertung der Messung fiel schon vor dem Vergleich mit der Tachymetermessung auf, dass die Messwerte in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von zwei der fünf Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten nicht auswertbar waren.
 
@@ -998,15 +1004,11 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher exisiert nur ein
  \label{abb:system}
 \end{figure}
 
-\todo{Erweitern}
-
-
 
 %% Literatur
 \renewcommand\UrlFont\itshape
 \bibliography{Thesis}
 %\printbibliography
-no-dhcp-interface=eth0
 \listoffigures
 \listoftables
 %\lstlistoflistings
