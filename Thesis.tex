@@ -29,7 +29,7 @@
 %\usepackage{tocloft}
 
 %Boxfehler
-\hbadness=100000
+\hbadness=1000000
 
 % Listings
 \usepackage{listings}
@@ -113,7 +113,7 @@ HafenCity Universität Hamburg\\
 E-Mail: carlos.acevedo@hcu-hamburg.de\\
 \newpage
 \noindent\textbf{\large Kurzzusammenfassung}\\
-Die vorliegende Arbeit ist Teil eines Projektes, das den modular austauschbaren Betrieb verschiedenster Sensorsysteme an einem Multikopter erlauben soll. Im Speziellen wird hier die Datenschnittstelle von einem Kompakt-Laser\-scan\-ner Velodyne Lidar Puck VLP-16 zu einem Einplatinencomputer Rasp\-berry Pi entwickelt und implementiert. Der Scanner selbst liefert hierbei die Daten in einem proprietären, binären Format, welche in ein einfach lesbares Format, beispielsweise eine ASCII-Datei, umgewandelt und gespeichert werden sollen. Außerdem benötigen die Daten einem eindeutigen Zeitstempel, um diese später mit den anderen Sensorsystemen verknüpfen zu können. Diese Datentransformation sollte möglichst simultan zur Aufnahme erfolgen.
+Die vorliegende Arbeit ist Teil eines Projektes, das den modular austauschbaren Betrieb verschiedenster Sensorsysteme an einem Multikopter erlauben soll. Im Speziellen wird hier die Datenschnittstelle von einem Kompakt-Laser\-scan\-ner Velodyne Lidar Puck VLP-16 zu einem Einplatinencomputer Rasp\-berry Pi entwickelt und implementiert. Der Scanner selbst liefert hierbei die Daten in einem proprietären, binären Format. Diese sollen dann in ein einfach lesbares Format, beispielsweise eine ASCII-Datei, umgewandelt und gespeichert werden. Außerdem benötigen die Daten einem eindeutigen Zeitstempel, um diese später mit den anderen Sensorsystemen verknüpfen zu können. Diese Datentransformation sollte möglichst simultan zur Aufnahme erfolgen.
 
 Auch Teil der Arbeit ist die Schaffung einer Steuerung der Laser\-scan\-ner\-auf\-nahme. Hierfür wurde ein Bedienmodul erstellt, welches am Rasp\-berry Pi direkt angeschlossen werden kann, sowie eine Weboberfläche entwickelt, die die Steuerung während des Fluges ermöglichen soll.\\
 \vspace{2cm}\\
@@ -198,7 +198,7 @@ Zu\-sätz\-lich haben alle Ablenk- und Drehsysteme eine Messeinheit, die den Sta
 \subsection{Oberflächeneffekte}
 Der vom Laser ausgesendete Impuls wird nur bei rechtwinklig zur Strahlenachse verlaufenden, ebenen Oberflächen als identischer, abgeschwächter Impuls zurückgestrahlt. Der Laser trifft bei der Messung nicht, wie idealisiert angenommen, punktförmig auf die Oberfläche, sondern stellt einen Kreis beziehungsweise bei schrägem Auftreffen eine Ellipse mit einer bestimmten Größe, dem sogenannten Footprint dar. Hierdurch ergeben sich je nach Oberfläche verschiedene Reflexionen: Bei einer zu dem Laserstrahl schrägen Oberfläche, wie einem Dach, wird das Signal geweitet, die Impulsdauer des reflektierten Strahles (Echo) wird verlängert, da dieser auf der Oberfläche zeitversetzt auftrifft. Ein anderes Phänomen sind mehrfache Echos. Dies tritt auf, wenn zwei unterschiedlich weite entfernte Oberflächen von einem Strahl getroffen werden -- zum Beispiel bei der Messung von Gebäudekanten oder Bäumen. \autoref{img:echo} zeigt solche Echos in grafischer Form. \citep[S. 28]{beraldin}
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.6\textwidth]{./img/echo.pdf}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -222,7 +222,7 @@ Die Messung erfolgt mit mehreren Einzelsensoren: Für die Messung der Beschleuni
 
 Die Genauigkeit von inertialen Messeinheiten wird in ihrer Messauflösung und in ihrer zeitlichen Richtungsabweichung, dem Drift, angegeben. Die zeitliche Stabilität ist vor allem bei der Inertialnavigation wichtig, bei der die Ortsbestimmung nur auf Grundlage der Messungen der IMU erfolgt.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.6\textwidth]{./img/mems.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -252,15 +252,16 @@ Im Folgenden wird zunächst auf die verwendeten Sensoren und Geräte und ihre te
 
 \subsection{Velodyne VLP-16}
 \label{sss:vlp16}
-Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laser\-scan\-ner eingesetzt. Einer dieser Kompakt-Laser\-scan\-ner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Sein Durchmesser beträgt 10,3~cm, seine Höhe 7,3~cm  und sein Gewicht 830~g ohne Kabel und Schnittstellenbox. Der VLP-16 hat 16 fest ausgerichteten Messstrahlen, die sich zu\-sätz\-lich um die Hochachse drehen. Wahrscheinlich handelt es sich um einen Glasfaser-Scanner, Angaben macht der Hersteller hierzu jedoch keine. Seine Messgenauigkeit beträgt laut Datenblatt 3~cm. Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem 903nm-Infrarotlaser. \citep{vlpSheet}
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
  \centering
  \includegraphics[width=0.6\textwidth]{./img/vlp16.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
  \caption{Laser\-scan\-ner Velodyne VLP-16 (eigene Aufnahme)}
  \label{img:vlp16}
 \end{figure}
+
+Um Gewicht zu sparen, wird für die Messung ein miniaturisierter Laser\-scan\-ner eingesetzt. Einer dieser Kompakt-Laser\-scan\-ner ist der Velodyne Puck VLP-16 (siehe \autoref{img:vlp16}). Sein Durchmesser beträgt 10,3~cm, seine Höhe 7,3~cm  und sein Gewicht 830~g ohne Kabel und Schnittstellenbox. Der VLP-16 hat 16 fest ausgerichteten Messstrahlen, die sich zu\-sätz\-lich um die Hochachse drehen. Wahrscheinlich handelt es sich um einen Glasfaser-Scanner, Angaben macht der Hersteller hierzu jedoch keine. Seine Messgenauigkeit beträgt laut Datenblatt 3~cm. Gemessen wird im Impulsmessverfahren (siehe \autoref{p:tof}) mit einem 903nm-Infrarotlaser. \citep{vlpSheet}
 
 Der Scanner sendet die Messstrahlen mit einem Zeitabstand von 2,3~$\mu$s aus, gefolgt von einer Nachladezeit von 18,4~$\mu$s, so dass jeder Messstrahl alle 55,3~$\mu$s ausgesendet werden kann \citep[S. 16]{vlpManual}. Es ergibt sich somit eine durchschnittliche Messfrequenz von 289~357~Hz (siehe \autoref{equ:XproS}). Während der Messungen dreht sich der Laser\-scan\-ner je nach Einstellung über das Webinterface des Scanners mit 5 bis 20 Umdrehungen pro Sekunde \citep{vlpSheet}. Pro ausgesendeten Strahl können jeweils die stärkste und die letzte Reflexion zurückgegeben werden, so dass über eine halbe Million Punkte pro Sekunde gemessen werden können (siehe \autoref{equ:XproS}). Die Daten werden anschließend über den Netzwerkanschluss gestreamt (siehe auch \autoref{ss:Datenlieferung}). Außerdem verfügt der Scanner über einen Anschluss für ein GNSS-Modul des Typs Garmin GPS 18x LVC. Auch andere GNSS-Module sind verwendbar, so dass im Weiteren versucht wurde, ein kostengünstiges uBlox-GNSS-Modul zu nutzen (siehe \autoref{s:GNSSAnschluss}). Durch die Nutzung eines GNSS-Modules am Scanner ist es möglich, die Daten mit einem hochgenauen Zeitstempel zu versehen und die Messungen des Scanners so mit den Daten aus der inertialen Messeinheit zu verknüpfen.
 
@@ -276,7 +277,7 @@ Der Scanner sendet die Messstrahlen mit einem Zeitabstand von 2,3~$\mu$s aus, ge
 \label{s:iMar}
 Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem des Typs iMAR iNAT-M200-FLAT verwendet. Hierbei handelt es sich um ein hochgenaues MEMS-System. Durch die Verwendung von mikroelektromechanischen Bauteilen wiegt der Sensor inklusive Gehäuse nur 550~g. Dieser kann bis zu 500 Messungen pro Sekunde durchführen. Der Drift pro Stunde liegt unter 0,5\(^\circ\). \citep{imar}
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/imu.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -286,7 +287,7 @@ Als inertiale Messeinheit wird das auf \autoref{img:imu} zu sehende Sensorsystem
 
 Außerdem verfügt die verwendete Einheit über zwei differentielle Satellitennavigationsempfänger (GNSS-Module, siehe \autoref{img:gnss}). Durch Nutzung einer zu\-sätz\-lichen GNSS-Basisstation oder auch eines entsprechenden Korrekturdienstes können diese eine Positionsgenauigkeit von etwa 2~cm in Echtzeit erreichen \citep{imar}. Durch Postprocessing lässt sich diese sogar noch steigern. Durch die Verwendung von zwei Empfängern, die an jeweils einem Ausleger befestigt sind (siehe Bild \autoref{img:gnss}), kann auch die Orientierung der IMU bestimmt werden. Hierdurch kann die durch Störungen, wie den Motoren des Multikopters, möglicherweise ungenaue Messung der magnetischen Nordrichtung kontrolliert werden. Außerdem kann die Positionssicherheit durch Mittelung der beiden Positionen erhöht werden und auch der Drift durch die Daten eliminiert werden.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.8\textwidth]{./img/gnss.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -323,7 +324,7 @@ Vorteilhaft bei der Nutzung des Rasp\-berry Pi zur Datenverarbeitung sind vor al
 
 Praktisch für die Nutzung am Multikopter ist außerdem seine geringe Größe und sein relativ geringer Stromverbrauch von maximal 12,5~Watt \citep{raspSheet}. Im Betrieb ohne weitere Peripherie außer einem GNSS-Chip wird dieser Stromverbrauch bei weitem nicht erreicht, hier wurden durchschnittlich nur 2,5~Watt gemessen.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/rpi3.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -337,7 +338,7 @@ Alternativ zum Raspberry Pi kämen zur Datenverarbeitung an Bord des Multikopter
 \subsection{Multikopter Copterproject CineStar 6HL}
 Bei einem Multikopter handelt es sich um ein Fluggerät mit drei oder mehr Rotoren. Weit verbreitetet sind vor allem Quadrokopter mit vier oder Hexakopter mit sechs Rotoren. Multikopter wurden ursprünglich für Militär- und Polizeizwecke eingesetzt, inzwischen sind diese aber auch vermehrt in kleineren Ausführungen in Privatbesitz zum Beispiel für Videoaufnahmen zu finden \citep{Quadro}. Angetrieben werden die handelsüblichen Modelle, welche eine Flugdauer von bis zu 30 Minuten und eine Tragkraft von bis zu 5~kg aufweisen, mit Lithium-Polymer-Akkumulatoren (LiPo-Akkus). Die Anzahl und die maximale Umdrehung der Rotoren bestimmt die Schubkraft und somit auch die Tragkraft des Multikopters. Im Normalfall besitzen diese eine gerade Anzahl von Rotoren. Das auf das Traggestell wirkende Drehmoment hebt sich so auf. Hier liegt auch der Vorteil der Bauform gegenüber einem Hubschrauber, bei welchem mit einem Heckrotor dem Drehmoment um die Hochachse entgegengewirkt werden muss. Die einzelnen Motoren und Propeller werden kreuzweise angeordnet, so dass eine Drehzahländerung eines Propellerpaares jeweils zur Steuerung ausreicht. Vorteil eines Multikopters im Gegensatz zu einem Modellflugzeug ist es außerdem, dass dieser senkrecht starten und auch zum Beispiel für die Aufnahme von Bildern auf der Stelle stehen bleiben kann. Nachteil ist der höhere Energieverbrauch, so dass Modellflugzeuge bei gleicher Akkukapazität deutlich länger in der Luft bleiben können. \citep{Bachfeld}
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.6\textwidth]{./img/uav.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -353,11 +354,11 @@ Um die Messgeräte während des Fluges des Multikopters zu stabilisieren und zu 
 Für das Projekt wird ein Gimbal des Herstellers Freefly verwendet. Dieses wurde zur Stabilisierung von Aufnahmen mit digitalen Spiegelreflexkameras entwickelt und hat eine Tragkraft von 2,3~Kilogramm. Außer dem erwähnten Beschleunigungsmesser verwendet diese auch GNSS um das Driften der integrierten IMU zu vermindern. \citep{movim5}
 
 \section{Strom\-ver\-sor\-gung}
-Die Strom\-ver\-sor\-gung der Mess- und Ver\-arbei\-tungs\-tech\-nik soll mittels Lithium-Ionen-Zellen erfolgen. Der Rasp\-berry Pi benötigt hierbei eine stabilisierte Spannungs- und Strom\-ver\-sor\-gung. Eine fehlerhafte Strom\-ver\-sor\-gung kann zu Sys\-tem\-in\-sta\-bi\-li\-täten füh\-ren und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den genauen Aufbau einer solchen Versorgung wird hierbei verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
+Die Strom\-ver\-sor\-gung der Mess- und Ver\-arbei\-tungs\-tech\-nik soll mittels Lithium-Ionen-Zellen erfolgen. Der Rasp\-berry Pi benötigt hierbei eine stabilisierte Spannung. Eine fehlerhafte Ver\-sor\-gung kann zu Sys\-tem\-in\-sta\-bi\-li\-täten füh\-ren und so im schlimmsten Fall die Datenaufzeichnung komplett verhindern. Auf den Aufbau einer solchen Versorgung wird hier verzichtet, sondern nur die Anforderungen an die Energiequelle erläutert.
 
 \autoref{tab:strom} listet die verschiedenen Module und die jeweils benötigte Energieversorgung auf. Der Multikopter mit der Gimbal verfügt über eine eigene Versorgung und muss daher nicht weiter beachtet werden. Außerdem hat hier eine eigene Akkukapazität auch Vorteile -- bei einem zu hohen Verbrauch der Sensortechnik bleibt der Multikopter durch seine eigenständige Akku-Überwachung immer noch flugfähig um sicher landen zu können.
 
-\begin{table}[!ht]
+\begin{table}
 \centering
 \begin{tabular}{ l | r | r | r }
   Gerät 	& Laser\-scan\-ner	& IMU		& Rasp\-berry Pi\\
@@ -386,17 +387,17 @@ Der Laser\-scan\-ner wird mit einem RJ45-Kabel an der Netzwerkschnittstelle des 
 \label{s:GNSSAnschluss}
 Für die Versorgung des Laser\-scan\-ners mit einem GNSS-Signal zur Synchronisierung wurde ein zu\-sätz\-liches GNSS-Modul vom Typ uBlox NEO"~6M mit PPS-Signal ausgewählt (ähnlich dem auf \autoref{img:ublox}), da dieses kleiner und leichter ist, als die entsprechenden Adapterkabel der inertialen Messeinheit um dessen Signal nutzen zu können.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.6\textwidth]{./img/ublox.jpg}
  % vlp16.jpg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{uBlox NEO"~M8N mit Keramik-Patchantenne, das Vor\-gän\-ger\-mo\-dell NEO"~6M mit PPS-Ausgang wurde verwendet (eigene Aufnahme)}
+ \caption{uBlox NEO"~M8N mit Keramik-Patchantenne, das ähnliche Vor\-gän\-ger\-mo\-dell NEO"~6M mit PPS-Ausgang wurde verwendet (eigene Aufnahme)}
  \label{img:ublox}
 \end{figure}
 
 Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per serieller Schnittstelle über einen acht poligen Platinensteckverbinder. Da dieser Stecker jedoch unpraktisch war, wurde zu\-sätz\-lich eine 3,5~mm Klinkenbuchse an der Schnittstellenbox des Laser\-scan\-ners montiert. Bei dem vom Laser\-scan\-ner benötigten Übertragungsprotokoll handelt es sich um das standardisierte NMEA-Protokoll, welches mit einer Datenrate von \(9600~\frac{bit}{s}\) und einer Signalspannung zwischen 3 und 15~V übertragen wird. Der direkte Anschluss des uBlox-GNSS-Modules brachte dennoch zunächst keinen Erfolg. Oszilloskop-ähnliche Messungen mit einem Arduino Mega 2560 (siehe \autoref{abb:oszi}) zeigten, dass das Signal des verwendeten GNSS-Modules nicht dem im Datenblatt von \citet[S. 3]{vlpInterface} geforderten entsprach. Es zeigte sich, dass das Signal gedreht werden musste, da die Definition der Signalspannung verschieden war: Der Laser\-scan\-ner benötigte ein Signal, bei dem Logisch 1 mit einer Spannung von über 3~V \citep[S. 3]{vlpInterface} entspricht (HIGH), bei dem GNSS-Modul entsprach die höhere Spannung Logisch 0.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/oszi.png}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -406,7 +407,7 @@ Die Übertragung der Daten des GNSS-Modules zum Laser\-scan\-ner erfolgt per ser
 
 Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hierbei handelt es sich um einen Logikkonverter, der die HIGH- und LOW-Signale (Signal gegen Masse) tauscht. Der Laser\-scan\-ner sieht eine Versorgung des GNSS-Modul mit 5~V vor, während das eingesetzte Modul nur eine Spannung von 3,3~V benötigt. Es wurde daher ein Spannungsregler verbaut, der die Spannung auf 3,3~V begrenzt. Zur weiteren Stabilisierung wurden Kondensatoren genutzt. Der Logikkonverter dient hier durch die Versorgung mit 5~V auch als Pegelwandler. Die genaue Schaltung ist \autoref{abb:schaltplan} zu entnehmen.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.9\textwidth]{img/schaltplanGnss.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -418,7 +419,7 @@ Um das Signal zu drehen wurde ein integrierter Schaltkreis 74HC04 verwendet. Hie
 \label{s:steuermodul}
 Der Betrieb des Rasp\-berry Pi erfolgt ohne Tastatur und Bildschirm. Daher ist es notwendig, eine alternative Benutzerschnittstelle zu implementieren. Ein großer Steuerbedarf ist nicht gegeben, so dass wenige Tasten zum Stoppen der Datenaufzeichnung und zum Herunterfahren des Rasp\-berry Pi ausreichend sind. Um auch eine Steuermöglichkeit zu implementieren, die im Flug genutzt werden kann, soll ein WLAN-Access-Point und ein simpler Webserver auf dem Rasp\-berry Pi implementiert werden, der den Zugriff zum Beispiel über ein Smartphone oder Laptop ermöglicht.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/schaltplanRasp.pdf}
  % GNSS-Modul_Schaltplan_Entwurf.svg: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
@@ -453,14 +454,14 @@ Für den Prototyp sollte die Schaltung von Hand aufgebaut und verlötet werden. 
 
 Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewählt. Bei einer solchen Platine sind alle Kontakte in einer Reihe mit einer Leiterbahn verbunden. Falls keine Verbindung gewünscht ist, kann diese Leiterbahn mit einem Messer oder ähnlichem unterbrochen werden. Da das Unterbrechen der Leiterbahn jedoch zeitaufwändig und fehlerträchtig ist -- beispielsweise durch nicht vollständig getrennte Leiterbahnen -- sollten diese bei dem Layouten der Platine möglichst vermieden werden. Auch sollten möglichst viele der benötigten Verbindungen durch die Leiterbahnen erfolgen und möglichst wenige Drahtbrücken verwendet werden, die diese Leiterbahnreihen verbinden. Diese würden ansonsten zu\-sätz\-lichen Lötaufwand erfordern. Das endgültige Layout der Platine ist der \autoref{abb:platine} zu entnehmen. Die fertige Platine ist auf der \autoref{abb:elektronik} zu sehen.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.9\textwidth]{img/platine.pdf}
  \caption{Schematisches Layout der Lochstreifenplatine}
  \label{abb:platine}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{img/elektronik.jpg}
  \caption{Fertige Lochstreifenplatine aufgesteckt auf den Raspberry Pi}
@@ -469,7 +470,7 @@ Da nur wenige Bauteile benötigt wurden, wurde eine Streifenrasterplatine gewäh
 
 Bei dem Routing wurden noch einige Teile der Schaltung optimiert und versucht einige Bauteile einzusparen. Es wurde zum Beispiel die Strom\-ver\-sor\-gung des Rasp\-berry Pi für den integrierten Schaltkreis und das GNSS-Modul verwendet, anstatt hierfür einen zu\-sätz\-lichen Spannungswandler zu verwenden. Die Platinengröße wurde so gewählt, dass die Platine direkt auf den Rasp\-berry Pi 2 oder 3 aufgesteckt werden kann. Der endgültige Schaltplan ist \autoref{abb:gesamtschaltung} zu entnehmen. Für die Taster wurden hier die internen Pull-Up-Widerstände genutzt, so dass Widerstände eingespart werden konnten. Außerdem wurde der Datensendeport (Tx) vom GNSS-Modul an die serielle Schnittstelle des Rasp\-berry Pi angeschlossen, so dass der Rasp\-berry Pi nun auch ohne den Umweg über den Laser\-scan\-ner die Daten vom GNSS-Modul empfangen kann. Es wurde Platz für weitere LEDs oder Taster freigelassen.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{img/schaltplanGesamt.pdf}
  \caption{Endgültiger Schaltplan}
@@ -483,7 +484,7 @@ Bei dem Routing wurden noch einige Teile der Schaltung optimiert und versucht ei
 \paragraph{Python}
 Zur Realisierung der Programmierung wurde die Skriptsprache Python ausgewählt. Python bietet den Vorteil vergleichsweise kurzen und gut lesbaren Programmierstil zu fördern. Hierfür werden unter anderem nicht Klammern zur Bildung von Blöcken genutzt, sondern Texteinrückungen verpflichtend eingesetzt \citep[S. 13f]{python}. Die Struktur des Programms ist so schnell erfassbar. Außerdem ist es nicht notwendig, den Quellcode zu kompilieren. Dieser wird vom Interpreter direkt ausgeführt. Dies ermöglicht kurze Entwicklungszyklen ohne (zeit-)aufwändiges Kompilieren. Änderungen und Anpassungen können schnell durchgeführt werden. Außerdem sind die Skripte größtenteils plattformunabhängig.
 
-Python wurde in seiner ersten Version 1991 von Guido van Rossum veröffentlicht. Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach zu lösendem Problem objektorientiert oder strukturiert programmiert werden kann \citep[S. 14]{python}.
+Python wurde in seiner ersten Version 1991 von Guido van Rossum veröffentlicht. Sein Ziel war es, eine einfach zu erlernende Programmiersprache zu entwickeln, die der Nachfolger der Sprache ABC werden sollte. Außerdem sollte die Sprache leicht erweiterbar sein und schon von Haus aus eine umfangreiche Standardbibliothek bieten. Python bietet mehrere Programmierparadigmen an, so dass je nach Aufgabe objektorientiert oder strukturiert programmiert werden kann \citep[S. 14]{python}.
 
 Die aktuelle Version von Python (Oktober 2017) ist die Version 3.6. Das Skript wurde unter Verwendung dieser Version entwickelt. Da sich viele Funktionen von der Version 2 zur 3 geändert haben, wurde auf die zuerst geplante Kompatibilität zu Python 2 verzichtet. Um Teile des Quellcodes als Python-Module auch in andere Skripte einfach einbinden zu können, aber auch den Quelltext übersichtlich zu halten, wurde der objektorientierte Programmierstil gewählt.
 
@@ -496,9 +497,9 @@ Bei C++ handelt es sich um eine objektorientierte Erweiterung der Programmierspr
 \label{ss:Datenlieferung}
 Der Laser\-scan\-ner Velodyne VLP-16 liefert seine Daten als UDP-Netzwerkpakete in einem proprietären, binären Datenformat. Diese Daten sind nicht direkt lesbar, sondern müssen vor einer weiteren Nutzung aufbereitet und umgeformt werden. Dies soll mittels des in dieser Arbeit entwickelten Skriptes durchgeführt werden.
 
-Ein Datenpaket (siehe \autoref{tab:datenmodell}) besteht jeweils aus einem Header von 42~Bytes, gefolgt von 12~Datenblöcken mit jeweils 32~Messungen, abgeschlossen von 4~Bytes, die den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern. Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers und darauf folgend die Messwerte von zwei Messungen der 16~Laserstrahlen. Die genaue Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen von zwei auf einander folgenden Messungen interpoliert werden.
+Ein Datenpaket (siehe \autoref{tab:datenmodell}, Beispiel im Anhang~\ref{a:Rohdaten}) besteht jeweils aus einem Header von 42~Bytes, gefolgt von 12~Datenblöcken mit jeweils 32~Messungen, abgeschlossen von 4~Bytes, die den Zeitstempel angeben und 2 Bytes, die den eingestellten Scan-Modus zurückliefern. Jeder Datenblock enthält die aktuelle horizontale Ausrichtung des rotierenden Lasers und darauf folgend die Messwerte von zwei Messungen der 16~Laserstrahlen. Die genaue Horizontalrichtung zum Zeitpunkt der Messung muss aus den Horizontalrichtungen von zwei auf einander folgenden Messungen interpoliert werden.
 
-\begin{table}[!ht]
+\begin{table}
 \centering
 \begin{tabular}{|lll|l|l|}
 \hline
@@ -548,7 +549,7 @@ bis zu 1508~Pakete dieser Form pro Sekunde \citep[S. 49]{vlpManual}. Die Ausgang
 
 \section{Geplantes Datenmodell}
 \label{s:datenmodell}
-Die Daten des Laser\-scan\-ners sollen in einer einfach lesbaren Textdatei abgelegt werden. In der Nachbereitung sollen die Daten aus dieser Textdatei mit den Daten der inertialen Messeinheit und des GNSS-Empfängers verknüpft werden, um so die Daten georeferenzieren zu können. Als Verknüpfung bietet sich der Zeitstempel an. Die inertiale Messeinheit und der Laser\-scan\-ner können die Zeitdaten aus dem GNSS-Signal verwenden, wodurch hochgenaue Zeitstempel möglich sind. Die Zeitinformation bildet also einen wichtigen Schlüssel in den Daten. Als einfaches Textformat wurden durch Tabulator getrennte Daten, jeweils eine Zeile je Messung, gewählt. Folgende Daten sind in dieser Reihenfolge enthalten:
+Die Daten des Laser\-scan\-ners sollen in einer einfach lesbaren Textdatei (siehe Anhang~\ref{a:AusgabeTXT}) abgelegt werden. In der Nachbereitung sollen die Daten aus dieser Textdatei mit den Daten der inertialen Messeinheit und des GNSS-Empfängers verknüpft werden, um so die Daten georeferenzieren zu können. Als Verknüpfung bietet sich der Zeitstempel an. Die inertiale Messeinheit und der Laser\-scan\-ner können die Zeitdaten aus dem GNSS-Signal verwenden, wodurch hochgenaue Zeitstempel möglich sind. Die Zeitinformation bildet also einen wichtigen Schlüssel in den Daten. Als einfaches Textformat wurden durch Tabulator getrennte Daten, jeweils eine Zeile je Messung, gewählt. Folgende Daten sind in dieser Reihenfolge enthalten:
 
 \begin{itemize}
  \item Zeitstempel in Mikrosekunden
@@ -572,7 +573,7 @@ Die als Text gespeicherten Rohdaten sollen im Rahmen einer weiterführenden Arbe
 
 Bei der Berechnung ist jedoch zu beachten, dass der Ursprungsort der Entfernungsmessung zwar in der Drehachse des Laser\-scan\-ners liegt, jedoch der Schnittpunkt der ausgesendeten Strahlen etwa 40~mm in Strahlrichtung verschoben ist (siehe \autoref{img:strahlengang}). Bei der Streckenberechnung ist diese Strecke mit enthalten, jedoch kann zur Berechnung der Z-Komponente der lokalen Koordinaten nicht einfach der Höhenwinkel und die gemessene Strecke verwendet werden. Die lokalen Koordinaten berechnen sich somit nach der \autoref{equ:koordinaten}.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/Strahlengang.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -608,7 +609,7 @@ Aus den technischen Vorgaben ergeben sich dann folgende Funktionen, die das Skri
 \end{itemize}
 
 Der Ablauf ist oft abhängig vom Fortschritt anderer Schritte und Voraussetzungen. Daher wurden die benötigten, einzelnen Schritte vorerst als grober Ablaufplan skizziert. So hat der Rasp\-berry Pi keinen eigenen Zeitgeber. Um die Dateien aber mit dem korrekten Zeitstempel zu versehen, ist daher eine aktuelle Uhrzeit notwendig -- diese liefert das GNSS-Modul, sofern ein GNSS-Fix besteht. Es muss also, vor dem Erzeugen der Dateien, auf ein gültiges GNSS-Signal gewartet werden. Der endgültige, vereinfachte Ablaufplan ist der \autoref{img:ablaufplan} zu entnehmen. 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{./img/ablaufplan.pdf}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -627,7 +628,7 @@ Zur Unterstützung der Programmierung wurden vor allem die Lehrbücher \textit{E
 Da das Skript objektorientiert programmiert werden soll, wurden zunächst mit Hilfe der anfangs bekannten Anforderungen und dem Ablaufplanes aus \autoref{img:ablaufplan} die benötigten, grundlegenden Klassen entworfen. Durch die Erweiterungen und die übliche Refaktorisierung -- der ständigen Optimierung des Quellcodes in seiner Lesbarkeit und Geschwindigkeit \citep[S. 255]{uml} -- erweiterte sich dieses Modell zu den endgültigen Klassen der \autoref{img:uml}. Auf die Funktionen der einzelnen Klassen wird im \autoref{s:klassen} eingegangen.
 
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{./img/UML.pdf}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -660,7 +661,7 @@ Die Arbeit wird nun auf mehrere Prozesse verteilt:
  \item Umformen der Daten durch mehrere Prozesse je nach Prozessorkernanzahl mit erhöhter Priorität (Klasse \code{VdTransformer})
 \end{itemize}
 
-Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sobald eine in der Konfiguration festgelegte Anzahl von Datensätzen zwischengespeichert wurde, werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binären Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt (abschaltbar). Damit die Transformationsprozesse beim Schreiben nicht aufeinander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls zum Beispiel die Strom\-ver\-sor\-gung unterbrochen wird, sind nun nur die Daten der letzten Sekunden verloren. Ältere Daten sind auch trotz Spannungsverlust als binäre Daten oder als Textdatei gespeichert. Durch ein Konvertierungsskript ist es im Nachhinein möglich, den Transformationsprozess alleine zu starten und die restlichen, noch nicht umgewandelten Daten umzuformen.
+Die Daten werden nun zuerst für wenige Sekunden im Arbeitsspeicher gesammelt. Sobald eine in der Konfiguration festgelegte Anzahl von Datensätzen zwischengespeichert wurde, werden diese im Dateisystem als binäre Datei abgelegt und der Dateiname in einer Warteschlange aus dem \code{multiprocessing}-Modul von Python (Klasse \code{Queue}) abgelegt. Die Prozesse zum Umformen der Daten fragen diese Warteschlange nun ab, verarbeiten jeweils eine binäre Datei und hängen die Ergebnisse an eine Ergebnis-Textdatei an. Die Dateinamen der binären Dateien, dessen Bearbeitung begonnen wurde, werden aus der Warteschlange entfernt. Nach dem Schreiben der umgeformten Daten werden die binären Dateien aus dem Dateisystem entfernt (abschaltbar). Damit die Transformationsprozesse beim Schreiben nicht aufeinander warten müssen, schreibt jeder Prozess in eine andere Ergebnisdatei. Diese können nach der Messung einfach zusammengefügt werden. Falls zum Beispiel die Strom\-ver\-sor\-gung unterbrochen wird, sind nun nur die Daten der letzten Sekunden verloren. Ältere Daten sind auch trotz Spannungsverlust als binäre Daten oder als Textdatei gespeichert. Durch ein Konvertierungsskript (siehe Anhang~\ref{a:convBin.py}) ist es im Nachhinein möglich, den Transformationsprozess alleine zu starten und die restlichen, noch nicht umgewandelten Daten umzuformen.
 
 Durch dieses Prinzip stört eine stockende Datenumformung nicht die Aufzeichnung der Daten vom Scanner. Sofern der Rasp\-berry Pi nicht die Geschwindigkeit der Umformung halten kann, werden einfach mehr binäre Dateien zwischengespeichert, welche gegebenenfalls im Postprocessing umgewandelt werden können.
 
@@ -680,32 +681,35 @@ Die Weboberfläche zur Steuerung wird mit dem Modul \code{Flask} erzeugt. Die We
 \subsection{VdInterface (Python)}
 Die Klasse \code{VdInterface} (siehe Anhang~\ref{a:vdInterface.py}) übernimmt die Kommunikation mit dem Laser\-scan\-ner. Sie stellt die UDP-Socket-Verbindungen zu dem GNSS- und zu dem Laserscan-Datenstream des Scanners her.
 
+\subsection{VdGNSSTime (Python)}
+Die Klasse \code{VdGNSSTime} (siehe Anhang~\ref{a:vdGNSSTime.py}) ist dafür zuständig, die Systemzeit des Rasp\-berry Pi zu setzen. Hierfür nutzt die Klasse die Daten des GNSS-Modules, welche über das Netzwerksignal des Laserscanners und die serielle Schnittstelle übertragen werden. 
 
 \subsection{VdHardware (Python)}
-Die Klasse \code{VdHardware} übernimmt die Hardwaresteuerung des Rasp\-berry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. Hierdurch werden die Abläufe des Hauptskriptes nicht durch die Abfrageschleifen der Hardwaresteuerung unterbrochen.
+Die Klasse \code{VdHardware} (siehe Anhang~\ref{a:vdHardware.py}) übernimmt die Hardwaresteuerung des Rasp\-berry Pi. Um etwas unabhängiger zu sein, stellt die Klasse einen eigenen Thread dar, der von der Klasse \code{VdAutoStart} je nach Hardware gestartet wird. Hierdurch werden die Abläufe des Hauptskriptes nicht durch die Abfrageschleifen der Hardwaresteuerung unterbrochen.
 
 Bei der Initialisierung der Klasse werden die GPIO-Ports des Rasp\-berry Pi entsprechend des Hardwaresteuerungsmodules aus \autoref{s:steuermodul} eingerichtet. Hierbei werden bei den Ein\-gangs\-ports die internen Pull-Up-Widerstände aktiviert. Bei dem Start des Threads wird dann zu\-sätz\-lich ein Event\-handler für die Ein\-gang\-spins eingerichtet, der entsprechende Funktionen zum Starten oder Stoppen der Aufzeichnung sowie zum Herunterfahren aufruft. Des Weiteren wird ein Timer aktiviert, der dafür sorgt, dass die Status-LEDs (siehe \autoref{abb:elektronik}) einmal sekündlich aktualisiert werden.
 
 \subsection{VdPoint (Python / C++)}
-Die \code{VdPoint}-Klasse stellt einen Messpunkt des Velodyne VLP-16 dar. Dieser nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Mög\-lich\-keit, die Messdaten in lokale kartesische Koordinaten mit dem Laser\-scan\-ner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ- und XYZ-Dateien genutzt.
+Die \code{VdPoint}-Klasse (siehe Anhang~\ref{a:vdPoint.py}, \ref{a:VdPoint.h} und \ref{a:VdPoint.cpp}) stellt einen Messpunkt des Velodyne VLP-16 dar. Dieser nimmt als Attribute die Messdaten auf. Außerdem bietet die Klasse die Mög\-lich\-keit, die Messdaten in lokale kartesische Koordinaten mit dem Laser\-scan\-ner als Ursprung umzurechnen. Dieses wird zum Beispiel bei der Erzeugung von OBJ- und XYZ-Dateien genutzt.
 
 \subsection{VdDataset (Python / C++)}
-Die Klasse \code{VdDataset} nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laser\-scan\-ner. Die Daten werden als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementierungen der Klasse \code{VdFile} können diese dann als Datei gespeichert werden.
+Die Klasse \code{VdDataset} (siehe Anhang~\ref{a:vdDataset.py}, \ref{a:VdDataset.h} und \ref{a:VdDataset.cpp}) nimmt die Messdaten auf. Diese Klasse sorgt auch für das Interpretieren der binären Daten vom Laser\-scan\-ner. Die Daten werden als \code{VdPoint}-Objekte in einer Liste gesichert. Durch die Übergabe der Daten an die Implementierungen der Klasse \code{VdFile} können diese dann als Datei gespeichert werden.
 
 \subsection{VdFile und Subklassen (Python / C++)}
-Bei der Klasse \code{VdFile} handelt es sich um eine abstrakte Klasse. Die Klasse stellt ein Interface bereit, das die Speicherung der umgewandelten Daten übernimmt. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben:
+Bei der Klasse \code{VdFile} (siehe Anhang~\ref{a:vdFile.py}, \ref{a:VdFile.h} und \ref{a:VdFile.cpp}) handelt es sich um eine abstrakte Klasse. Die Klasse stellt ein Interface bereit, das die Speicherung der umgewandelten Daten übernimmt. Die genauen Datenformate werden in Klassen festgelegt, die von ihr erben:
 
 \paragraph{VdASCIIFile sowie VdTxtFile, VdObjFile und VdXYZFile}
-Die abstrakte Klasse \code{VdASCIIFile} erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile}, \code{VdObjFile} und \code{VdXYZFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} schreibt hierbei die Rohdaten als einfache Textdateien. \code{VdObjFile} formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei. Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen. Im Zusammenhang mit der Vergleichsmessung aus \autoref{c:systemueberpruefung} wurde zu\-sätz\-lich noch eine Klasse zur Implementierung von XYZ-Dateien (\code{VdXYZFile}) erstellt. Hier werden die schon für die OBJ-Dateien aufbereiteten Daten in anderer Formatierung genutzt.
+Die abstrakte Klasse \code{VdASCIIFile} (siehe Anhang~\ref{a:vdASCIIFile.py}, \ref{a:VdASCIIFile.h} und \ref{a:VdASCIIFile.cpp}) erweitert die Klasse \code{VdFile} um Funktionen, um ASCII-Dateien zu schreiben. \code{VdTxtFile}, \code{VdObjFile} und \code{VdXYZFile} implementieren dann die eigentlichen Dateiformate. Die Klasse \code{VdTxtFile} (siehe Anhang~\ref{a:vdTxtFile.py}, \ref{a:VdTxtFile.h} und \ref{a:VdTxtFile.cpp}) schreibt hierbei die Rohdaten als einfache Textdateien (siehe Anhang~\ref{a:AusgabeTXT}). \code{VdObjFile} (siehe Anhang~\ref{a:vdObjFile.py}, \ref{a:VdObjFile.h} und \ref{a:VdObjFile.cpp}) formt die Rohdaten in lokale Koordinaten mit dem Ursprung im Standpunkt des Scanners um und speichert die Daten als OBJ-Datei (siehe Anhang~\ref{a:AusgabeOBJ}). Das Dateiformat ist für das einfache Betrachten der Daten hilfreich. Es lässt sich als Punktwolke in vielen Programmen, wie zum Beispiel \code{MeshLab}, einlesen und darstellen. Im Zusammenhang mit der Vergleichsmessung aus \autoref{c:systemueberpruefung} wurde zu\-sätz\-lich noch eine Klasse zur Implementierung von XYZ-Dateien (\code{VdXYZFile}, siehe Anhang~\ref{a:vdXYZFile.py}, \ref{a:VdXYZFile.h} und \ref{a:VdXYZFile.cpp}) erstellt. Hier werden die schon für die OBJ-Dateien aufbereiteten Daten in anderer Formatierung genutzt.
+Die Daten aus der TXT-Datei können auch im Nachhinein in die anderen Dateiformate umgeformt werden. Hierfür wurde ein Konvertierungsskript erstellt (siehe Anhang~\ref{a:convTxt.py}).
 
-\paragraph{VdSQLite}
-Die Klasse \code{VdSQLite} ermöglicht das Speichern der Rohdaten in einer SQLite-Datenbank-Datei. Das Format bietet sich zum einfachen Übertragen und Auswerten der Daten an. Alle Daten werden in einer Datenbank-Datei gesichert. Dies erleichtert das Einladen der Daten in weitere Skripte, zum Beispiel zum Durchführen von Berechnungen.
+\paragraph{VdSQLite (Python)}
+Die Klasse \code{VdSQLite} (siehe Anhang~\ref{a:vdSQLite.py}, \ref{a:VdSQLite.h} und \ref{a:VdSQLite.cpp}) er\-mög\-licht das Speichern der Rohdaten in einer SQLite-Datenbank-Datei. Das Format bietet sich zum einfachen Übertragen und Auswerten der Daten an. Alle Daten werden in einer Datenbank-Datei gesichert. Dies erleichtert das Einladen der Daten in weitere Skripte, zum Beispiel zum Durchführen von Berechnungen.
 
-\subsection{VdBuffer}
-Die Klasse \code{VdBuffer} übernimmt die Zwischenspeicherung der binären Rohdaten vom Laser\-scan\-ner. Über die Klasse \code{VdInterface} wird eine Socketverbindung zum UDP-Port des Laser\-scan\-ners hergestellt. Anschließend werden die Daten vom Socket in einer Variable gespeichert und re\-gel\-mä\-ßig in kurzen Intervallen als binäre Datei auf dem Speicher des Rasp\-berry Pi abgelegt. Hierzu wird bei dem ersten Datenempfang eine Verzeichnisstruktur für die Messung angelegt. Nach dem Schreiben der Datei wird ihr Pfad in die Warteschleife für \code{VdTransformer} eingetragen.
+\subsection{VdBuffer (Python)}
+Die Klasse \code{VdBuffer} (siehe Anhang~\ref{a:vdBuffer.py}) übernimmt die Zwischenspeicherung der binären Rohdaten vom Laser\-scan\-ner. Über die Klasse \code{VdInterface} wird eine Socketverbindung zum UDP-Port des Laser\-scan\-ners hergestellt. Anschließend werden die Daten vom Socket in einer Variable gespeichert und re\-gel\-mä\-ßig in kurzen Intervallen als binäre Datei auf dem Speicher des Rasp\-berry Pi abgelegt. Hierzu wird bei dem ersten Datenempfang eine Verzeichnisstruktur für die Messung angelegt. Nach dem Schreiben der Datei wird ihr Pfad in die Warteschleife für \code{VdTransformer} eingetragen.
 
-\subsection{VdTransformer}
-\code{VdTransformer} übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Leistung des jeweiligen Computersystems auszunutzen, wird durch \code{VdAutoStart} die Anzahl der Instanzen des Prozesses je nach Anzahl der Kerne des Prozessors gesteuert -- auf dem Rasp\-berry Pi als Vierkern-System beispielsweise drei Prozesse. Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine binäre Datei ausgewählt, eingelesen und an ein Objekt der Klasse \code{VdDataset} übermittelt. Nachdem dieses die Daten zu einer Liste von \code{VdPoint}-Objekten umgewandelt hat, werden diese an ein Objekt der Klasse \code{VdFile} übergeben. Das Objekt schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die binäre Datei gelöscht oder, je nach Einstellungen, in einen anderen Unterordner verschoben.
+\subsection{VdTransformer (Python)}
+\code{VdTransformer} (siehe Anhang~\ref{a:vdTransformer.py}) übernimmt die Umformung der als Datei gespeicherten binären Daten in \code{VdPoint}-Objekte. Um die Leistung des jeweiligen Computersystems auszunutzen, wird durch \code{VdAutoStart} die Anzahl der Instanzen des Prozesses je nach Anzahl der Kerne des Prozessors gesteuert -- auf dem Rasp\-berry Pi als Vierkern-System beispielsweise drei Prozesse. Sofern die Daten als ASCII-File gesichert werden sollen, wird für jede Instanz eine Datei erstellt, damit sich die Schreibprozesse nicht gegenseitig stören. Aus der Warteschlange wird jeweils eine binäre Datei ausgewählt, eingelesen und an ein Objekt der Klasse \code{VdDataset} übermittelt. Nachdem dieses die Daten zu einer Liste von \code{VdPoint}-Objekten umgewandelt hat, werden diese an ein Objekt der Klasse \code{VdFile} übergeben. Das Objekt schreibt dann je nach Einstellung in der Konfigurationsdatei die Daten im gewünschten Dateiformat. Nach dem erfolgreichen Schreibvorgang, wird die binäre Datei gelöscht oder, je nach Einstellungen, in einen anderen Unterordner verschoben.
 
 \chapter{Konfiguration und Steuerung des Rasp\-berry Pi}
 \label{c:konfig}
@@ -734,7 +738,7 @@ pi	ALL=(ALL) NOPASSWD: VLP
 \section{IP-Adressen-Konfiguration}
 Die Ethernet-Schnittstelle des Rasp\-berry Pi soll die IP-Adresse \code{192.168.1.111} nutzen, da diese IP-Adresse im Laser\-scan\-ner als Host voreingestellt war und an diesen die Daten vom Scanner übertragen werden. Die IP-Adresse des Rasp\-berry Pi im WLAN wurde fest auf die gut zu merkende Adresse \code{10.10.10.10} geändert, hierüber erfolgt später der Zugriff auf die Weboberfläche (siehe auch \autoref{tab:ipAdressen}).
 
-\begin{table}[!ht]
+\begin{table}
 \centering
 \begin{tabular}{l|r|r|l|}
 \cline{2-4}
@@ -859,7 +863,7 @@ up service dnsmasq restart
 \end{lstlisting}
 
 \section{Bedienung des Systems}
-Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier können Einstellungen zum Verhalten des Skriptes durchgeführt werden, aber auch die Parameter des Laser\-scan\-ners angepasst werden. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners, sowie die Tasten am Steuermodul.
+Die grundlegenden Einstellungen erfolgen über die Konfigurationsdatei \code{config.ini}. Hier werden Einstellungen zum Verhalten des Skriptes durchgeführt, aber auch die Parameter des Laser\-scan\-ners angepasst. Die weitere Steuerung erfolgt über die Weboberfläche des Skriptes und des Laser\-scan\-ners sowie die Tasten am Steuermodul.
 
 Nach dem Start des Raspberry Pi, erkennbar an dem Ausgehen der obersten LED (Datenempfang), kann sich mit einem WLAN-fähigen Endgerät in das WLAN-Netzwerk \code{VLPinterface} mit dem dazugehörigen Schlüssel \code{hafencity} eingeloggt werden. Unter der Adresse \code{http://10.10.10.10:8080/} (siehe \autoref{img:web}, links) ist dann das Webinterface des Raspberry Pi zu erreichen. Das Interface ermöglicht es, genauso wie die Tasten auf dem Hardware-Steuerungsmodul, die Aufzeichnung zu starten und zu stoppen, sowie den Raspberry Pi herunterzufahren.
 
@@ -870,7 +874,7 @@ Falls die Daten direkt übertragen werden sollen, kann über das Webinterface (s
 
 Die Einstellungen in der \code{config.ini} (siehe Anhang~\ref{a:config.ini}) können über eine SSH-Verbindung oder durch Herausnehmen der microSD-Karte geändert werden.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=.24\textwidth]{./img/web1.png}
  \includegraphics[width=.24\textwidth]{./img/web2.png}
@@ -890,7 +894,7 @@ Am Arduino werden hierzu an zwei digitalen Eingängen die PPS-Anschlüsse der GN
 
 Der Test zeigte, dass das Skript keine Zeitdifferenz messen konnte. Daher wurde auf dem Arduino nochmals das Oszilloskop-ähnliche Skript installiert, dass auch schon bei der Untersuchung der NMEA-Übertragung zum Laserscanner genutzt wurde. Hier zeigte sich, dass das PPS-Signal der IMU ein LOW-Signal und nicht wie erwartet ein HIGH-Impuls absendet. Dennoch wurde bei einer Abtastrate von 450 Messungen pro Sekunde keine Zeitdifferenz festgestellt (siehe \autoref{img:osPPS}). Außerdem konnte hiermit auch festgestellt werden, dass das Signal der IMU nicht den Anforderungen des Velodyne VLP-16 entspricht: Hier wird ein Signal mit einer Impulsdauer von mindestens 10~ms gefordert. Dies wird scheinbar nicht eingehalten, da der Arduino, der mit einer Taktrate von 2,2~ms misst, nicht alle Signale der IMU erkennen konnte (siehe erster Puls auf \autoref{img:osPPS}). Außerdem müsste auch hier das Signal elektrisch gedreht werden.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{./img/osziPPS.png}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -904,7 +908,7 @@ Um die Strecken und Winkelmessung des Laser\-scan\-ners und die Umwandlung der D
 \paragraph{Zu\-sätz\-liches Datenformat}
 Die Daten des Velodyne VLP-16 wurden mit dem in dieser Arbeit entwickelten Skript aufgezeichnet und umgewandelt. Da hierbei auffiel, dass einige Programme besser mit XYZ-Dateien umgehen können, wurde das Klassenmodell um dieses Dateiformat erweitert.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.45\textwidth]{./img/fassade.jpg}
  \includegraphics[width=0.45\textwidth]{./img/tiefgarage.jpg}
@@ -921,7 +925,7 @@ Aus den Daten der Tachymeter-Messung wurden die Wände und Pfeiler der Tiefgarag
 
 \paragraph{Fehler im Skript} Bei der Auswertung der Messung fiel schon vor dem Vergleich mit der Tachymeter-Messung auf, dass die Messwerte in Rotationsrichtung verschoben waren. Die Analyse ergab einen Umformungsfehler in der Klasse \code{VdDataset}. Hierdurch wurden die Horizontalrichtungen um bis zu 2 Grad (bei 1200 Umdrehungen pro Minute) fehlerhaft berechnet (siehe \autoref{img:fehlerWolke}). Bei der Messung der Tiefgarage wurden glücklicherweise auch die Rohdaten von zwei der fünf Messreihen gespeichert, so dass hier keine erneute Messung vor Ort nötig war. Die Daten der Fassadenmessung (\autoref{img:messbilder}, links) mussten nochmals wiederholt werden, da die Daten nicht auswertbar waren.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.45\textwidth]{./img/punktwolke_f.png}
  \includegraphics[width=0.45\textwidth]{./img/punktwolke_k.png}
@@ -933,7 +937,7 @@ Aus den Daten der Tachymeter-Messung wurden die Wände und Pfeiler der Tiefgarag
 \paragraph{Weitere Ergebnisse}
 An den Pfeilern, von denen zwei Seiten gut modellierbar waren (siehe zum Beispiel \autoref{img:pfeiler}), wurden die Standardabweichungen verglichen, um zu prüfen, ob weitere Fehler in der Berechnung der Horizontalrichtungen vorhanden waren. Die Standardabweichungen und die durchschnittlichen Abweichungen zu den Ebenen der Tachymeter-Messung waren auf beiden Seiten ähnlich, so dass von keinen weiteren Fehlern ausgegangen wurde.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.60\textwidth]{./img/pfeiler.jpg}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -945,7 +949,7 @@ An den Pfeilern, von denen zwei Seiten gut modellierbar waren (siehe zum Beispie
 Eine weitere Messung fand etwa 20~m vor einer weißen, rauen und ebenen Fassade (verputztes Wärmedämmverbundsystem) statt. Hier wurden zum Vergleich der Messaufbau komplett von zwei Standpunkten aus mit dem terrestrischem Laser\-scan\-ner Zoller+Fröhlich Imager 5010 gescannt. Durch einen Fehler im Auswerteskript, der erst bei großen Strecken auffiel, waren die Messdaten jedoch leider nicht zu verwenden. Es wurde daher eine ähnliche Messung im geodätischen Labor nachgeholt (siehe \autoref{img:geoLabor}).
 Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurden zur Überprüfung der Entfernungsmessung verwendet. Eine verblieb hierbei immer an der gleichen Stelle, etwa 5~m vom Velodyne entfernt stehen, die zweite wurde in verschiedenen Entfernungen zwischen 6 und 26~m aufgestellt. Die Messszenarien wurden jeweils mit dem terrestrischen Laser\-scan\-ner Imager 5010 von Zoller+Fröhlich dokumentiert. Bei Messungen auf weißen Oberflächen liegt die Streckenmessgenauigkeit des Vergleichsscanners unter einem Millimeter \citep{imager5010}. Zum Vergleich mit dem Velodyne VLP-16, der eine angegebene Genauigkeit von 3~cm hat \citep{vlpSheet}, wird die Messung des Imagers daher als wahrer Wert angenommen.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{./img/geoLabor.jpg}
  % Strahlengang.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=0 0 3066 4000
@@ -953,7 +957,7 @@ Hier wurde der Velodyne VLP-16 mittig im Raum aufgestellt. Zwei Stellwände wurd
  \label{img:geoLabor}
 \end{figure}
 
-\begin{table}[!ht]
+\begin{table}
 \centering
 \begin{tabular}{|l|r|r|r|r|}
 \cline{2-4}
@@ -1002,7 +1006,7 @@ In der Programmierung des Rasp\-berry Pi sind noch Optimierungen möglich. So is
 \paragraph{Gehäuse}
 Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ein mit einem 3D-Drucker erstellter Entwurf (siehe \autoref{abb:system}). Jedoch ist dieser noch zu instabil, um im Flug die Technik zu halten. Eine Mög\-lich\-keit wäre es, ein solches, gelochtes Gehäuse aus Aluminium zu bauen. Außerdem sollten vor einem Einsatz auch noch die Kabel entsprechend der benötigten Länge konfektioniert werden, um die Gefahr des Hängenbleibens zu vermindern.
 
-\begin{figure}[!ht]
+\begin{figure}
  \centering
  \includegraphics[width=1\textwidth]{img/system.jpg}
  \caption{Prototyp des Messsystems (noch ohne Akkumulatoren)}
@@ -1028,14 +1032,6 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \label{a:vdAutoStart.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdAutoStart.py}
 
-\section{vdBuffer.py}
-\label{a:vdBuffer.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/vdBuffer.py}
-
-\section{vdTransformer.py}
-\label{a:vdTransformer.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/vdTransformer.py}
-
 \section{vdInterface.py}
 \label{a:vdInterface.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdInterface.py}
@@ -1048,6 +1044,14 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \label{a:vdHardware.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdHardware.py}
 
+\section{vdPoint.py}
+\label{a:vdPoint.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdPoint.py}
+
+\section{vdDataset.py}
+\label{a:vdDataset.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdDataset.py}
+
 \section{vdFile.py}
 \label{a:vdFile.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdFile.py}
@@ -1056,13 +1060,13 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \label{a:vdASCIIFile.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdASCIIFile.py}
 
-\section{vdTxtFile.py}
-\label{a:vdTxtFile.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/vdTxtFile.py}
-
 \section{vdObjFile.py}
 \label{a:vdObjFile.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdObjFile.py}
+
+\section{vdTxtFile.py}
+\label{a:vdTxtFile.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdTxtFile.py}
 
 \section{vdXYZFile.py}
 \label{a:vdXYZFile.py}
@@ -1072,13 +1076,14 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \label{a:vdSQLite.py}
 \lstinputlisting[language=Python]{../Quelltext/Python/vdSQLite.py}
 
-\section{vdDataset.py}
-\label{a:vdDataset.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/vdDataset.py}
+\section{vdBuffer.py}
+\label{a:vdBuffer.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdBuffer.py}
 
-\section{vdPoint.py}
-\label{a:vdPoint.py}
-\lstinputlisting[language=Python]{../Quelltext/Python/vdPoint.py}
+\section{vdTransformer.py}
+\label{a:vdTransformer.py}
+\lstinputlisting[language=Python]{../Quelltext/Python/vdTransformer.py}
+
 
 \lstdefinelanguage{Ini}
 {
@@ -1111,6 +1116,31 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \section{main.cpp}
 \label{a:main.cpp}
 \lstinputlisting[language=C++]{../Quelltext/C++/src/main.cpp}
+
+\section{VdXYZ.h}
+\label{a:VdXYZ.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.h}
+
+\section{VdXYZ.cpp}
+\label{a:VdXYZ.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.cpp}
+
+\section{VdPoint.h}
+\label{a:VdPoint.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.h}
+
+\section{VdPoint.cpp}
+\label{a:VdPoint.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.cpp}
+
+\section{VdDataset.h}
+\label{a:VdDataset.h}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.h}
+
+\section{VdDataset.cpp}
+\label{a:VdDataset.cpp}
+\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.cpp}
+
 
 \section{VdFile.h}
 \label{a:VdFile.h}
@@ -1159,30 +1189,6 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \section{VdSQLite.cpp}
 \label{a:VdSQLite.cpp}
 \lstinputlisting[language=C++]{../Quelltext/C++/src/VdSQLite.cpp}
-
-\section{VdDataset.h}
-\label{a:VdDataset.h}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.h}
-
-\section{VdDataset.cpp}
-\label{a:VdDataset.cpp}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdDataset.cpp}
-
-\section{VdPoint.h}
-\label{a:VdPoint.h}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.h}
-
-\section{VdPoint.cpp}
-\label{a:VdPoint.cpp}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdPoint.cpp}
-
-\section{VdXYZ.h}
-\label{a:VdXYZ.h}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.h}
-
-\section{VdXYZ.cpp}
-\label{a:VdXYZ.cpp}
-\lstinputlisting[language=C++]{../Quelltext/C++/src/VdXYZ.cpp}
 
 \chapter{Arduino-Quelltext}
 \section{ppsVergleich.ino}
@@ -1278,6 +1284,7 @@ Auch das Gehäuse befindet sich noch in der Entwicklung. Bisher existiert nur ei
 \end{appendices}
 
 \newpage
+\thispagestyle{empty}
 \noindent\textbf{\large Erklärung}\\
 Hiermit versichere ich, dass ich die beiliegende Bachelor-Thesis ohne fremde Hilfe selbst\-stän\-dig verfasst und nur die angegebenen Quellen und Hilfsmittel benutzt habe.\\
 \\
@@ -1286,7 +1293,7 @@ Wörtlich oder dem Sinn nach aus anderen Werken entnommene Stellen sind unter An
 \\
 \\
 \\
-\noindent{\underline{Hamburg, den 12. Dez. 2017~\hspace{10cm}}}\\
+\noindent{\underline{Hamburg, den 13. Dez. 2017~\hspace{10cm}}}\\
 \noindent{\small Ort, Datum \hspace{4.5cm} Florian Timm}
 
 
